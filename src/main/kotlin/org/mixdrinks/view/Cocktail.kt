@@ -31,13 +31,12 @@ fun Application.cocktails() {
             val search = call.request.queryParameters["query"].toString()
 
             call.respond(transaction {
-                return@transaction CocktailsTable.select { CocktailsTable.name like "%$search%" }
-                    .map { row ->
-                        CocktailVM(
-                            row[CocktailsTable.id],
-                            row[CocktailsTable.name],
-                        )
-                    }
+                CocktailsTable.select { CocktailsTable.name like "%$search%" }.map { row ->
+                    CocktailVM(
+                        row[CocktailsTable.id],
+                        row[CocktailsTable.name],
+                    )
+                }
             })
         }
     }
