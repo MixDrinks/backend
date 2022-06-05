@@ -6,9 +6,10 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.mixdrinks.data.GoodsTable
+import org.mixdrinks.data.CocktailsTable
+import org.mixdrinks.view.CocktailVM
 
 fun Application.cocktails() {
     install(ContentNegotiation) {
@@ -27,15 +28,17 @@ fun Application.cocktails() {
 
     routing {
         get("cocktails") {
-            val test = transaction {
-                val row = GoodsTable.selectAll().first()
+            val search = call.request.queryParameters["query"].toString()
 
-                val image = row[GoodsTable.id].toString()
-
-                return@transaction image
-            }
-
-            call.respond(test)
+            call.respond(transaction {
+                return@transaction CocktailsTable.select { CocktailsTable.name like "%$search%" }
+                    .map { row ->
+                        CocktailVM(
+                            row[CocktailsTable.id],
+                            row[CocktailsTable.name],
+                        )
+                    }
+            })
         }
     }
 }
