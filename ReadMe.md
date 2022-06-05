@@ -22,6 +22,9 @@ Base url:
 Queries
 
 - `query`
+- `mode` (variants: `MINI`, `COMPACT`). Default: MINI
+    - MINI - just an id and a name
+    - COMPACT - the entity with main info such as id, description, etc, with short information about ingredients.
 
 Response
 

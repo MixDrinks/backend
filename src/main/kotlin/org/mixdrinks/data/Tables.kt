@@ -18,12 +18,12 @@ object GoodsTable : Table(name = "goods") {
     override val primaryKey: PrimaryKey = PrimaryKey(id)
 }
 
-object CocktailsToItemsTable : Table(name = "cocktail_to_items") {
+object CocktailsToItemsTable : Table(name = "cocktails_to_items") {
     val cocktailId = integer("cocktail_id")
     val goodId = integer("good_id")
     val unit = text("unit")
     val amount = integer("amount")
-    val relation = text("relation")
+    val relation = integer("relation")
 }
 
 object TagsTable : Table(name = "tags") {
