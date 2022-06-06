@@ -5,6 +5,7 @@ import io.ktor.server.config.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import org.mixdrinks.plugins.*
+import org.mixdrinks.view.cocktails
 
 fun main() {
     embeddedServer(Netty, environment = applicationEngineEnvironment {

@@ -19,8 +19,10 @@ data class CompactCocktailVM(
     val name: String,
     @SerialName("images")
     val images: List<Image>,
-    @SerialName("ingredients")
-    val ingredients: List<SimpleIngredient>,
+    @SerialName("goods")
+    val goods: List<SimpleIngredient>,
+    @SerialName("tags")
+    val tags: List<TagVM>,
 )
 
 @Serializable
@@ -41,6 +43,10 @@ data class Image(
     val type: String,
 )
 
-enum class CocktailView {
-    MINI, COMPACT, FULL
-}
+@Serializable
+data class TagVM(
+    @SerialName("id")
+    val id: Int,
+    @SerialName("name")
+    val name: String,
+)
