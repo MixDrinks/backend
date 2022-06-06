@@ -1,10 +1,14 @@
 package org.mixdrinks
 
 import com.typesafe.config.ConfigFactory
+import io.ktor.http.*
+import io.ktor.server.application.*
 import io.ktor.server.config.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import org.mixdrinks.plugins.*
+import io.ktor.server.plugins.cors.routing.*
+import org.mixdrinks.plugins.configureRouting
+import org.mixdrinks.plugins.configureSecurity
 import org.mixdrinks.view.cocktails
 
 fun main() {
@@ -14,7 +18,13 @@ fun main() {
         module {
             configureRouting()
             configureSecurity()
-            configureHTTP()
+            install(CORS) {
+                anyHost()
+                allowMethod(HttpMethod.Options)
+                allowMethod(HttpMethod.Put)
+                allowMethod(HttpMethod.Patch)
+                allowMethod(HttpMethod.Delete)
+            }
             cocktails()
         }
 
