@@ -86,9 +86,10 @@ private fun getFullCocktail(id: Int): FullCocktailVM {
             id = cocktailId,
             name = cocktail[CocktailsTable.name],
             images = buildImages(cocktailId, ImageType.COCKTAIL),
+            receipt = cocktail[CocktailsTable.steps].toList(),
             goods = getSimpleIngredients(cocktailId, ItemType.GOOD),
             tools = getSimpleIngredients(cocktailId, ItemType.TOOL),
-            tags = getCocktailTags(cocktailId)
+            tags = getCocktailTags(cocktailId),
         )
     }
 }

@@ -31,6 +31,8 @@ data class FullCocktailVM(
     val id: Int,
     @SerialName("name")
     val name: String,
+    @SerialName("receipt")
+    val receipt: List<String>,
     @SerialName("images")
     val images: List<Image>,
     @SerialName("goods")
