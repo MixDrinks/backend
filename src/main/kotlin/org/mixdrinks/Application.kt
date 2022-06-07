@@ -26,6 +26,7 @@ fun main() {
             configureSecurity()
             install(CORS) {
                 anyHost()
+                allowHeaders { true }
                 DefaultMethods.forEach(::allowMethod)
             }
 
