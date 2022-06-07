@@ -1,4 +1,4 @@
-package org.mixdrinks.view
+package org.mixdrinks.view.cocktail
 
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -9,6 +9,8 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.*
+import org.mixdrinks.view.images.ImageType
+import org.mixdrinks.view.images.buildImages
 import org.mixdrinks.view.tag.TagVM
 
 fun Application.cocktails() {
@@ -24,7 +26,9 @@ fun Application.cocktails() {
             })
         }
         get("cocktails/filter") {
-            val tags = call.request.queryParameters["tags"]?.split(",")?.mapNotNull(String::toIntOrNull)
+            val tags = call.request.queryParameters["tags"]
+                ?.split(",")
+                ?.mapNotNull(String::toIntOrNull)
             val search = call.request.queryParameters["query"]
 
             call.respond(getCompactCocktail(search, tags))
@@ -37,7 +41,6 @@ fun Application.cocktails() {
             } else {
                 call.respond(HttpStatusCode.BadRequest, "Query id is require, and must be integer")
             }
-
         }
     }
 }
@@ -85,17 +88,21 @@ private fun getCompactCocktail(search: String?, tags: List<Int>?): List<CompactC
     return transaction {
         CocktailsTable.select { searchQuery() and tagQuery() }
             .map { cocktailRow ->
-                val id = cocktailRow[CocktailsTable.id]
-
-                CompactCocktailVM(
-                    id,
-                    cocktailRow[CocktailsTable.name],
-                    buildImages(id, ImageType.COCKTAIL),
-                    getSimpleIngredients(id, ItemType.GOOD),
-                    getCocktailTags(id),
-                )
+                buildCompactCocktail(cocktailRow)
             }
     }
+}
+
+fun buildCompactCocktail(cocktailRow: ResultRow): CompactCocktailVM {
+    val id = cocktailRow[CocktailsTable.id]
+
+    return CompactCocktailVM(
+        id,
+        cocktailRow[CocktailsTable.name],
+        buildImages(id, ImageType.COCKTAIL),
+        getSimpleIngredients(id, ItemType.GOOD),
+        getCocktailTags(id),
+    )
 }
 
 private fun getCocktailTags(id: Int) =
@@ -109,44 +116,18 @@ private fun getCocktailTags(id: Int) =
         }
 
 private fun getSimpleIngredients(id: Int, relation: ItemType): List<SimpleIngredient> {
-    return CocktailsToItemsTable.join(GoodsTable, JoinType.INNER, GoodsTable.id, CocktailsToItemsTable.goodId)
+    return CocktailsToItemsTable.join(ItemsTable, JoinType.INNER, ItemsTable.id, CocktailsToItemsTable.goodId)
         .select { CocktailsToItemsTable.cocktailId eq id and (CocktailsToItemsTable.relation eq relation.relation) }
         .map { imageRow ->
             SimpleIngredient(
-                name = imageRow[GoodsTable.name],
-                images = buildImages(imageRow[GoodsTable.id], ImageType.ITEM),
+                name = imageRow[ItemsTable.name],
+                images = buildImages(imageRow[ItemsTable.id], ImageType.ITEM),
             )
         }
 
 }
-
-
-private fun buildImages(id: Int, type: ImageType): List<Image> {
-    data class SizeDep(
-        val responseSize: String,
-        val imageSize: String,
-    )
-    return listOf("webp", "jpg").map { format ->
-        listOf(
-            SizeDep("570", "origin"),
-            SizeDep("410", "560"),
-            SizeDep("330", "400"),
-            SizeDep("0", "320"),
-        ).map { size ->
-            Image(
-                src = "https://image.mixdrinks.org/${type.imagePrefix}/$id/${size.imageSize}/$id.$format",
-                media = "screen and (min-width: ${size.responseSize}px)",
-                type = "image/$format"
-            )
-        }
-    }.flatten()
-}
-
 
 enum class ItemType(val relation: Int) {
     GOOD(1), TOOL(2)
 }
 
-enum class ImageType(val imagePrefix: String) {
-    COCKTAIL("cocktails"), ITEM("goods")
-}

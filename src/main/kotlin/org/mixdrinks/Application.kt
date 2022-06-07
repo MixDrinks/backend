@@ -12,8 +12,9 @@ import io.ktor.server.plugins.cors.routing.*
 import org.jetbrains.exposed.sql.Database
 import org.mixdrinks.plugins.configureRouting
 import org.mixdrinks.plugins.configureSecurity
-import org.mixdrinks.view.cocktails
-import org.mixdrinks.view.tags
+import org.mixdrinks.view.cocktail.cocktails
+import org.mixdrinks.view.items.items
+import org.mixdrinks.view.tag.tags
 
 fun main() {
     embeddedServer(Netty, environment = applicationEngineEnvironment {
@@ -46,6 +47,7 @@ fun main() {
 
             cocktails()
             tags()
+            items()
         }
 
         connector {

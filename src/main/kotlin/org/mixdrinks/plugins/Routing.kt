@@ -16,6 +16,10 @@ fun Application.configureRouting() {
         exception<AuthorizationException> { call, cause ->
             call.respond(HttpStatusCode.Forbidden)
         }
+        exception<Exception> { call, cause ->
+            println(cause)
+            call.respond(HttpStatusCode.InternalServerError)
+        }
     }
 
     routing {

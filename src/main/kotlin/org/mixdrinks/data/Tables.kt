@@ -10,7 +10,7 @@ object CocktailsTable : Table(name = "cocktails") {
     override val primaryKey: PrimaryKey = PrimaryKey(id)
 }
 
-object GoodsTable : Table(name = "goods") {
+object ItemsTable : Table(name = "goods") {
     val id = integer("id")
     val name = text("name")
     val about = text("about")

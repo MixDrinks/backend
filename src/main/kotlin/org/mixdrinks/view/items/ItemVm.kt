@@ -1,0 +1,18 @@
+package org.mixdrinks.view.items
+
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import org.mixdrinks.view.cocktail.CompactCocktailVM
+import org.mixdrinks.view.images.Image
+
+@Serializable
+data class ItemVm(
+    @SerialName("id")
+    val id: Int,
+    @SerialName("name")
+    val name: String,
+    @SerialName("about")
+    val about: String,
+    @SerialName("images")
+    val images: List<Image>,
+)
