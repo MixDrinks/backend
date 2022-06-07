@@ -45,6 +45,6 @@ dependencies {
     implementation("org.jetbrains.exposed", "exposed-jdbc", "0.38.2")
     implementation("com.h2database", "h2", "2.1.210")
 
-    implementation("com.zaxxer:HikariCP:2.7.8")
-    implementation("org.postgresql:postgresql:42.3.3")
+    implementation("com.zaxxer:HikariCP:5.0.1")
+    implementation("org.postgresql:postgresql:42.3.4")
 }

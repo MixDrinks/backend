@@ -28,7 +28,7 @@ Example
 cocktail's name contains `ін`
 
 Response
-    ```json
+```json
 [
   {
     "id": 245,
