@@ -36,7 +36,10 @@ fun Application.cocktails() {
 
             val search = call.request.queryParameters["query"]
 
-            call.respond(getCompactCocktail(search, tags, goods))
+            val offset = call.request.queryParameters["offset"]?.toLongOrNull()
+            val limit = call.request.queryParameters["limit"]?.toIntOrNull()
+
+            call.respond(getCompactCocktail(search, tags, goods, limit, offset))
         }
         get("cocktails/full") {
             val id = call.request.queryParameters["id"]?.toIntOrNull()
@@ -72,6 +75,8 @@ private fun getCompactCocktail(
     search: String?,
     tags: List<Int>?,
     goods: List<Int>?,
+    limit: Int?,
+    offset: Long?,
 ): List<CompactCocktailVM> {
     fun searchQuery(): Op<Boolean> {
         return if (search != null) {
@@ -106,10 +111,14 @@ private fun getCompactCocktail(
     }
 
     return transaction {
-        CocktailsTable.select { searchQuery() and tagQuery() and itemsQuery() }
-            .map { cocktailRow ->
-                buildCompactCocktail(cocktailRow)
-            }
+        var query = CocktailsTable.select { searchQuery() and tagQuery() and itemsQuery() }
+        if (limit != null) {
+            query = query.limit(limit, offset ?: 0)
+        }
+
+        query.map { cocktailRow ->
+            buildCompactCocktail(cocktailRow)
+        }
     }
 }
 
