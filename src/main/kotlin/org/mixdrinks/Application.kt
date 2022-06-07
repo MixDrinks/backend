@@ -2,6 +2,7 @@ package org.mixdrinks
 
 import com.typesafe.config.ConfigFactory
 import io.ktor.http.*
+import io.ktor.http.HttpMethod.Companion.DefaultMethods
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.config.*
@@ -25,10 +26,7 @@ fun main() {
             configureSecurity()
             install(CORS) {
                 anyHost()
-                allowMethod(HttpMethod.Options)
-                allowMethod(HttpMethod.Put)
-                allowMethod(HttpMethod.Patch)
-                allowMethod(HttpMethod.Delete)
+                DefaultMethods.forEach(::allowMethod)
             }
 
             install(ContentNegotiation) {
