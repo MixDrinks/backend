@@ -5,7 +5,7 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.inSubQuery
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.*
@@ -29,9 +29,14 @@ fun Application.cocktails() {
             val tags = call.request.queryParameters["tags"]
                 ?.split(",")
                 ?.mapNotNull(String::toIntOrNull)
+
+            val goods = call.request.queryParameters["items"]
+                ?.split(",")
+                ?.mapNotNull(String::toIntOrNull)
+
             val search = call.request.queryParameters["query"]
 
-            call.respond(getCompactCocktail(search, tags))
+            call.respond(getCompactCocktail(search, tags, goods))
         }
         get("cocktails/full") {
             val id = call.request.queryParameters["id"]?.toIntOrNull()
@@ -63,9 +68,12 @@ private fun getFullCocktail(id: Int): FullCocktailVM {
     }
 }
 
-private fun getCompactCocktail(search: String?, tags: List<Int>?): List<CompactCocktailVM> {
+private fun getCompactCocktail(
+    search: String?,
+    tags: List<Int>?,
+    goods: List<Int>?,
+): List<CompactCocktailVM> {
     fun searchQuery(): Op<Boolean> {
-        println("query $search")
         return if (search != null) {
             CocktailsTable.name.lowerCase() like "%$search%".lowercase()
         } else {
@@ -75,18 +83,30 @@ private fun getCompactCocktail(search: String?, tags: List<Int>?): List<CompactC
 
     fun tagQuery(): Op<Boolean> {
         return if (tags != null) {
-            val cocktailIdsByTag = CocktailToTagTable.select { CocktailToTagTable.tagId inList tags }
-                .map { row ->
-                    row[CocktailToTagTable.cocktailId]
-                }.distinct()
-            CocktailsTable.id inList cocktailIdsByTag
+            val cocktailIdsByTag = CocktailToTagTable
+                .slice(CocktailToTagTable.cocktailId)
+                .select { CocktailToTagTable.tagId inList tags }
+
+            CocktailsTable.id inSubQuery cocktailIdsByTag
+        } else {
+            Op.TRUE
+        }
+    }
+
+    fun itemsQuery(): Op<Boolean> {
+        return if (goods != null) {
+            val cocktailIdsByGoods = CocktailsToItemsTable
+                .slice(CocktailsToItemsTable.cocktailId)
+                .select { CocktailsToItemsTable.goodId inList goods }
+
+            CocktailsTable.id inSubQuery cocktailIdsByGoods
         } else {
             Op.TRUE
         }
     }
 
     return transaction {
-        CocktailsTable.select { searchQuery() and tagQuery() }
+        CocktailsTable.select { searchQuery() and tagQuery() and itemsQuery() }
             .map { cocktailRow ->
                 buildCompactCocktail(cocktailRow)
             }

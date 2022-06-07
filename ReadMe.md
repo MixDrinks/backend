@@ -22,6 +22,8 @@ Queries
 |------|----------|-----------|------|
 |query | No |String |The string to filter cocktail by name, filter return only cocktails which name contains `query` |
 |tags | No |Array<Int> |The array of tag ids. The filter allow only cocktails, which connect to the one of tag |
+|items| No |Array<Int> |The array of items ids. The filter allow only cocktails, which need the item for create a cocktail. The filter works for ingredients and tools.|
+
 
 Example
 `/cocktails/filter?tags=60&query=ін` - Returns all cocktails with connect with tag {id:60, name:шоколадні} and
