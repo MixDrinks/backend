@@ -24,7 +24,8 @@ Queries
 |tags | No |Array<Int> |The array of tag ids. The filter allow only cocktails, which connect to the one of tag |
 |items| No |Array<Int> |The array of items ids. The filter allow only cocktails, which need the item for create a cocktail. The filter works for ingredients and tools.|
 |offset| No | The app skip first entities|
-|limit| No | The limit of entities into response| 
+|limit| No | The limit of entities into response|
+|page | No | Return the subset of cocktails, offset and limit calculate on be site |
 
 Example
 `/cocktails/filter?tags=60&query=ін` - Returns all cocktails with connect with tag {id:60, name:шоколадні} and
