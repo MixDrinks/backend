@@ -1,9 +1,7 @@
 package org.mixdrinks.view
 
 import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
-import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.jetbrains.exposed.sql.*
@@ -11,22 +9,9 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.*
+import org.mixdrinks.view.tag.TagVM
 
 fun Application.cocktails() {
-    install(ContentNegotiation) {
-        json()
-    }
-
-    val databaseUrl = environment.config.property("ktor.database.url").getString()
-    val user = environment.config.property("ktor.database.user").getString()
-    val password = environment.config.property("ktor.database.password").getString()
-
-    Database.connect(
-        url = "jdbc:postgresql://$databaseUrl?sslmode=require",
-        user = user,
-        password = password,
-    )
-
     routing {
         get("cocktails/all") {
             call.respond(transaction {
@@ -54,26 +39,7 @@ fun Application.cocktails() {
             }
 
         }
-        get("tags/all") {
-            call.respond(transaction {
-                TagsTable.selectAll().orderBy(TagsTable.id)
-                    .map { row ->
-                        TagVM(
-                            id = row[TagsTable.id],
-                            name = row[TagsTable.name],
-                        )
-                    }
-            })
-        }
     }
-}
-
-enum class ItemType(val relation: Int) {
-    GOOD(1), TOOL(2)
-}
-
-enum class ImageType(val imagePrefix: String) {
-    COCKTAIL("cocktails"), ITEM("goods")
 }
 
 private fun getFullCocktail(id: Int): FullCocktailVM {
@@ -92,18 +58,6 @@ private fun getFullCocktail(id: Int): FullCocktailVM {
             tags = getCocktailTags(cocktailId),
         )
     }
-}
-
-private fun getSimpleIngredients(id: Int, relation: ItemType): List<SimpleIngredient> {
-    return CocktailsToItemsTable.join(GoodsTable, JoinType.INNER, GoodsTable.id, CocktailsToItemsTable.goodId)
-        .select { CocktailsToItemsTable.cocktailId eq id and (CocktailsToItemsTable.relation eq relation.relation) }
-        .map { imageRow ->
-            SimpleIngredient(
-                name = imageRow[GoodsTable.name],
-                images = buildImages(imageRow[GoodsTable.id], ImageType.ITEM),
-            )
-        }
-
 }
 
 private fun getCompactCocktail(search: String?, tags: List<Int>?): List<CompactCocktailVM> {
@@ -154,6 +108,19 @@ private fun getCocktailTags(id: Int) =
             )
         }
 
+private fun getSimpleIngredients(id: Int, relation: ItemType): List<SimpleIngredient> {
+    return CocktailsToItemsTable.join(GoodsTable, JoinType.INNER, GoodsTable.id, CocktailsToItemsTable.goodId)
+        .select { CocktailsToItemsTable.cocktailId eq id and (CocktailsToItemsTable.relation eq relation.relation) }
+        .map { imageRow ->
+            SimpleIngredient(
+                name = imageRow[GoodsTable.name],
+                images = buildImages(imageRow[GoodsTable.id], ImageType.ITEM),
+            )
+        }
+
+}
+
+
 private fun buildImages(id: Int, type: ImageType): List<Image> {
     data class SizeDep(
         val responseSize: String,
@@ -175,3 +142,11 @@ private fun buildImages(id: Int, type: ImageType): List<Image> {
     }.flatten()
 }
 
+
+enum class ItemType(val relation: Int) {
+    GOOD(1), TOOL(2)
+}
+
+enum class ImageType(val imagePrefix: String) {
+    COCKTAIL("cocktails"), ITEM("goods")
+}
