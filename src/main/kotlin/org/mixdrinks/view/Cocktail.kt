@@ -1,5 +1,6 @@
 package org.mixdrinks.view
 
+import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.contentnegotiation.*
@@ -42,6 +43,15 @@ fun Application.cocktails() {
             val search = call.request.queryParameters["query"]
 
             call.respond(getCompactCocktail(search, tags))
+        }
+        get("cocktails/full") {
+            val id = call.request.queryParameters["id"]?.toIntOrNull()
+
+            if (id != null) {
+                call.respond(getFullCocktail(id))
+            } else {
+                call.respond(HttpStatusCode.BadRequest, "Query id is require, and must be integer")
+            }
 
         }
         get("tags/all") {
@@ -58,6 +68,43 @@ fun Application.cocktails() {
     }
 }
 
+enum class ItemType(val relation: Int) {
+    GOOD(1), TOOL(2)
+}
+
+enum class ImageType(val imagePrefix: String) {
+    COCKTAIL("cocktails"), ITEM("goods")
+}
+
+private fun getFullCocktail(id: Int): FullCocktailVM {
+    return transaction {
+        val cocktail = CocktailsTable.select { CocktailsTable.id eq id }.first()
+
+        val cocktailId = cocktail[CocktailsTable.id]
+
+        return@transaction FullCocktailVM(
+            id = cocktailId,
+            name = cocktail[CocktailsTable.name],
+            images = buildImages(cocktailId, ImageType.COCKTAIL),
+            goods = getSimpleIngredients(cocktailId, ItemType.GOOD),
+            tools = getSimpleIngredients(cocktailId, ItemType.TOOL),
+            tags = getCocktailTags(cocktailId)
+        )
+    }
+}
+
+private fun getSimpleIngredients(id: Int, relation: ItemType): List<SimpleIngredient> {
+    return CocktailsToItemsTable.join(GoodsTable, JoinType.INNER, GoodsTable.id, CocktailsToItemsTable.goodId)
+        .select { CocktailsToItemsTable.cocktailId eq id and (CocktailsToItemsTable.relation eq relation.relation) }
+        .map { imageRow ->
+            SimpleIngredient(
+                name = imageRow[GoodsTable.name],
+                images = buildImages(imageRow[GoodsTable.id], ImageType.ITEM),
+            )
+        }
+
+}
+
 private fun getCompactCocktail(search: String?, tags: List<Int>?): List<CompactCocktailVM> {
     fun searchQuery(): Op<Boolean> {
         println("query $search")
@@ -69,12 +116,11 @@ private fun getCompactCocktail(search: String?, tags: List<Int>?): List<CompactC
     }
 
     fun tagQuery(): Op<Boolean> {
-        println("tags $tags")
         return if (tags != null) {
             val cocktailIdsByTag = CocktailToTagTable.select { CocktailToTagTable.tagId inList tags }
                 .map { row ->
                     row[CocktailToTagTable.cocktailId]
-                }
+                }.distinct()
             CocktailsTable.id inList cocktailIdsByTag
         } else {
             Op.TRUE
@@ -86,38 +132,28 @@ private fun getCompactCocktail(search: String?, tags: List<Int>?): List<CompactC
             .map { cocktailRow ->
                 val id = cocktailRow[CocktailsTable.id]
 
-                val ingredients =
-                    CocktailsToItemsTable.join(GoodsTable, JoinType.INNER, GoodsTable.id, CocktailsToItemsTable.goodId)
-                        .select { CocktailsToItemsTable.cocktailId eq id and (CocktailsToItemsTable.relation eq 1) }
-                        .map { imageRow ->
-                            SimpleIngredient(
-                                name = imageRow[GoodsTable.name],
-                                images = buildImages(imageRow[GoodsTable.id], "goods"),
-                            )
-                        }
-
-
-                val tags = CocktailToTagTable.join(TagsTable, JoinType.INNER, TagsTable.id, CocktailToTagTable.tagId)
-                    .select { CocktailToTagTable.cocktailId eq id }
-                    .map { tagRow ->
-                        TagVM(
-                            tagRow[TagsTable.id],
-                            tagRow[TagsTable.name]
-                        )
-                    }
-
                 CompactCocktailVM(
                     id,
                     cocktailRow[CocktailsTable.name],
-                    buildImages(id, "cocktails"),
-                    ingredients,
-                    tags,
+                    buildImages(id, ImageType.COCKTAIL),
+                    getSimpleIngredients(id, ItemType.GOOD),
+                    getCocktailTags(id),
                 )
             }
     }
 }
 
-private fun buildImages(id: Int, type: String): List<Image> {
+private fun getCocktailTags(id: Int) =
+    CocktailToTagTable.join(TagsTable, JoinType.INNER, TagsTable.id, CocktailToTagTable.tagId)
+        .select { CocktailToTagTable.cocktailId eq id }
+        .map { tagRow ->
+            TagVM(
+                tagRow[TagsTable.id],
+                tagRow[TagsTable.name]
+            )
+        }
+
+private fun buildImages(id: Int, type: ImageType): List<Image> {
     data class SizeDep(
         val responseSize: String,
         val imageSize: String,
@@ -130,7 +166,7 @@ private fun buildImages(id: Int, type: String): List<Image> {
             SizeDep("0", "320"),
         ).map { size ->
             Image(
-                src = "https://image.mixdrinks.org/$type/$id/${size.imageSize}/$id.$format",
+                src = "https://image.mixdrinks.org/${type.imagePrefix}/$id/${size.imageSize}/$id.$format",
                 media = "screen and (min-width: ${size.responseSize}px)",
                 type = "image/$format"
             )

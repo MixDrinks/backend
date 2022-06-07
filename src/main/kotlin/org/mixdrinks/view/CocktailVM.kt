@@ -26,6 +26,22 @@ data class CompactCocktailVM(
 )
 
 @Serializable
+data class FullCocktailVM(
+    @SerialName("id")
+    val id: Int,
+    @SerialName("name")
+    val name: String,
+    @SerialName("images")
+    val images: List<Image>,
+    @SerialName("goods")
+    val goods: List<SimpleIngredient>,
+    @SerialName("tools")
+    val tools: List<SimpleIngredient>,
+    @SerialName("tags")
+    val tags: List<TagVM>,
+)
+
+@Serializable
 data class SimpleIngredient(
     @SerialName("name")
     val name: String,

@@ -13,7 +13,7 @@ Environment variable
 Base url:
 `https://api.mixdrinks.org/`
 
-#### Search
+#### Cocktail filter
 
 `/cocktails/filter` - search by filters
 
@@ -28,6 +28,7 @@ Example
 cocktail's name contains `ін`
 
 Response
+
 ```json
 [
   {
@@ -418,8 +419,7 @@ Response
 ]
 ```
 
-
-#### Cocktails
+#### All cocktails
 
 `cocktails/all` - return the list of all cocktails, with short information id and name.
 
@@ -455,6 +455,15 @@ Connection: keep-alive
   }
 ]
 ```
+
+#### Full cocktail info
+
+`cocktail/full` - return the cocktail with all information id, name, list of ingredients, tools, receipt and tags.
+
+Queries
+| Name | Require |Type | Description |
+|------|----------|-----------|------|
+|id | Yes |String |The cocktail id |
 
 #### Tags
 
