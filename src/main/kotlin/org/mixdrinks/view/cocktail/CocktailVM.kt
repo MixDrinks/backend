@@ -12,6 +12,12 @@ data class SimpleCocktailVM(
 )
 
 @Serializable
+data class FilterResultVM(
+    @SerialName("totalCount") val totalCount: Long,
+    @SerialName("cocktails") val cocktails: List<CompactCocktailVM>,
+)
+
+@Serializable
 data class CompactCocktailVM(
     @SerialName("id") val id: Int,
     @SerialName("name") val name: String,

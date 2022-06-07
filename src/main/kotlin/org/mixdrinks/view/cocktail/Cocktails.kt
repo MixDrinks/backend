@@ -13,6 +13,8 @@ import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
 import org.mixdrinks.view.tag.TagVM
 
+const val DEFAULT_PAGE_SIZE = 10
+
 fun Application.cocktails() {
     routing {
         get("cocktails/all") {
@@ -36,8 +38,15 @@ fun Application.cocktails() {
 
             val search = call.request.queryParameters["query"]
 
-            val offset = call.request.queryParameters["offset"]?.toLongOrNull()
-            val limit = call.request.queryParameters["limit"]?.toIntOrNull()
+            var offset = call.request.queryParameters["offset"]?.toLongOrNull()
+            var limit = call.request.queryParameters["limit"]?.toIntOrNull()
+
+            val page = call.request.queryParameters["page"]?.toIntOrNull()
+
+            if (page != null) {
+                offset = (page * DEFAULT_PAGE_SIZE).toLong()
+                limit = DEFAULT_PAGE_SIZE
+            }
 
             call.respond(getCompactCocktail(search, tags, goods, limit, offset))
         }
@@ -77,7 +86,7 @@ private fun getCompactCocktail(
     goods: List<Int>?,
     limit: Int?,
     offset: Long?,
-): List<CompactCocktailVM> {
+): FilterResultVM {
     fun searchQuery(): Op<Boolean> {
         return if (search != null) {
             CocktailsTable.name.lowerCase() like "%$search%".lowercase()
@@ -116,9 +125,11 @@ private fun getCompactCocktail(
             query = query.limit(limit, offset ?: 0)
         }
 
-        query.map { cocktailRow ->
+        val cocktails = query.map { cocktailRow ->
             buildCompactCocktail(cocktailRow)
         }
+
+        FilterResultVM(query.count(), cocktails)
     }
 }
 
