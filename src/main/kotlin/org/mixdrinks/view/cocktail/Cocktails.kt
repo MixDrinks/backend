@@ -120,12 +120,14 @@ private fun getCompactCocktail(
     }
 
     return transaction {
-        var query = CocktailsTable.select { searchQuery() and tagQuery() and itemsQuery() }
-        if (limit != null) {
-            query = query.limit(limit, offset ?: 0)
+        val query = CocktailsTable.select { searchQuery() and tagQuery() and itemsQuery() }
+        val paginationQuery = if (limit != null) {
+            query.copy().limit(limit, offset ?: 0)
+        } else {
+            query.copy()
         }
 
-        val cocktails = query.map { cocktailRow ->
+        val cocktails = paginationQuery.map { cocktailRow ->
             buildCompactCocktail(cocktailRow)
         }
 
