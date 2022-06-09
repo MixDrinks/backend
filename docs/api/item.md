@@ -6,7 +6,7 @@ The ingredients and goods has the same object format. The app provide a one API 
 
 Queries
 
-| Name | Require  | Type      | Description     |
-|:-----|:---------|:----------|:----------------|
-| id   | Yes      | String    | The cocktail id |
+| Name | Require | Type   | Description     |
+|------|---------|--------|-----------------|
+| id   | Yes     | String | The cocktail id |
 
