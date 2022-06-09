@@ -1,4 +1,8 @@
-## Welcome to GitHub Pages
+## The mixdrinks service documentation
+
+- [API](api/api.md)
+
+The service provide API for get cocktails, good and tools for cocktail preparing.    
 
 You can use the [editor on GitHub](https://github.com/MixDrinks/backend/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
 
