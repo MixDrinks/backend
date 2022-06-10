@@ -39,6 +39,7 @@ data class FullCocktailVM(
 
 @Serializable
 data class SimpleIngredient(
+    @SerialName("id") val id: Int,
     @SerialName("name") val name: String,
     @SerialName("images") val images: List<Image>,
 )

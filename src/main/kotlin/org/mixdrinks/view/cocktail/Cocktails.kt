@@ -160,10 +160,11 @@ private fun getCocktailTags(id: Int) =
 private fun getSimpleIngredients(id: Int, relation: ItemType): List<SimpleIngredient> {
     return CocktailsToItemsTable.join(ItemsTable, JoinType.INNER, ItemsTable.id, CocktailsToItemsTable.goodId)
         .select { CocktailsToItemsTable.cocktailId eq id and (CocktailsToItemsTable.relation eq relation.relation) }
-        .map { imageRow ->
+        .map { itemRow ->
             SimpleIngredient(
-                name = imageRow[ItemsTable.name],
-                images = buildImages(imageRow[ItemsTable.id], ImageType.ITEM),
+                id = itemRow[ItemsTable.id],
+                name = itemRow[ItemsTable.name],
+                images = buildImages(itemRow[ItemsTable.id], ImageType.ITEM),
             )
         }
 
