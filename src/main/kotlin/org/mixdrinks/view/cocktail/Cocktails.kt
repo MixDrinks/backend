@@ -73,8 +73,8 @@ private fun getFullCocktail(id: Int): FullCocktailVM {
             name = cocktail[CocktailsTable.name],
             images = buildImages(cocktailId, ImageType.COCKTAIL),
             receipt = cocktail[CocktailsTable.steps].toList(),
-            goods = getSimpleIngredients(cocktailId, ItemType.GOOD),
-            tools = getSimpleIngredients(cocktailId, ItemType.TOOL),
+            goods = getFullIngredients(cocktailId, ItemType.GOOD),
+            tools = getFullIngredients(cocktailId, ItemType.TOOL),
             tags = getCocktailTags(cocktailId),
         )
     }
@@ -156,6 +156,21 @@ private fun getCocktailTags(id: Int) =
                 tagRow[TagsTable.name]
             )
         }
+
+private fun getFullIngredients(id: Int, relation: ItemType): List<FullIngredient> {
+    return CocktailsToItemsTable.join(ItemsTable, JoinType.INNER, ItemsTable.id, CocktailsToItemsTable.goodId)
+        .select { CocktailsToItemsTable.cocktailId eq id and (CocktailsToItemsTable.relation eq relation.relation) }
+        .map { itemRow ->
+            FullIngredient(
+                id = itemRow[ItemsTable.id],
+                name = itemRow[ItemsTable.name],
+                images = buildImages(itemRow[ItemsTable.id], ImageType.ITEM),
+                amount = itemRow[CocktailsToItemsTable.amount],
+                unit = itemRow[CocktailsToItemsTable.unit],
+            )
+        }
+}
+
 
 private fun getSimpleIngredients(id: Int, relation: ItemType): List<SimpleIngredient> {
     return CocktailsToItemsTable.join(ItemsTable, JoinType.INNER, ItemsTable.id, CocktailsToItemsTable.goodId)
