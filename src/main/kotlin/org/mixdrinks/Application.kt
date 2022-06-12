@@ -14,6 +14,7 @@ import org.jetbrains.exposed.sql.Database
 import org.mixdrinks.plugins.configureCache
 import org.mixdrinks.plugins.configureRouting
 import org.mixdrinks.plugins.configureSecurity
+import org.mixdrinks.plugins.static
 import org.mixdrinks.view.cocktail.cocktails
 import org.mixdrinks.view.items.items
 import org.mixdrinks.view.tag.tags
@@ -26,6 +27,7 @@ fun main() {
             configureRouting()
             configureSecurity()
             configureCache()
+            static()
             install(CORS) {
                 anyHost()
                 allowHeaders { true }
