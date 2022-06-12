@@ -12,6 +12,7 @@ import org.mixdrinks.data.*
 import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
 import org.mixdrinks.view.tag.TagVM
+import kotlin.time.measureTime
 
 data class CocktailFilter(
     val id: Int,
@@ -26,34 +27,42 @@ class Filter {
     private val cocktails: List<CocktailFilter>
 
     init {
+        println("Start create filter")
         cocktails = transaction {
-            return@transaction CocktailsTable.selectAll().map { cocktailRow ->
-                val cocktailId = cocktailRow[CocktailsTable.id]
+            return@transaction CocktailsTable
+                .slice(CocktailsTable.id, CocktailsTable.name)
+                .selectAll()
+                .map { cocktailRow ->
+                    val cocktailId = cocktailRow[CocktailsTable.id]
 
-                val goodIds =
-                    CocktailsToItemsTable
-                        .select { CocktailsToItemsTable.cocktailId eq cocktailId and (CocktailsToItemsTable.relation eq ItemType.GOOD.relation) }
-                        .map { it[CocktailsToItemsTable.goodId] }
+                    val goodIds =
+                        CocktailsToItemsTable
+                            .slice(CocktailsToItemsTable.goodId)
+                            .select { CocktailsToItemsTable.cocktailId eq cocktailId and (CocktailsToItemsTable.relation eq ItemType.GOOD.relation) }
+                            .map { it[CocktailsToItemsTable.goodId] }
 
-                val toolIds =
-                    CocktailsToItemsTable
-                        .select { CocktailsToItemsTable.cocktailId eq cocktailId and (CocktailsToItemsTable.relation eq ItemType.TOOL.relation) }
-                        .map { it[CocktailsToItemsTable.goodId] }
+                    val toolIds =
+                        CocktailsToItemsTable
+                            .slice(CocktailsToItemsTable.goodId)
+                            .select { CocktailsToItemsTable.cocktailId eq cocktailId and (CocktailsToItemsTable.relation eq ItemType.TOOL.relation) }
+                            .map { it[CocktailsToItemsTable.goodId] }
 
-                val tagIds =
-                    CocktailToTagTable
-                        .select { CocktailToTagTable.cocktailId eq cocktailId }
-                        .map { it[CocktailToTagTable.tagId] }
+                    val tagIds =
+                        CocktailToTagTable
+                            .slice(CocktailToTagTable.tagId)
+                            .select { CocktailToTagTable.cocktailId eq cocktailId }
+                            .map { it[CocktailToTagTable.tagId] }
 
-                return@map CocktailFilter(
-                    id = cocktailId,
-                    name = cocktailRow[CocktailsTable.name],
-                    goodIds = goodIds,
-                    toolIds = toolIds,
-                    tagIds = tagIds,
-                )
-            }
+                    return@map CocktailFilter(
+                        id = cocktailId,
+                        name = cocktailRow[CocktailsTable.name],
+                        goodIds = goodIds,
+                        toolIds = toolIds,
+                        tagIds = tagIds,
+                    )
+                }
         }
+        println("End create filter")
     }
 
     fun filter(routing: Routing) = with(routing) {
@@ -149,7 +158,7 @@ class Filter {
     }
 
     private fun getSimpleGoods(goods: List<Int>): List<SimpleIngredient> {
-        return ItemsTable.select { ItemsTable.id inList goods and (CocktailsToItemsTable.relation eq ItemType.GOOD.relation) }
+        return ItemsTable.select { ItemsTable.id inList goods }
             .map { itemRow ->
                 SimpleIngredient(
                     id = itemRow[ItemsTable.id],
@@ -157,6 +166,5 @@ class Filter {
                     images = buildImages(itemRow[ItemsTable.id], ImageType.ITEM),
                 )
             }
-
     }
 }
