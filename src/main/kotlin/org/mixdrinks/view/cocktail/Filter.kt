@@ -129,7 +129,7 @@ class Filter {
         }
 
         if (limit != null) {
-            result = result.subList(limit, result.size)
+            result = result.subList(0, limit)
         }
 
         val cocktails = transaction {
