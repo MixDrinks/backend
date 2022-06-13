@@ -32,6 +32,7 @@ class Filter {
             return@transaction CocktailsTable
                 .slice(CocktailsTable.id, CocktailsTable.name)
                 .selectAll()
+                .limit(50)
                 .map { cocktailRow ->
                     val cocktailId = cocktailRow[CocktailsTable.id]
 
@@ -101,8 +102,8 @@ class Filter {
         tags: List<Int>?,
         goods: List<Int>?,
         tools: List<Int>?,
-        limit: Int?,
         offset: Int?,
+        limit: Int?,
     ): FilterResultVM {
         var result = cocktails
 
