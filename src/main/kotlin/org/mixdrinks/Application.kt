@@ -1,7 +1,6 @@
 package org.mixdrinks
 
 import com.typesafe.config.ConfigFactory
-import io.ktor.http.*
 import io.ktor.http.HttpMethod.Companion.DefaultMethods
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
@@ -18,6 +17,7 @@ import org.mixdrinks.plugins.static
 import org.mixdrinks.view.cocktail.cocktails
 import org.mixdrinks.view.filter.filters
 import org.mixdrinks.view.items.items
+import org.mixdrinks.view.scores.scores
 import org.mixdrinks.view.tag.tags
 
 fun main() {
@@ -54,6 +54,7 @@ fun main() {
             tags()
             filters()
             items()
+            scores()
         }
 
         connector {

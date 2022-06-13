@@ -33,6 +33,7 @@ private fun getFullItem(id: Int): ItemVm {
             id = itemId,
             name = item[ItemsTable.name],
             about = item[ItemsTable.about],
+            visitCount = item[ItemsTable.visitCount],
             images = buildImages(itemId, ImageType.ITEM),
         )
     }

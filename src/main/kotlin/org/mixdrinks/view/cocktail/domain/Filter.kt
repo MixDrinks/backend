@@ -1,7 +1,7 @@
 package org.mixdrinks.view.cocktail.domain
 
 import org.mixdrinks.view.cocktail.CocktailFilter
-import org.mixdrinks.view.cocktail.OffsetToBig
+import org.mixdrinks.view.error.OffsetToBig
 
 data class CocktailFilterFull(
     val list: List<CocktailFilter>,

@@ -48,6 +48,7 @@ private fun getFullCocktail(id: Int): FullCocktailVM {
         return@transaction FullCocktailVM(
             id = cocktailId,
             name = cocktail[CocktailsTable.name],
+            visitCount = cocktail[CocktailsTable.visitCount],
             images = buildImages(cocktailId, ImageType.COCKTAIL),
             receipt = cocktail[CocktailsTable.steps].toList(),
             goods = getFullIngredients(cocktailId, ItemType.GOOD),

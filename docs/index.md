@@ -5,4 +5,5 @@
     - [Full cocktails](api/full_cocktails.md)
     - [Item](api/item.md)
     - [Meta](api/meta.md)
+    - [Visit](api/visit.md)
 - [Image](image/image.md)

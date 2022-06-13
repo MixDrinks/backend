@@ -31,6 +31,7 @@ data class CompactCocktailVM(
 data class FullCocktailVM(
     @SerialName("id") val id: Int,
     @SerialName("name") val name: String,
+    @SerialName("visitCount") val visitCount: Int,
     @SerialName("receipt") val receipt: List<String>,
     @SerialName("images") val images: List<Image>,
     @SerialName("goods") val goods: List<FullIngredient>,

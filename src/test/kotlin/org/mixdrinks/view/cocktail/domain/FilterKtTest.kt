@@ -4,7 +4,7 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert
 import org.mixdrinks.view.cocktail.CocktailFilter
-import org.mixdrinks.view.cocktail.OffsetToBig
+import org.mixdrinks.view.error.OffsetToBig
 import kotlin.test.Test
 
 internal class FilterKtTest {

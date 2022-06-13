@@ -7,5 +7,6 @@ Base url:
 - [Full cocktails](full_cocktails.md)
 - [Item](item.md)
 - [Meta](meta.md)
+- [Visit](visit.md)
 - [All cocktails](all_cocktails.md) **Deprecated**
 - [Tags](tags.md) **Deprecated**
