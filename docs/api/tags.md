@@ -1,5 +1,7 @@
 #### Tags
 
+**Deprecated**
+
 Get list of tags
 
 GET: `tags/all`

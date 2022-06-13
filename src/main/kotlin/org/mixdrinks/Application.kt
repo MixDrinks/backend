@@ -16,6 +16,7 @@ import org.mixdrinks.plugins.configureRouting
 import org.mixdrinks.plugins.configureSecurity
 import org.mixdrinks.plugins.static
 import org.mixdrinks.view.cocktail.cocktails
+import org.mixdrinks.view.filter.filters
 import org.mixdrinks.view.items.items
 import org.mixdrinks.view.tag.tags
 
@@ -51,6 +52,7 @@ fun main() {
 
             cocktails()
             tags()
+            filters()
             items()
         }
 

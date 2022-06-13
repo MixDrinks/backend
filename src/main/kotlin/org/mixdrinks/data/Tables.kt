@@ -14,6 +14,7 @@ object ItemsTable : Table(name = "goods") {
     val id = integer("id")
     val name = text("name")
     val about = text("about")
+    val relation = integer("relation")
 
     override val primaryKey: PrimaryKey = PrimaryKey(id)
 }
