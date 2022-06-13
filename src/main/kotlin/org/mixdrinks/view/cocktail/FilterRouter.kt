@@ -9,7 +9,6 @@ import org.mixdrinks.data.*
 import org.mixdrinks.view.cocktail.domain.filterCocktails
 import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
-import org.mixdrinks.view.tag.TagVM
 
 data class CocktailFilter(
     val id: Int,
@@ -85,40 +84,19 @@ class FilterRouter {
         offset: Int?,
         limit: Int?,
     ): FilterResultVM {
+        return transaction {
+            val allTags = TagsTable.slice(TagsTable.id).selectAll().map { it[TagsTable.id] }
+            val result = filterCocktails(cocktails, search, tags, goods, tools, offset, limit, allTags)
 
-        val result = filterCocktails(cocktails, search, tags, goods, tools, offset, limit)
-
-        val cocktails = transaction {
-            result.list.map { cocktailFilter ->
+            val resultCocktails = result.list.map { cocktailFilter ->
                 CompactCocktailVM(
                     cocktailFilter.id,
                     cocktailFilter.name,
                     buildImages(cocktailFilter.id, ImageType.COCKTAIL),
-                    getSimpleGoods(cocktailFilter.goodIds),
-                    getTags(cocktailFilter.tagIds)
                 )
             }
-        }
 
-        return FilterResultVM(result.totalCount, cocktails)
-    }
-
-    private fun getTags(tagIds: List<Int>): List<TagVM> {
-        return TagsTable.select { TagsTable.id inList tagIds }.map { itemRow ->
-            TagVM(
-                id = itemRow[TagsTable.id],
-                name = itemRow[TagsTable.name],
-            )
-        }
-    }
-
-    private fun getSimpleGoods(goods: List<Int>): List<SimpleIngredient> {
-        return ItemsTable.select { ItemsTable.id inList goods }.map { itemRow ->
-            SimpleIngredient(
-                id = itemRow[ItemsTable.id],
-                name = itemRow[ItemsTable.name],
-                images = buildImages(itemRow[ItemsTable.id], ImageType.ITEM),
-            )
+            FilterResultVM(result.totalCount, resultCocktails, result.tagMaps, result.goodMaps, result.toolMaps)
         }
     }
 }
