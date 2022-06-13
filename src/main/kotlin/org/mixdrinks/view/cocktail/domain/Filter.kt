@@ -33,20 +33,20 @@ fun filterCocktails(
     }
 
     if (limit != null) {
-        result = result.subList(0, limit.coerceAtMost(count))
+        result = result.subList(0, limit.coerceAtMost(result.size))
     }
 
-    val tagsMap = allTags.map {
-        Pair(it, commonFilter(cocktails, search, tags.orEmpty().plus(it), goods, tools).count())
-    }.toMap()
+    val tagsMap = allTags.associateWith {
+        commonFilter(cocktails, search, tags.orEmpty().plus(it), goods, tools).count()
+    }
 
-    val goodsMap = allTags.map {
-        Pair(it, commonFilter(cocktails, search, tags, goods.orEmpty().plus(it), tools).count())
-    }.toMap()
+    val goodsMap = allTags.associateWith {
+        commonFilter(cocktails, search, tags, goods.orEmpty().plus(it), tools).count()
+    }
 
-    val toolsMap = allTags.map {
-        Pair(it, commonFilter(cocktails, search, tags, goods, tools.orEmpty().plus(it)).count())
-    }.toMap()
+    val toolsMap = allTags.associateWith {
+        commonFilter(cocktails, search, tags, goods, tools.orEmpty().plus(it)).count()
+    }
 
     return CocktailFilterFull(result, count, tagsMap, goodsMap, toolsMap)
 }
