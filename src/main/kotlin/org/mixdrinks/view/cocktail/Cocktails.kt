@@ -14,7 +14,7 @@ import org.mixdrinks.view.tag.TagVM
 const val DEFAULT_PAGE_SIZE = 10
 
 fun Application.cocktails() {
-    val filter = Filter()
+    val filterRouter = FilterRouter()
     routing {
         get("cocktails/all") {
             call.respond(transaction {
@@ -26,7 +26,7 @@ fun Application.cocktails() {
                 }
             })
         }
-        filter.filter(this)
+        filterRouter.filter(this)
         get("cocktails/full") {
             val id = call.request.queryParameters["id"]?.toIntOrNull()
 

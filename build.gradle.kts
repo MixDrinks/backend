@@ -47,4 +47,6 @@ dependencies {
 
     implementation("com.zaxxer:HikariCP:5.0.1")
     implementation("org.postgresql:postgresql:42.3.4")
+
+    testImplementation("io.mockk:mockk:1.12.4")
 }
