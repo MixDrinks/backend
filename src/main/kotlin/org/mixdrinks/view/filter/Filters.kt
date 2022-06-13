@@ -6,6 +6,7 @@ import io.ktor.server.routing.*
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.view.cocktail.ItemType
@@ -14,24 +15,21 @@ fun Application.filters() {
     routing {
         get("meta/all") {
             call.respond(transaction {
-
                 FiltersVM(
-                    tags = TagsTable
-                        .selectAll().orderBy(TagsTable.id)
-                        .associate { tagRow ->
-                            Pair(tagRow[TagsTable.id], tagRow[TagsTable.name])
-                        },
-                    goods = ItemsTable
-                        .select { ItemsTable.relation eq ItemType.GOOD.relation }.orderBy(ItemsTable.id)
+                    tags = TagsTable.selectAll().orderBy(TagsTable.id).associate { tagRow ->
+                        Pair(tagRow[TagsTable.id], tagRow[TagsTable.name])
+                    },
+                    goods = ItemsTable.select { ItemsTable.relation eq ItemType.GOOD.relation }.orderBy(ItemsTable.id)
                         .associate { goodRow ->
                             Pair(goodRow[ItemsTable.id], goodRow[ItemsTable.name])
                         },
-                    tools = ItemsTable
-                        .select { ItemsTable.relation eq ItemType.TOOL.relation }.orderBy(ItemsTable.id)
+                    tools = ItemsTable.select { ItemsTable.relation eq ItemType.TOOL.relation }.orderBy(ItemsTable.id)
                         .associate { toolRow ->
                             Pair(toolRow[ItemsTable.id], toolRow[ItemsTable.name])
-                        }
-                )
+                        },
+                    cocktails = CocktailsTable.selectAll().orderBy(CocktailsTable.id).associate { cocktailRow ->
+                        Pair(cocktailRow[CocktailsTable.id], cocktailRow[CocktailsTable.name])
+                    })
             })
         }
     }

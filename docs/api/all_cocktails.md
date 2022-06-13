@@ -1,5 +1,7 @@
 ## All cocktails
 
+**Deprecated**, use the [meta](meta.md) endpoint instead
+
 `cocktails/all` - return the list of all cocktails, with short information id and name.
 
 Response
