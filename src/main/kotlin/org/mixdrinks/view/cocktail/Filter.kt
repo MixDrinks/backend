@@ -32,7 +32,6 @@ class Filter {
             return@transaction CocktailsTable
                 .slice(CocktailsTable.id, CocktailsTable.name)
                 .selectAll()
-                .limit(50)
                 .map { cocktailRow ->
                     val cocktailId = cocktailRow[CocktailsTable.id]
 
