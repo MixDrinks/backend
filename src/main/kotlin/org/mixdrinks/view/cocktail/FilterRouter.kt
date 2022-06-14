@@ -28,7 +28,12 @@ class FilterRouter {
     init {
         println("Start create filter")
         cocktails = transaction {
-            return@transaction CocktailsTable.slice(CocktailsTable.id, CocktailsTable.name, CocktailsTable.ratingCount, CocktailsTable.ratingValue).selectAll()
+            return@transaction CocktailsTable.slice(
+                CocktailsTable.id,
+                CocktailsTable.name,
+                CocktailsTable.ratingCount,
+                CocktailsTable.ratingValue
+            ).selectAll()
                 .map { cocktailRow ->
                     val cocktailId = cocktailRow[CocktailsTable.id]
 
