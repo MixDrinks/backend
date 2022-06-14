@@ -4,10 +4,7 @@ import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
-import org.mixdrinks.view.error.CocktailNotFound
-import org.mixdrinks.view.error.OffsetToBig
-import org.mixdrinks.view.error.QueryRequire
-import org.mixdrinks.view.error.VoteError
+import org.mixdrinks.view.error.*
 
 fun Application.configureRouting() {
     install(StatusPages) {
@@ -21,6 +18,9 @@ fun Application.configureRouting() {
             call.respond(HttpStatusCode.BadRequest, cause.toString())
         }
         exception<VoteError> { call, cause ->
+            call.respond(HttpStatusCode.BadRequest, cause.toString())
+        }
+        exception<SortTypeNotFound> { call, cause ->
             call.respond(HttpStatusCode.BadRequest, cause.toString())
         }
         exception<Exception> { call, cause ->

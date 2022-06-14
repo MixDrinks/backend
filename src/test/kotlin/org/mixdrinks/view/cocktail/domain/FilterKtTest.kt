@@ -4,6 +4,7 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert
 import org.mixdrinks.view.cocktail.CocktailFilter
+import org.mixdrinks.view.cocktail.SortType
 import org.mixdrinks.view.error.OffsetToBig
 import kotlin.test.Test
 
@@ -17,7 +18,14 @@ internal class FilterKtTest {
         )
 
         val result = filterCocktails(
-            cocktails = list, search = null, tags = null, goods = null, tools = null, offset = null, limit = null
+            cocktails = list,
+            search = null,
+            tags = null,
+            goods = null,
+            tools = null,
+            offset = null,
+            limit = null,
+            sortType = SortType.MOST_POPULAR
         )
 
         Assert.assertEquals(list, result.list)
@@ -32,7 +40,14 @@ internal class FilterKtTest {
         )
 
         val result = filterCocktails(
-            cocktails = list, search = "tN", tags = null, goods = null, tools = null, offset = null, limit = null
+            cocktails = list,
+            search = "tN",
+            tags = null,
+            goods = null,
+            tools = null,
+            offset = null,
+            limit = null,
+            sortType = SortType.MOST_POPULAR
         )
 
         Assert.assertEquals(listOf(list[0], list[2]), result.list)
@@ -47,7 +62,14 @@ internal class FilterKtTest {
         )
 
         val result = filterCocktails(
-            cocktails = list, search = null, tags = listOf(3), goods = null, tools = null, offset = null, limit = null
+            cocktails = list,
+            search = null,
+            tags = listOf(3),
+            goods = null,
+            tools = null,
+            offset = null,
+            limit = null,
+            sortType = SortType.MOST_POPULAR
         )
 
         Assert.assertEquals(listOf(list[0], list[1]), result.list)
@@ -62,7 +84,14 @@ internal class FilterKtTest {
         )
 
         val result = filterCocktails(
-            cocktails = list, search = null, tags = listOf(224), goods = null, tools = null, offset = null, limit = null
+            cocktails = list,
+            search = null,
+            tags = listOf(224),
+            goods = null,
+            tools = null,
+            offset = null,
+            limit = null,
+            sortType = SortType.MOST_POPULAR
         )
 
         Assert.assertEquals(listOf(list[2]), result.list)
@@ -84,7 +113,8 @@ internal class FilterKtTest {
             goods = null,
             tools = null,
             offset = null,
-            limit = null
+            limit = null,
+            sortType = SortType.MOST_POPULAR
         )
 
         Assert.assertEquals(listOf(list[0], list[3]), result.list)
@@ -104,7 +134,14 @@ internal class FilterKtTest {
 
         Assert.assertThrows(OffsetToBig::class.java) {
             filterCocktails(
-                cocktails = list, search = null, tags = listOf(3), goods = null, tools = null, offset = 10, limit = null
+                cocktails = list,
+                search = null,
+                tags = listOf(3),
+                goods = null,
+                tools = null,
+                offset = 10,
+                limit = null,
+                sortType = SortType.MOST_POPULAR
             )
         }
     }
@@ -122,7 +159,14 @@ internal class FilterKtTest {
 
 
         val result = filterCocktails(
-            cocktails = list, search = null, tags = listOf(3), goods = null, tools = null, offset = null, limit = 2
+            cocktails = list,
+            search = null,
+            tags = listOf(3),
+            goods = null,
+            tools = null,
+            offset = null,
+            limit = 2,
+            sortType = SortType.MOST_POPULAR
         )
 
         Assert.assertEquals(listOf(list[0], list[1]), result.list)
@@ -142,7 +186,14 @@ internal class FilterKtTest {
 
 
         val result = filterCocktails(
-            cocktails = list, search = null, tags = listOf(3), goods = null, tools = null, offset = null, limit = 20
+            cocktails = list,
+            search = null,
+            tags = listOf(3),
+            goods = null,
+            tools = null,
+            offset = null,
+            limit = 20,
+            sortType = SortType.MOST_POPULAR
         )
 
         Assert.assertEquals(listOf(list[0], list[1], list[2], list[3], list[4]), result.list)

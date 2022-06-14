@@ -4,15 +4,16 @@ GET: `/cocktails/filter` - search by filters
 
 Queries
 
-| Name   | Require | Type       | Description                                                                                                                              |
-|:-------|:--------|:-----------|:-----------------------------------------------------------------------------------------------------------------------------------------|
-| query  | No      | String     | The string to filter cocktail by name, filter return only cocktails which name contains `query`                                          |
-| tags   | No      | Array<Int> | The array of tag ids. The filter allow only cocktails, which connect to the one of tag                                                   |
-| goods  | No      | Array<Int> | The array of items ids. The filter allow only cocktails with the goods.                                                                  |
-| tools  | No      | Array<Int> | The array of items ids. The filter allow only cocktails, which need the item for create a cocktail. The filter works for only for tools. |
-| offset | No      | Int        | The app skip first entities                                                                                                              |
-| limit  | No      | Int        | The limit of entities into response                                                                                                      |
-| page   | No      | Int        | Return the subset of cocktails, offset and limit calculate on be site                                                                    |
+| Name   | Require | Type       | Default        | Description                                                                                                                              |
+|:-------|:--------|:-----------|:---------------|:-----------------------------------------------------------------------------------------------------------------------------------------|
+| query  | No      | String     | null           | The string to filter cocktail by name, filter return only cocktails which name contains `query`                                          |
+| tags   | No      | Array<Int> | null           | The array of tag ids. The filter allow only cocktails, which connect to the one of tag                                                   |
+| goods  | No      | Array<Int> | null           | The array of items ids. The filter allow only cocktails with the goods.                                                                  |
+| tools  | No      | Array<Int> | null           | The array of items ids. The filter allow only cocktails, which need the item for create a cocktail. The filter works for only for tools. |
+| offset | No      | Int        | null           | The app skip first entities                                                                                                              |
+| limit  | No      | Int        | null           | The limit of entities into response                                                                                                      |
+| page   | No      | Int        | null           | Return the subset of cocktails, offset and limit calculate on be site                                                                    |
+| sort   | No      | Int        | `most-popular` | The sort type. Available the following  sort types: `most-popular` and `biggest-rate`                                                    |
 
 Example
 `/cocktails/filter?tags=60&query=ін` - Returns all cocktails with connect with tag {id:60, name:шоколадні} and

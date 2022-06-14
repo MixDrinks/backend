@@ -3,11 +3,11 @@ package org.mixdrinks.view.cocktail
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.serialization.SerialName
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.*
 import org.mixdrinks.view.cocktail.domain.filterCocktails
+import org.mixdrinks.view.error.SortTypeNotFound
 import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
 
@@ -15,11 +15,16 @@ data class CocktailFilter(
     val id: Int,
     val name: String,
     val rating: Float?,
-    val ratingCount: Int,
+    val visitCount: Int,
     val goodIds: List<Int>,
     val toolIds: List<Int>,
     val tagIds: List<Int>,
 )
+
+enum class SortType(val key: String) {
+    MOST_POPULAR("most-popular"),
+    BIGGEST_RATE("biggest-rate"),
+}
 
 class FilterRouter {
 
@@ -32,7 +37,8 @@ class FilterRouter {
                 CocktailsTable.id,
                 CocktailsTable.name,
                 CocktailsTable.ratingCount,
-                CocktailsTable.ratingValue
+                CocktailsTable.ratingValue,
+                CocktailsTable.visitCount
             ).selectAll()
                 .map { cocktailRow ->
                     val cocktailId = cocktailRow[CocktailsTable.id]
@@ -52,7 +58,7 @@ class FilterRouter {
                         id = cocktailId,
                         name = cocktailRow[CocktailsTable.name],
                         rating = cocktailRow.getRating(),
-                        ratingCount = cocktailRow[CocktailsTable.ratingCount],
+                        visitCount = cocktailRow[CocktailsTable.visitCount],
                         goodIds = goodIds,
                         toolIds = toolIds,
                         tagIds = tagIds,
@@ -82,7 +88,11 @@ class FilterRouter {
                 limit = DEFAULT_PAGE_SIZE
             }
 
-            call.respond(getCompactCocktail(search, tags, goods, tools, offset, limit))
+            val sortKey = call.request.queryParameters["sort"] ?: SortType.MOST_POPULAR.key
+
+            val sortType = SortType.values().firstOrNull { it.key == sortKey } ?: throw SortTypeNotFound()
+
+            call.respond(getCompactCocktail(search, tags, goods, tools, offset, limit, sortType))
         }
     }
 
@@ -93,20 +103,22 @@ class FilterRouter {
         tools: List<Int>?,
         offset: Int?,
         limit: Int?,
+        sortType: SortType,
     ): FilterResultVM {
         return transaction {
             val allTags = TagsTable.slice(TagsTable.id).selectAll().map { it[TagsTable.id] }
-            val result = filterCocktails(cocktails, search, tags, goods, tools, offset, limit, allTags)
+            val result = filterCocktails(cocktails, search, tags, goods, tools, offset, limit, sortType, allTags)
 
-            val resultCocktails = result.list.map { cocktailFilter ->
-                CompactCocktailVM(
-                    cocktailFilter.id,
-                    cocktailFilter.name,
-                    cocktailFilter.rating,
-                    cocktailFilter.ratingCount,
-                    buildImages(cocktailFilter.id, ImageType.COCKTAIL),
-                )
-            }
+            val resultCocktails = result.list
+                .map { cocktailFilter ->
+                    CompactCocktailVM(
+                        cocktailFilter.id,
+                        cocktailFilter.name,
+                        cocktailFilter.rating,
+                        cocktailFilter.visitCount,
+                        buildImages(cocktailFilter.id, ImageType.COCKTAIL),
+                    )
+                }
 
             FilterResultVM(result.totalCount, resultCocktails, result.tagMaps, result.goodMaps, result.toolMaps)
         }

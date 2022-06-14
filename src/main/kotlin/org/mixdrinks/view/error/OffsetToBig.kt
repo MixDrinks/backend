@@ -27,4 +27,6 @@ class QueryRequire(val queryName: String) : Exception() {
     }
 }
 
-class VoteError() : Exception()
+class VoteError : Exception()
+
+class SortTypeNotFound : Exception()

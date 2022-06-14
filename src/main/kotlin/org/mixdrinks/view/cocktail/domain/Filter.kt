@@ -1,6 +1,7 @@
 package org.mixdrinks.view.cocktail.domain
 
 import org.mixdrinks.view.cocktail.CocktailFilter
+import org.mixdrinks.view.cocktail.SortType
 import org.mixdrinks.view.error.OffsetToBig
 
 data class CocktailFilterFull(
@@ -19,9 +20,19 @@ fun filterCocktails(
     tools: List<Int>?,
     offset: Int?,
     limit: Int?,
+    sortType: SortType,
     allTags: List<Int> = emptyList()
 ): CocktailFilterFull {
+    val comparator: Comparator<CocktailFilter> = when (sortType) {
+        SortType.MOST_POPULAR -> {
+            compareBy<CocktailFilter> { it.visitCount }.reversed()
+        }
+        SortType.BIGGEST_RATE -> {
+            compareBy<CocktailFilter> { it.rating }.reversed()
+        }
+    }
     var result = commonFilter(cocktails, search, tags, goods, tools)
+        .sortedWith(comparator)
 
     val count = result.count()
 
