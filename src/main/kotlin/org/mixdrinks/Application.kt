@@ -7,6 +7,7 @@ import io.ktor.server.application.*
 import io.ktor.server.config.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
 import org.jetbrains.exposed.sql.Database
@@ -27,8 +28,10 @@ fun main() {
         module {
             configureRouting()
             configureSecurity()
-            configureCache()
+            //configureCache()
             static()
+            install(CallLogging)
+
             install(CORS) {
                 anyHost()
                 allowHeaders { true }
