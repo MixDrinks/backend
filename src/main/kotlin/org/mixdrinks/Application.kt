@@ -11,6 +11,7 @@ import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
 import org.jetbrains.exposed.sql.Database
+import org.mixdrinks.plugins.configureCache
 import org.mixdrinks.plugins.configureRouting
 import org.mixdrinks.plugins.configureSecurity
 import org.mixdrinks.plugins.static
@@ -27,7 +28,7 @@ fun main() {
         module {
             configureRouting()
             configureSecurity()
-            //configureCache()
+            configureCache()
             static()
             install(CallLogging)
 
