@@ -45,11 +45,18 @@ private fun getFullCocktail(id: Int): FullCocktailVM {
 
         val cocktailId = cocktail[CocktailsTable.id]
 
+        val rating: Float? = cocktail[CocktailsTable.ratingValue]?.let { ratingValue ->
+            cocktail[CocktailsTable.ratingCount].takeIf { it != 0 }?.let { ratingCount ->
+                ratingValue.toFloat() / ratingCount.toFloat()
+            }
+        }
+
         return@transaction FullCocktailVM(
             id = cocktailId,
             name = cocktail[CocktailsTable.name],
             visitCount = cocktail[CocktailsTable.visitCount],
-            rating = cocktail[CocktailsTable.ratingValue].toFloat() / cocktail[CocktailsTable.ratingCount].toFloat(),
+            rating = rating,
+            ratingCount = cocktail[CocktailsTable.ratingCount],
             images = buildImages(cocktailId, ImageType.COCKTAIL),
             receipt = cocktail[CocktailsTable.steps].toList(),
             goods = getFullIngredients(cocktailId, ItemType.GOOD),
@@ -61,11 +68,9 @@ private fun getFullCocktail(id: Int): FullCocktailVM {
 
 private fun getCocktailTags(id: Int) =
     CocktailToTagTable.join(TagsTable, JoinType.INNER, TagsTable.id, CocktailToTagTable.tagId)
-        .select { CocktailToTagTable.cocktailId eq id }
-        .map { tagRow ->
+        .select { CocktailToTagTable.cocktailId eq id }.map { tagRow ->
             TagVM(
-                tagRow[TagsTable.id],
-                tagRow[TagsTable.name]
+                tagRow[TagsTable.id], tagRow[TagsTable.name]
             )
         }
 

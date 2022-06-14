@@ -6,4 +6,5 @@
     - [Item](api/item.md)
     - [Meta](api/meta.md)
     - [Visit](api/visit.md)
+    - [Raiting](api/rating.md)
 - [Image](image/image.md)

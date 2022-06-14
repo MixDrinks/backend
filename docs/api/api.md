@@ -8,5 +8,6 @@ Base url:
 - [Item](item.md)
 - [Meta](meta.md)
 - [Visit](visit.md)
+- [Rating](rating.md)
 - [All cocktails](all_cocktails.md) **Deprecated**
 - [Tags](tags.md) **Deprecated**
