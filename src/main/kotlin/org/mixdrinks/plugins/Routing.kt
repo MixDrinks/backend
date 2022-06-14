@@ -24,15 +24,15 @@ fun Application.configureRouting() {
             call.respond(HttpStatusCode.BadRequest, cause.toString())
         }
         exception<Exception> { call, cause ->
-            println(cause.stackTraceToString())
-            call.respond(HttpStatusCode.BadRequest, cause.toString())
+            this@configureRouting.log.error(cause.stackTraceToString())
+            call.respond(HttpStatusCode.ServiceUnavailable, cause.toString())
         }
-        exception<AuthenticationException> { call, cause ->
+        /*exception<AuthenticationException> { call, cause ->
             call.respond(HttpStatusCode.Unauthorized)
         }
         exception<AuthorizationException> { call, cause ->
             call.respond(HttpStatusCode.Forbidden)
-        }
+        }*/
     }
 }
 
