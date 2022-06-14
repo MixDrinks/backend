@@ -2,7 +2,7 @@
 
 ##### Cocktails
 
-`cocktails/visit`
+POST: `cocktails/visit`
 
 Queries
 
@@ -11,7 +11,8 @@ Queries
 | id   | Yes     | String | The cocktail id |
 
 ##### Items
-`items/visit`
+
+POST: `items/visit`
 
 Queries
 
@@ -19,10 +20,10 @@ Queries
 |------|---------|--------|-----------------|
 | id   | Yes     | String | The cocktail id |
 
-
 ---
 
 
 Note:
-The endpoints just notify the server. We cannot use the exists GET endpoints for count visits, because the get response has
+The endpoints just notify the server. We cannot use the exists GET endpoints for count visits, because the get response
+has
 caches.

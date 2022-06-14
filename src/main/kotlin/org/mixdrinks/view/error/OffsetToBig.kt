@@ -14,6 +14,7 @@ class CocktailNotFound(val id: Int) : Exception() {
         return "Cocktails with id: $id not found"
     }
 }
+
 class ItemsNotFound(val id: Int) : Exception() {
     override fun toString(): String {
         return "Item with id: $id not found"
@@ -25,3 +26,5 @@ class QueryRequire(val queryName: String) : Exception() {
         return "$queryName is require"
     }
 }
+
+class VoteError() : Exception()

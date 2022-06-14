@@ -1,6 +1,6 @@
 #### Cocktail filter
 
-`/cocktails/filter` - search by filters
+GET: `/cocktails/filter` - search by filters
 
 Queries
 

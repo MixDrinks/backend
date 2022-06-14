@@ -7,6 +7,8 @@ object CocktailsTable : Table(name = "cocktails") {
     val name = text("name")
     val steps = textArray("recipe")
     val visitCount = integer("visit_count")
+    val ratingCount = integer("rating_count")
+    val ratingValue = integer("rating_value")
 
     override val primaryKey: PrimaryKey = PrimaryKey(id)
 }

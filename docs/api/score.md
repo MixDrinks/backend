@@ -1,6 +1,6 @@
-## Full cocktail info
+#### Score
 
-GET: `cocktail/full` - return the cocktail with all information id, name, list of ingredients, tools, receipt and tags.
+POST: `cocktails/score`
 
 Queries
 
@@ -8,3 +8,7 @@ Queries
 |------|---------|--------|-----------------|
 | id   | Yes     | String | The cocktail id |
 
+Body:
+`{"value":Int}`
+
+The value must be between 0 (include) and 5(include)
