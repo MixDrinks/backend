@@ -39,17 +39,21 @@ fun Application.cocktails() {
     }
 }
 
+fun ResultRow.getRating(): Float? {
+    return this[CocktailsTable.ratingValue]?.let { ratingValue ->
+        this[CocktailsTable.ratingCount].takeIf { it != 0 }?.let { ratingCount ->
+            ratingValue.toFloat() / ratingCount.toFloat()
+        }
+    }
+}
+
 private fun getFullCocktail(id: Int): FullCocktailVM {
     return transaction {
         val cocktail = CocktailsTable.select { CocktailsTable.id eq id }.first()
 
         val cocktailId = cocktail[CocktailsTable.id]
 
-        val rating: Float? = cocktail[CocktailsTable.ratingValue]?.let { ratingValue ->
-            cocktail[CocktailsTable.ratingCount].takeIf { it != 0 }?.let { ratingCount ->
-                ratingValue.toFloat() / ratingCount.toFloat()
-            }
-        }
+        val rating: Float? = cocktail.getRating()
 
         return@transaction FullCocktailVM(
             id = cocktailId,

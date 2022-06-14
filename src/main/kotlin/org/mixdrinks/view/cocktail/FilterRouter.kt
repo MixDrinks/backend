@@ -3,6 +3,7 @@ package org.mixdrinks.view.cocktail
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.SerialName
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.*
@@ -13,6 +14,8 @@ import org.mixdrinks.view.images.buildImages
 data class CocktailFilter(
     val id: Int,
     val name: String,
+    val rating: Float?,
+    val ratingCount: Int,
     val goodIds: List<Int>,
     val toolIds: List<Int>,
     val tagIds: List<Int>,
@@ -25,7 +28,7 @@ class FilterRouter {
     init {
         println("Start create filter")
         cocktails = transaction {
-            return@transaction CocktailsTable.slice(CocktailsTable.id, CocktailsTable.name).selectAll()
+            return@transaction CocktailsTable.slice(CocktailsTable.id, CocktailsTable.name, CocktailsTable.ratingCount, CocktailsTable.ratingValue).selectAll()
                 .map { cocktailRow ->
                     val cocktailId = cocktailRow[CocktailsTable.id]
 
@@ -43,6 +46,8 @@ class FilterRouter {
                     return@map CocktailFilter(
                         id = cocktailId,
                         name = cocktailRow[CocktailsTable.name],
+                        rating = cocktailRow.getRating(),
+                        ratingCount = cocktailRow[CocktailsTable.ratingCount],
                         goodIds = goodIds,
                         toolIds = toolIds,
                         tagIds = tagIds,
@@ -92,6 +97,8 @@ class FilterRouter {
                 CompactCocktailVM(
                     cocktailFilter.id,
                     cocktailFilter.name,
+                    cocktailFilter.rating,
+                    cocktailFilter.ratingCount,
                     buildImages(cocktailFilter.id, ImageType.COCKTAIL),
                 )
             }
