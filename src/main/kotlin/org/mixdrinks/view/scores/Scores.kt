@@ -66,7 +66,7 @@ fun Application.scores() {
                 val ratingCount = cocktailRow[CocktailsTable.ratingCount]
                 val ratingValue = cocktailRow.getOrNull(CocktailsTable.ratingValue)
 
-                val newRating = (ratingCount * (ratingValue ?: 0)) + vote
+                val newRating = (ratingValue ?: 0) + vote
 
                 CocktailsTable.update({ CocktailsTable.id eq id }) {
                     it[CocktailsTable.ratingValue] = newRating
