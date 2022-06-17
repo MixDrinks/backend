@@ -106,7 +106,7 @@ class FilterRouter {
         sortType: SortType,
     ): FilterResultVM {
         return transaction {
-            val allTags = TagsTable.slice(TagsTable.id).selectAll().map { it[TagsTable.id] }
+            val allTags = TagsTable.slice(TagsTable.id).selectAll().orderBy(TagsTable.id).map { it[TagsTable.id] }
             val result = filterCocktails(cocktails, search, tags, goods, tools, offset, limit, sortType, allTags)
 
             val resultCocktails = result.list
