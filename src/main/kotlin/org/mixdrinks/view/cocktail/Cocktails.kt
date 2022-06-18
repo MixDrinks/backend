@@ -11,7 +11,7 @@ import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
 import org.mixdrinks.view.tag.TagVM
 
-const val DEFAULT_PAGE_SIZE = 10
+const val DEFAULT_PAGE_SIZE = 24
 
 fun Application.cocktails() {
     val filterRouter = FilterRouter()
