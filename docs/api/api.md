@@ -9,4 +9,4 @@ Base url:
 - [Meta](meta.md)
 - [Visit](visit.md)
 - [Rating](rating.md)
-- [All cocktails](all_cocktails.md) **Deprecated**
+- [All cocktails](all_cocktails.md)
