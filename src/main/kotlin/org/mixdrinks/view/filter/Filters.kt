@@ -26,10 +26,8 @@ fun Application.filters() {
                     tools = ItemsTable.select { ItemsTable.relation eq ItemType.TOOL.relation }.orderBy(ItemsTable.id)
                         .associate { toolRow ->
                             Pair(toolRow[ItemsTable.id], toolRow[ItemsTable.name])
-                        },
-                    cocktails = CocktailsTable.selectAll().orderBy(CocktailsTable.id).associate { cocktailRow ->
-                        Pair(cocktailRow[CocktailsTable.id], cocktailRow[CocktailsTable.name])
-                    })
+                        }
+                )
             })
         }
     }

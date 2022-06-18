@@ -11,6 +11,4 @@ data class FiltersVM(
     val goods: Map<Int, String>,
     @SerialName("tools")
     val tools: Map<Int, String>,
-    @SerialName("cocktails")
-    val cocktails: Map<Int, String>,
 )

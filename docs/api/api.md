@@ -10,4 +10,3 @@ Base url:
 - [Visit](visit.md)
 - [Rating](rating.md)
 - [All cocktails](all_cocktails.md) **Deprecated**
-- [Tags](tags.md) **Deprecated**
