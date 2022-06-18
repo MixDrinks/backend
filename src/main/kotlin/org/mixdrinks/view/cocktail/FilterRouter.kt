@@ -112,7 +112,7 @@ class FilterRouter {
                 .orderBy(ItemsTable.id).map { it[ItemsTable.id] }
 
             val allTools = ItemsTable.slice(ItemsTable.id)
-                .select { ItemsTable.relation eq ItemType.GOOD.relation }
+                .select { ItemsTable.relation eq ItemType.TOOL.relation }
                 .orderBy(ItemsTable.id).map { it[ItemsTable.id] }
 
             val result = filterCocktails(cocktails, search, tags, goods, tools, offset, limit, sortType, allTags, allGoods, allTools)
