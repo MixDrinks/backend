@@ -11,7 +11,7 @@ fun Application.configureCache() {
     install(CachingHeaders) {
         options { call, outgoingContent ->
             when {
-                isGet(call) && isJson(outgoingContent) -> CachingOptions(
+                isCachedCall(call) -> CachingOptions(
                     CacheControl.MaxAge(
                         maxAgeSeconds = TimeUnit.MINUTES.toSeconds(1).toInt(),
                         visibility = CacheControl.Visibility.Public
@@ -23,6 +23,6 @@ fun Application.configureCache() {
     }
 }
 
-private fun isGet(call: ApplicationCall) = call.request.httpMethod == HttpMethod.Get
-
-private fun isJson(content: OutgoingContent) = content.contentType?.withoutParameters() == ContentType.Application.Json
+private fun isCachedCall(call: ApplicationCall) =
+    call.request.httpMethod == HttpMethod.Get &&
+            (call.request.path().contains("meta/all") || call.request.path().contains("tags/all"))
