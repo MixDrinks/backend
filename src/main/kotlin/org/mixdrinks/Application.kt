@@ -19,7 +19,6 @@ import org.mixdrinks.view.cocktail.cocktails
 import org.mixdrinks.view.filter.filters
 import org.mixdrinks.view.items.items
 import org.mixdrinks.view.scores.scores
-import org.mixdrinks.view.tag.tags
 
 fun main() {
     embeddedServer(Netty, environment = applicationEngineEnvironment {
@@ -56,7 +55,6 @@ fun main() {
             )
 
             cocktails()
-            tags()
             filters()
             items()
             scores()
