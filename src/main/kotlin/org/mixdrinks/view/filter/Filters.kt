@@ -16,16 +16,16 @@ fun Application.filters() {
         get("meta/all") {
             call.respond(transaction {
                 FiltersVM(
-                    tags = TagsTable.selectAll().orderBy(TagsTable.id).associate { tagRow ->
-                        Pair(tagRow[TagsTable.id], tagRow[TagsTable.name])
+                    tags = TagsTable.selectAll().orderBy(TagsTable.id).map { tagRow ->
+                        FilterProperty(tagRow[TagsTable.id], tagRow[TagsTable.name])
                     },
                     goods = ItemsTable.select { ItemsTable.relation eq ItemType.GOOD.relation }.orderBy(ItemsTable.id)
-                        .associate { goodRow ->
-                            Pair(goodRow[ItemsTable.id], goodRow[ItemsTable.name])
+                        .map { goodRow ->
+                            FilterProperty(goodRow[ItemsTable.id], goodRow[ItemsTable.name])
                         },
                     tools = ItemsTable.select { ItemsTable.relation eq ItemType.TOOL.relation }.orderBy(ItemsTable.id)
-                        .associate { toolRow ->
-                            Pair(toolRow[ItemsTable.id], toolRow[ItemsTable.name])
+                        .map { toolRow ->
+                            FilterProperty(toolRow[ItemsTable.id], toolRow[ItemsTable.name])
                         }
                 )
             })

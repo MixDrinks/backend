@@ -6,9 +6,17 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class FiltersVM(
     @SerialName("tags")
-    val tags: Map<Int, String>,
+    val tags: List<FilterProperty>,
     @SerialName("goods")
-    val goods: Map<Int, String>,
+    val goods: List<FilterProperty>,
     @SerialName("tools")
-    val tools: Map<Int, String>,
+    val tools: List<FilterProperty>,
+)
+
+@Serializable
+data class FilterProperty(
+    @SerialName("id")
+    val id: Int,
+    @SerialName("name")
+    val name: String
 )
