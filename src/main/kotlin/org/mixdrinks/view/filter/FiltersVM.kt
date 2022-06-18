@@ -5,12 +5,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FiltersVM(
-    @SerialName("tags")
-    val tags: List<FilterProperty>,
     @SerialName("goods")
     val goods: List<FilterProperty>,
     @SerialName("tools")
     val tools: List<FilterProperty>,
+    @SerialName("tags")
+    val tags: List<FilterProperty>,
 )
 
 @Serializable
