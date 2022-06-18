@@ -21,7 +21,9 @@ fun filterCocktails(
     offset: Int?,
     limit: Int?,
     sortType: SortType,
-    allTags: List<Int> = emptyList()
+    allTags: List<Int> = emptyList(),
+    allGoods: List<Int> = emptyList(),
+    allTools: List<Int> = emptyList(),
 ): CocktailFilterFull {
     val comparator: Comparator<CocktailFilter> = when (sortType) {
         SortType.MOST_POPULAR -> {
@@ -51,11 +53,11 @@ fun filterCocktails(
         commonFilter(cocktails, search, tags.orEmpty().plus(it), goods, tools).count()
     }
 
-    val goodsMap = allTags.associateWith {
+    val goodsMap = allGoods.associateWith {
         commonFilter(cocktails, search, tags, goods.orEmpty().plus(it), tools).count()
     }
 
-    val toolsMap = allTags.associateWith {
+    val toolsMap = allTools.associateWith {
         commonFilter(cocktails, search, tags, goods, tools.orEmpty().plus(it)).count()
     }
 

@@ -107,7 +107,15 @@ class FilterRouter {
     ): FilterResultVM {
         return transaction {
             val allTags = TagsTable.slice(TagsTable.id).selectAll().orderBy(TagsTable.id).map { it[TagsTable.id] }
-            val result = filterCocktails(cocktails, search, tags, goods, tools, offset, limit, sortType, allTags)
+            val allGoods = ItemsTable.slice(ItemsTable.id)
+                .select { ItemsTable.relation eq ItemType.GOOD.relation }
+                .orderBy(ItemsTable.id).map { it[ItemsTable.id] }
+
+            val allTools = ItemsTable.slice(ItemsTable.id)
+                .select { ItemsTable.relation eq ItemType.GOOD.relation }
+                .orderBy(ItemsTable.id).map { it[ItemsTable.id] }
+
+            val result = filterCocktails(cocktails, search, tags, goods, tools, offset, limit, sortType, allTags, allGoods, allTools)
 
             val resultCocktails = result.list
                 .map { cocktailFilter ->
