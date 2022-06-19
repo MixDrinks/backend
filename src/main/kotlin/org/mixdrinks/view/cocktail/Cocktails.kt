@@ -7,14 +7,17 @@ import io.ktor.server.routing.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.*
+import org.mixdrinks.view.cocktail.domain.CocktailsAggregator
+import org.mixdrinks.view.cocktail.domain.CocktailsFilterSearchParam
+import org.mixdrinks.view.cocktail.domain.SortType
+import org.mixdrinks.view.error.SortTypeNotFound
 import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
 import org.mixdrinks.view.tag.TagVM
 
 const val DEFAULT_PAGE_SIZE = 24
 
-fun Application.cocktails() {
-    val filterRouter = FilterRouter()
+fun Application.cocktails(cocktailsAggregator: CocktailsAggregator) {
     routing {
         get("cocktails/all") {
             call.respond(transaction {
@@ -26,7 +29,39 @@ fun Application.cocktails() {
                 }
             })
         }
-        filterRouter.filter(this)
+        get("cocktails/filter") {
+            val tags = call.request.queryParameters["tags"]?.split(",")?.mapNotNull(String::toIntOrNull)
+
+            val goods = call.request.queryParameters["goods"]?.split(",")?.mapNotNull(String::toIntOrNull)
+
+            val tools = call.request.queryParameters["tools"]?.split(",")?.mapNotNull(String::toIntOrNull)
+
+            val search = call.request.queryParameters["query"]
+
+            var offset = call.request.queryParameters["offset"]?.toIntOrNull()
+            var limit = call.request.queryParameters["limit"]?.toIntOrNull()
+
+            val page = call.request.queryParameters["page"]?.toIntOrNull()
+
+            if (page != null) {
+                offset = (page * DEFAULT_PAGE_SIZE)
+                limit = DEFAULT_PAGE_SIZE
+            }
+
+            val sortKey = call.request.queryParameters["sort"] ?: SortType.MOST_POPULAR.key
+
+            val sortType = SortType.values().firstOrNull { it.key == sortKey } ?: throw SortTypeNotFound()
+
+            val searchParam = CocktailsFilterSearchParam(
+                search, tags, goods, tools,
+            )
+            
+            val resultV2: FilterResultVMV2 = cocktailsAggregator.getCompactCocktail(searchParam, offset, limit, sortType) 
+
+            call.respond(
+                FilterResultVM(resultV2.totalCount, resultV2)
+            )
+        }
         get("cocktails/full") {
             val id = call.request.queryParameters["id"]?.toIntOrNull()
 
