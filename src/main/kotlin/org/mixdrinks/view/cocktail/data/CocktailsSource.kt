@@ -46,11 +46,17 @@ class CocktailsSource {
                 val cocktailId = cocktailRow[CocktailsTable.id]
 
                 val goodIds = CocktailsToItemsTable.slice(CocktailsToItemsTable.goodId)
-                    .select { CocktailsToItemsTable.cocktailId eq cocktailId and (CocktailsToItemsTable.relation eq ItemType.GOOD.relation) }
+                    .select {
+                        CocktailsToItemsTable.cocktailId eq cocktailId and
+                                (CocktailsToItemsTable.relation eq ItemType.GOOD.relation)
+                    }
                     .map { it[CocktailsToItemsTable.goodId] }
 
                 val toolIds = CocktailsToItemsTable.slice(CocktailsToItemsTable.goodId)
-                    .select { CocktailsToItemsTable.cocktailId eq cocktailId and (CocktailsToItemsTable.relation eq ItemType.TOOL.relation) }
+                    .select {
+                        CocktailsToItemsTable.cocktailId eq cocktailId and
+                                (CocktailsToItemsTable.relation eq ItemType.TOOL.relation)
+                    }
                     .map { it[CocktailsToItemsTable.goodId] }
 
                 val tagIds = CocktailToTagTable.slice(CocktailToTagTable.tagId)

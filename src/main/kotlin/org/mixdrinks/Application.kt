@@ -68,9 +68,12 @@ fun main() {
             scores()
         }
 
+        val port = config.property("ktor.connector.port").getString().toInt()
+        val host = config.property("ktor.connector.host").getString()
+
         connector {
-            port = 8080
-            host = "0.0.0.0"
+            this.port = port
+            this.host = host
         }
     }).start(true)
 }

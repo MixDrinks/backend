@@ -69,7 +69,7 @@ fun Application.cocktails(cocktailsAggregator: CocktailsAggregator) {
             val result = cocktailsAggregator.getCompactCocktail(searchParam, offset, limit, sortType)
 
             call.respond(
-                FilterResultVMOld(
+                FilterResultVM(
                     totalCount = result.totalCount,
                     cocktails = result.list.map { cocktailFilter ->
                         CompactCocktailVM(
@@ -83,54 +83,6 @@ fun Application.cocktails(cocktailsAggregator: CocktailsAggregator) {
                     cocktailsByGoodCounts = result.counts.goodCounts,
                     cocktailsByTagCounts = result.counts.tagCounts,
                     cocktailsByToolCounts = result.counts.toolCounts,
-                )
-            )
-        }
-        get("cocktails/filter/v2") {
-            val tags = call.request.queryParameters["tags"]?.split(",")?.mapNotNull(String::toIntOrNull)
-
-            val goods = call.request.queryParameters["goods"]?.split(",")?.mapNotNull(String::toIntOrNull)
-
-            val tools = call.request.queryParameters["tools"]?.split(",")?.mapNotNull(String::toIntOrNull)
-
-            val search = call.request.queryParameters["query"]
-
-            var offset = call.request.queryParameters["offset"]?.toIntOrNull()
-            var limit = call.request.queryParameters["limit"]?.toIntOrNull()
-
-            val page = call.request.queryParameters["page"]?.toIntOrNull()
-
-            if (page != null) {
-                offset = (page * DEFAULT_PAGE_SIZE)
-                limit = DEFAULT_PAGE_SIZE
-            }
-
-            val sortKey = call.request.queryParameters["sort"] ?: SortType.MOST_POPULAR.key
-
-            val sortType = SortType.values().firstOrNull { it.key == sortKey } ?: throw SortTypeNotFound()
-
-            val searchParam = CocktailsFilterSearchParam(
-                search, tags, goods, tools,
-            )
-
-            val result = cocktailsAggregator.getCompactCocktail(searchParam, offset, limit, sortType)
-
-            call.respond(
-                FilterResultVM(
-                    totalCount = result.totalCount, cocktails = result.list.map { cocktailFilter ->
-                        CompactCocktailVM(
-                            cocktailFilter.id,
-                            cocktailFilter.name,
-                            cocktailFilter.rating,
-                            cocktailFilter.visitCount,
-                            buildImages(cocktailFilter.id, ImageType.COCKTAIL),
-                        )
-
-                    }, filterFutureCounts = FilterFutureCounts(
-                        tagCounts = result.counts.tagCounts,
-                        goodCounts = result.counts.goodCounts,
-                        toolCounts = result.counts.toolCounts,
-                    )
                 )
             )
         }
