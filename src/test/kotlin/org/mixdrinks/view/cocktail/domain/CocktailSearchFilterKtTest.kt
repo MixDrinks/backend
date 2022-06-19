@@ -72,5 +72,4 @@ internal class CocktailSearchFilterKtTest {
             tagIds = tagsIds
         )
     }
-
 }

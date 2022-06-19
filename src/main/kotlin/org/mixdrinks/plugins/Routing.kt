@@ -1,10 +1,16 @@
 package org.mixdrinks.plugins
 
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.plugins.statuspages.*
-import io.ktor.server.response.*
-import org.mixdrinks.view.error.*
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.Application
+import io.ktor.server.application.install
+import io.ktor.server.application.log
+import io.ktor.server.plugins.statuspages.StatusPages
+import io.ktor.server.response.respond
+import org.mixdrinks.view.error.CocktailNotFound
+import org.mixdrinks.view.error.OffsetToBig
+import org.mixdrinks.view.error.QueryRequire
+import org.mixdrinks.view.error.SortTypeNotFound
+import org.mixdrinks.view.error.VoteError
 
 fun Application.configureRouting() {
     install(StatusPages) {
@@ -27,14 +33,5 @@ fun Application.configureRouting() {
             this@configureRouting.log.error(cause.stackTraceToString())
             call.respond(HttpStatusCode.ServiceUnavailable, cause.toString())
         }
-        /*exception<AuthenticationException> { call, cause ->
-            call.respond(HttpStatusCode.Unauthorized)
-        }
-        exception<AuthorizationException> { call, cause ->
-            call.respond(HttpStatusCode.Forbidden)
-        }*/
     }
 }
-
-class AuthenticationException : RuntimeException()
-class AuthorizationException : RuntimeException()

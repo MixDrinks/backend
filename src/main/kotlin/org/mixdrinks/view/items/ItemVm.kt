@@ -2,7 +2,6 @@ package org.mixdrinks.view.items
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.mixdrinks.view.cocktail.CompactCocktailVM
 import org.mixdrinks.view.images.Image
 
 @Serializable

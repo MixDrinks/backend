@@ -183,5 +183,4 @@ internal class CocktailsFutureCountCalculatorTest {
             }
         }
     }
-
 }

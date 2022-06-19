@@ -4,7 +4,11 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.mixdrinks.data.*
+import org.mixdrinks.data.CocktailToTagTable
+import org.mixdrinks.data.CocktailsTable
+import org.mixdrinks.data.CocktailsToItemsTable
+import org.mixdrinks.data.ItemsTable
+import org.mixdrinks.data.TagsTable
 import org.mixdrinks.view.cocktail.ItemType
 import org.mixdrinks.view.cocktail.getRating
 
@@ -42,11 +46,17 @@ class CocktailsSource {
                 val cocktailId = cocktailRow[CocktailsTable.id]
 
                 val goodIds = CocktailsToItemsTable.slice(CocktailsToItemsTable.goodId)
-                    .select { CocktailsToItemsTable.cocktailId eq cocktailId and (CocktailsToItemsTable.relation eq ItemType.GOOD.relation) }
+                    .select {
+                        CocktailsToItemsTable.cocktailId eq cocktailId and
+                                (CocktailsToItemsTable.relation eq ItemType.GOOD.relation)
+                    }
                     .map { it[CocktailsToItemsTable.goodId] }
 
                 val toolIds = CocktailsToItemsTable.slice(CocktailsToItemsTable.goodId)
-                    .select { CocktailsToItemsTable.cocktailId eq cocktailId and (CocktailsToItemsTable.relation eq ItemType.TOOL.relation) }
+                    .select {
+                        CocktailsToItemsTable.cocktailId eq cocktailId and
+                                (CocktailsToItemsTable.relation eq ItemType.TOOL.relation)
+                    }
                     .map { it[CocktailsToItemsTable.goodId] }
 
                 val tagIds = CocktailToTagTable.slice(CocktailToTagTable.tagId)

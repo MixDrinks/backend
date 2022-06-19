@@ -74,6 +74,4 @@ class CocktailsAggregator(
 
         return CocktailFilterFull(result, count, futureCountCalculator.getFutureCounts(searchParam))
     }
-
-
 }

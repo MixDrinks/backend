@@ -1,12 +1,22 @@
 package org.mixdrinks.view.cocktail
 
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
-import org.jetbrains.exposed.sql.*
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.Application
+import io.ktor.server.application.call
+import io.ktor.server.response.respond
+import io.ktor.server.routing.get
+import io.ktor.server.routing.routing
+import org.jetbrains.exposed.sql.JoinType
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.mixdrinks.data.*
+import org.mixdrinks.data.CocktailToTagTable
+import org.mixdrinks.data.CocktailsTable
+import org.mixdrinks.data.CocktailsToItemsTable
+import org.mixdrinks.data.ItemsTable
+import org.mixdrinks.data.TagsTable
 import org.mixdrinks.view.cocktail.domain.CocktailsAggregator
 import org.mixdrinks.view.cocktail.domain.CocktailsFilterSearchParam
 import org.mixdrinks.view.cocktail.domain.SortType
@@ -59,7 +69,7 @@ fun Application.cocktails(cocktailsAggregator: CocktailsAggregator) {
             val result = cocktailsAggregator.getCompactCocktail(searchParam, offset, limit, sortType)
 
             call.respond(
-                FilterResultVMOld(
+                FilterResultVM(
                     totalCount = result.totalCount,
                     cocktails = result.list.map { cocktailFilter ->
                         CompactCocktailVM(
@@ -73,54 +83,6 @@ fun Application.cocktails(cocktailsAggregator: CocktailsAggregator) {
                     cocktailsByGoodCounts = result.counts.goodCounts,
                     cocktailsByTagCounts = result.counts.tagCounts,
                     cocktailsByToolCounts = result.counts.toolCounts,
-                )
-            )
-        }
-        get("cocktails/filter/v2") {
-            val tags = call.request.queryParameters["tags"]?.split(",")?.mapNotNull(String::toIntOrNull)
-
-            val goods = call.request.queryParameters["goods"]?.split(",")?.mapNotNull(String::toIntOrNull)
-
-            val tools = call.request.queryParameters["tools"]?.split(",")?.mapNotNull(String::toIntOrNull)
-
-            val search = call.request.queryParameters["query"]
-
-            var offset = call.request.queryParameters["offset"]?.toIntOrNull()
-            var limit = call.request.queryParameters["limit"]?.toIntOrNull()
-
-            val page = call.request.queryParameters["page"]?.toIntOrNull()
-
-            if (page != null) {
-                offset = (page * DEFAULT_PAGE_SIZE)
-                limit = DEFAULT_PAGE_SIZE
-            }
-
-            val sortKey = call.request.queryParameters["sort"] ?: SortType.MOST_POPULAR.key
-
-            val sortType = SortType.values().firstOrNull { it.key == sortKey } ?: throw SortTypeNotFound()
-
-            val searchParam = CocktailsFilterSearchParam(
-                search, tags, goods, tools,
-            )
-
-            val result = cocktailsAggregator.getCompactCocktail(searchParam, offset, limit, sortType)
-
-            call.respond(
-                FilterResultVM(
-                    totalCount = result.totalCount, cocktails = result.list.map { cocktailFilter ->
-                        CompactCocktailVM(
-                            cocktailFilter.id,
-                            cocktailFilter.name,
-                            cocktailFilter.rating,
-                            cocktailFilter.visitCount,
-                            buildImages(cocktailFilter.id, ImageType.COCKTAIL),
-                        )
-
-                    }, filterFutureCounts = FilterFutureCounts(
-                        tagCounts = result.counts.tagCounts,
-                        goodCounts = result.counts.goodCounts,
-                        toolCounts = result.counts.toolCounts,
-                    )
                 )
             )
         }
@@ -193,4 +155,3 @@ private fun getFullIngredients(id: Int, relation: ItemType): List<FullIngredient
 enum class ItemType(val relation: Int) {
     GOOD(1), TOOL(2)
 }
-
