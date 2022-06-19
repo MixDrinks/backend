@@ -18,6 +18,7 @@ import org.mixdrinks.plugins.static
 import org.mixdrinks.view.cocktail.cocktails
 import org.mixdrinks.view.cocktail.data.CocktailsSource
 import org.mixdrinks.view.cocktail.domain.CocktailsAggregator
+import org.mixdrinks.view.cocktail.domain.CocktailsFutureCountCalculator
 import org.mixdrinks.view.filter.filters
 import org.mixdrinks.view.items.items
 import org.mixdrinks.view.scores.scores
@@ -59,7 +60,9 @@ fun main() {
 
             tags()
 
-            cocktails(CocktailsAggregator(CocktailsSource()))
+            val cocktailsSource = CocktailsSource()
+
+            cocktails(CocktailsAggregator(cocktailsSource, CocktailsFutureCountCalculator(cocktailsSource)))
             filters()
             items()
             scores()

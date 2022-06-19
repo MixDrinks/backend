@@ -1,14 +1,8 @@
 package org.mixdrinks.view.cocktail.domain
 
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.mixdrinks.view.cocktail.CompactCocktailVM
-import org.mixdrinks.view.cocktail.FilterFutureCounts
-import org.mixdrinks.view.cocktail.FilterResultVMV2
 import org.mixdrinks.view.cocktail.data.CocktailsSource
 import org.mixdrinks.view.cocktail.data.FullCocktailData
 import org.mixdrinks.view.error.OffsetToBig
-import org.mixdrinks.view.images.ImageType
-import org.mixdrinks.view.images.buildImages
 
 data class CocktailFilterFull(
     val list: List<FullCocktailData>,
@@ -37,34 +31,15 @@ class CocktailsAggregator(
         offset: Int?,
         limit: Int?,
         sortType: SortType,
-    ): FilterResultVMV2 {
-        return transaction {
-            val result = filterCocktails(
-                cocktailsSource.cocktails,
-                searchParam,
-                offset,
-                limit,
-                sortType,
-            )
-
-            val resultCocktails = result.list.map { cocktailFilter ->
-                CompactCocktailVM(
-                    cocktailFilter.id,
-                    cocktailFilter.name,
-                    cocktailFilter.rating,
-                    cocktailFilter.visitCount,
-                    buildImages(cocktailFilter.id, ImageType.COCKTAIL),
-                )
-            }
-
-            FilterResultVMV2(
-                result.totalCount,
-                resultCocktails,
-                FilterFutureCounts(result.counts.tagCounts, result.counts.goodCounts, result.counts.toolCounts)
-            )
-        }
+    ): CocktailFilterFull {
+        return filterCocktails(
+            cocktailsSource.cocktails,
+            searchParam,
+            offset,
+            limit,
+            sortType,
+        )
     }
-
 
     private fun filterCocktails(
         cocktails: List<FullCocktailData>,
