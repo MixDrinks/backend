@@ -23,7 +23,6 @@ import org.mixdrinks.view.cocktail.domain.SortType
 import org.mixdrinks.view.error.SortTypeNotFound
 import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
-import org.mixdrinks.view.tag.TagVM
 
 const val DEFAULT_PAGE_SIZE = 24
 

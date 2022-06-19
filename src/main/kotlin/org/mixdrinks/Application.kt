@@ -24,7 +24,7 @@ import org.mixdrinks.view.cocktail.domain.CocktailsFutureCountCalculator
 import org.mixdrinks.view.filter.filters
 import org.mixdrinks.view.items.items
 import org.mixdrinks.view.scores.scores
-import org.mixdrinks.view.tag.tags
+import org.mixdrinks.view.settings.appSetting
 
 fun main() {
     embeddedServer(Netty, environment = applicationEngineEnvironment {
@@ -59,8 +59,6 @@ fun main() {
                 password = password,
             )
 
-            tags()
-
             val cocktailsSource = CocktailsSource()
             val appSettings = AppSettings(
                 minVote = config.property("ktor.settings.minVote").getString().toInt(),
@@ -72,6 +70,7 @@ fun main() {
             filters()
             items()
             scores(appSettings)
+            appSetting(appSettings)
         }
 
         val port = config.property("ktor.connector.port").getString().toInt()
