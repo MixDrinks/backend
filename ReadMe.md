@@ -1,4 +1,4 @@
-# The mix drinks backend application
+# The service for mixdrinks.org
 
 ## Application setup
 
