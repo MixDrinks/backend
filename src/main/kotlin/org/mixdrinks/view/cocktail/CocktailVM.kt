@@ -3,7 +3,6 @@ package org.mixdrinks.view.cocktail
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.mixdrinks.view.images.Image
-import org.mixdrinks.view.tag.TagVM
 
 @Serializable
 data class SimpleCocktailVM(
@@ -52,17 +51,18 @@ data class FullCocktailVM(
 )
 
 @Serializable
-data class SimpleIngredient(
-    @SerialName("id") val id: Int,
-    @SerialName("name") val name: String,
-    @SerialName("images") val images: List<Image>,
-)
-
-@Serializable
 data class FullIngredient(
     @SerialName("id") val id: Int,
     @SerialName("name") val name: String,
     @SerialName("images") val images: List<Image>,
     @SerialName("amount") val amount: Int,
     @SerialName("unit") val unit: String,
+)
+
+@Serializable
+data class TagVM(
+    @SerialName("id")
+    val id: Int,
+    @SerialName("name")
+    val name: String,
 )
