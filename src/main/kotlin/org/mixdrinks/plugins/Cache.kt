@@ -1,10 +1,14 @@
 package org.mixdrinks.plugins
 
-import io.ktor.http.*
-import io.ktor.http.content.*
-import io.ktor.server.application.*
-import io.ktor.server.plugins.cachingheaders.*
-import io.ktor.server.request.*
+import io.ktor.http.CacheControl
+import io.ktor.http.HttpMethod
+import io.ktor.http.content.CachingOptions
+import io.ktor.server.application.Application
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.application.install
+import io.ktor.server.plugins.cachingheaders.CachingHeaders
+import io.ktor.server.request.httpMethod
+import io.ktor.server.request.path
 import java.util.concurrent.TimeUnit
 
 fun Application.configureCache() {

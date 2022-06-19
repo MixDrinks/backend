@@ -4,7 +4,11 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.mixdrinks.data.*
+import org.mixdrinks.data.CocktailToTagTable
+import org.mixdrinks.data.CocktailsTable
+import org.mixdrinks.data.CocktailsToItemsTable
+import org.mixdrinks.data.ItemsTable
+import org.mixdrinks.data.TagsTable
 import org.mixdrinks.view.cocktail.ItemType
 import org.mixdrinks.view.cocktail.getRating
 
