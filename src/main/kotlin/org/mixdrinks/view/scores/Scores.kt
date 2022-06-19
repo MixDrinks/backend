@@ -17,16 +17,17 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.ItemsTable
+import org.mixdrinks.settings.AppSettings
 import org.mixdrinks.view.error.CocktailNotFound
 import org.mixdrinks.view.error.ItemsNotFound
 import org.mixdrinks.view.error.QueryRequire
 import org.mixdrinks.view.error.VoteError
 
-fun Application.scores() {
+fun Application.scores(appSettings: AppSettings) {
     routing {
         cocktailsVisit()
 
-        cocktailsScore()
+        cocktailsScore(appSettings)
 
         itemsVisit()
     }
@@ -49,13 +50,13 @@ private fun Routing.itemsVisit() {
     }
 }
 
-private fun Routing.cocktailsScore() {
+private fun Routing.cocktailsScore(appSettings: AppSettings) {
     post("cocktails/score") {
         val id = getId()
 
         val vote = call.receive<ScoreRequest>().value
 
-        if (vote !in 0..5) {
+        if (vote !in appSettings.minVote..appSettings.maxVote) {
             throw VoteError()
         }
 

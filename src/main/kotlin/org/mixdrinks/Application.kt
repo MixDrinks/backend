@@ -16,6 +16,7 @@ import org.jetbrains.exposed.sql.Database
 import org.mixdrinks.plugins.configureCache
 import org.mixdrinks.plugins.configureRouting
 import org.mixdrinks.plugins.static
+import org.mixdrinks.settings.AppSettings
 import org.mixdrinks.view.cocktail.cocktails
 import org.mixdrinks.view.cocktail.data.CocktailsSource
 import org.mixdrinks.view.cocktail.domain.CocktailsAggregator
@@ -61,11 +62,16 @@ fun main() {
             tags()
 
             val cocktailsSource = CocktailsSource()
+            val appSettings = AppSettings(
+                minVote = config.property("ktor.settings.minVote").getString().toInt(),
+                maxVote = config.property("ktor.settings.maxVote").getString().toInt(),
+                pageSize = config.property("ktor.settings.pageSize").getString().toInt()
+            )
 
             cocktails(CocktailsAggregator(cocktailsSource, CocktailsFutureCountCalculator(cocktailsSource)))
             filters()
             items()
-            scores()
+            scores(appSettings)
         }
 
         val port = config.property("ktor.connector.port").getString().toInt()
