@@ -13,7 +13,6 @@ import io.ktor.server.plugins.cors.routing.*
 import org.jetbrains.exposed.sql.Database
 import org.mixdrinks.plugins.configureCache
 import org.mixdrinks.plugins.configureRouting
-import org.mixdrinks.plugins.configureSecurity
 import org.mixdrinks.plugins.static
 import org.mixdrinks.view.cocktail.cocktails
 import org.mixdrinks.view.cocktail.data.CocktailsSource
@@ -30,7 +29,6 @@ fun main() {
 
         module {
             configureRouting()
-            configureSecurity()
             configureCache()
             static()
             install(CallLogging)

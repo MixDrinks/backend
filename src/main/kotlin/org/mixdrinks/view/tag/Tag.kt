@@ -22,4 +22,3 @@ fun Application.tags() {
         }
     }
 }
-

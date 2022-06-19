@@ -193,4 +193,3 @@ private fun getFullIngredients(id: Int, relation: ItemType): List<FullIngredient
 enum class ItemType(val relation: Int) {
     GOOD(1), TOOL(2)
 }
-

@@ -38,5 +38,4 @@ class CocktailsFutureCountCalculator(private val cocktailsSource: CocktailsSourc
 
         return FutureCocktailsCounts(tagsMap, goodsMap, toolsMap)
     }
-
 }

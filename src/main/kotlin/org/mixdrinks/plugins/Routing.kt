@@ -27,14 +27,5 @@ fun Application.configureRouting() {
             this@configureRouting.log.error(cause.stackTraceToString())
             call.respond(HttpStatusCode.ServiceUnavailable, cause.toString())
         }
-        /*exception<AuthenticationException> { call, cause ->
-            call.respond(HttpStatusCode.Unauthorized)
-        }
-        exception<AuthorizationException> { call, cause ->
-            call.respond(HttpStatusCode.Forbidden)
-        }*/
     }
 }
-
-class AuthenticationException : RuntimeException()
-class AuthorizationException : RuntimeException()

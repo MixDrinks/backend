@@ -24,4 +24,3 @@ fun List<FullCocktailData>.filterBySearch(searchParam: CocktailsFilterSearchPara
 
     return result.toList()
 }
-
