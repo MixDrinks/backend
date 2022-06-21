@@ -25,6 +25,8 @@ import org.mixdrinks.view.filter.filters
 import org.mixdrinks.view.items.items
 import org.mixdrinks.view.scores.scores
 import org.mixdrinks.view.settings.appSetting
+import org.mixdrinks.view.v2.filter.FilterSource
+import org.mixdrinks.view.v2.v2
 
 fun main() {
     embeddedServer(Netty, environment = applicationEngineEnvironment {
@@ -71,6 +73,9 @@ fun main() {
             items()
             scores(appSettings)
             appSetting(appSettings)
+
+            v2(FilterSource())
+
         }
 
         val port = config.property("ktor.connector.port").getString().toInt()

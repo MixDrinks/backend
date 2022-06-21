@@ -2,12 +2,12 @@ package org.mixdrinks.view.cocktail
 
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
+import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.call
 import io.ktor.server.response.respond
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
 import org.jetbrains.exposed.sql.JoinType
-import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
@@ -23,6 +23,7 @@ import org.mixdrinks.view.cocktail.domain.SortType
 import org.mixdrinks.view.error.SortTypeNotFound
 import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
+import org.mixdrinks.view.rating.getRating
 
 const val DEFAULT_PAGE_SIZE = 24
 
@@ -39,11 +40,9 @@ fun Application.cocktails(cocktailsAggregator: CocktailsAggregator) {
             })
         }
         get("cocktails/filter") {
-            val tags = call.request.queryParameters["tags"]?.split(",")?.mapNotNull(String::toIntOrNull)
-
-            val goods = call.request.queryParameters["goods"]?.split(",")?.mapNotNull(String::toIntOrNull)
-
-            val tools = call.request.queryParameters["tools"]?.split(",")?.mapNotNull(String::toIntOrNull)
+            val tags = call.getIntArray("tags")
+            val goods = call.getIntArray("goods")
+            val tools = call.getIntArray("tools")
 
             val search = call.request.queryParameters["query"]
 
@@ -97,12 +96,8 @@ fun Application.cocktails(cocktailsAggregator: CocktailsAggregator) {
     }
 }
 
-fun ResultRow.getRating(): Float? {
-    return this[CocktailsTable.ratingValue]?.let { ratingValue ->
-        this[CocktailsTable.ratingCount].takeIf { it != 0 }?.let { ratingCount ->
-            ratingValue.toFloat() / ratingCount.toFloat()
-        }
-    }
+private fun ApplicationCall.getIntArray(key: String): List<Int>? {
+    return this.request.queryParameters[key]?.split(",")?.mapNotNull(String::toIntOrNull)
 }
 
 private fun getFullCocktail(id: Int): FullCocktailVM {

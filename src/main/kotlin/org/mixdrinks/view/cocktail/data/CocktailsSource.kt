@@ -10,7 +10,7 @@ import org.mixdrinks.data.CocktailsToItemsTable
 import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.view.cocktail.ItemType
-import org.mixdrinks.view.cocktail.getRating
+import org.mixdrinks.view.rating.getRating
 
 data class FullCocktailData(
     val id: Int,
