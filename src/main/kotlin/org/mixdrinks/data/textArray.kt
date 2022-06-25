@@ -9,7 +9,6 @@ import org.jetbrains.exposed.sql.ExpressionWithColumnType
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.statements.api.PreparedStatementApi
 import org.jetbrains.exposed.sql.statements.jdbc.JdbcPreparedStatementImpl
-import org.jetbrains.exposed.sql.stringLiteral
 import org.jetbrains.exposed.sql.vendors.currentDialect
 import java.io.Serializable
 import kotlin.Array
@@ -25,19 +24,6 @@ public fun Table.textArray(name: String, size: Int? = null): Column<Array<String
 
 private fun <T : Serializable> Table.array(name: String, underlyingType: String, size: Int?) =
     registerColumn<Array<T>>(name, ArrayColumnType<T>(underlyingType, size))
-
-/**
- * Checks whether this string is in the [other] expression.
- *
- * Example:
- * ```kotlin
- * productService.find { "tag" eqAny ProductsTable.tags }
- * ```
- *
- * @see any
- */
-public infix fun String.equalsAny(other: Expression<Array<String>>): EqOp =
-    stringLiteral(this) eqAny other
 
 /**
  * Invokes the `ANY` function on [expression].

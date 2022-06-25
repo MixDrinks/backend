@@ -45,19 +45,13 @@ class CocktailsSource {
             ).selectAll().map { cocktailRow ->
                 val cocktailId = cocktailRow[CocktailsTable.id]
 
-                val goodIds = CocktailsToItemsTable.slice(CocktailsToItemsTable.goodId)
-                    .select {
-                        CocktailsToItemsTable.cocktailId eq cocktailId and
-                                (CocktailsToItemsTable.relation eq ItemType.GOOD.relation)
-                    }
-                    .map { it[CocktailsToItemsTable.goodId] }
+                val goodIds = CocktailsToItemsTable.slice(CocktailsToItemsTable.goodId).select {
+                        CocktailsToItemsTable.cocktailId eq cocktailId and (CocktailsToItemsTable.relation eq ItemType.GOOD.relation)
+                    }.map { it[CocktailsToItemsTable.goodId] }
 
-                val toolIds = CocktailsToItemsTable.slice(CocktailsToItemsTable.goodId)
-                    .select {
-                        CocktailsToItemsTable.cocktailId eq cocktailId and
-                                (CocktailsToItemsTable.relation eq ItemType.TOOL.relation)
-                    }
-                    .map { it[CocktailsToItemsTable.goodId] }
+                val toolIds = CocktailsToItemsTable.slice(CocktailsToItemsTable.goodId).select {
+                        CocktailsToItemsTable.cocktailId eq cocktailId and (CocktailsToItemsTable.relation eq ItemType.TOOL.relation)
+                    }.map { it[CocktailsToItemsTable.goodId] }
 
                 val tagIds = CocktailToTagTable.slice(CocktailToTagTable.tagId)
                     .select { CocktailToTagTable.cocktailId eq cocktailId }.map { it[CocktailToTagTable.tagId] }
@@ -81,7 +75,6 @@ class CocktailsSource {
             ItemsTable.slice(ItemsTable.id).select { ItemsTable.relation eq ItemType.GOOD.relation }
                 .orderBy(ItemsTable.id).map { it[ItemsTable.id] }
         }
-
 
         allToolIds = transaction {
             ItemsTable.slice(ItemsTable.id).select { ItemsTable.relation eq ItemType.TOOL.relation }
