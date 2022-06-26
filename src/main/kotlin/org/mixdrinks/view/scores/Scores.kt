@@ -20,7 +20,7 @@ import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.settings.AppSettings
 import org.mixdrinks.view.error.CocktailNotFound
 import org.mixdrinks.view.error.ItemsNotFound
-import org.mixdrinks.view.error.QueryRequire
+import org.mixdrinks.view.error.QueryRequireException
 import org.mixdrinks.view.error.VoteError
 
 fun Application.scores(appSettings: AppSettings) {
@@ -98,7 +98,7 @@ private fun Routing.cocktailsVisit() {
 }
 
 private fun PipelineContext<Unit, ApplicationCall>.getId(): Int {
-    val id = call.request.queryParameters["id"]?.toIntOrNull() ?: throw QueryRequire("id")
+    val id = call.request.queryParameters["id"]?.toIntOrNull() ?: throw QueryRequireException("id")
     return id
 }
 

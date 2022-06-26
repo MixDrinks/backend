@@ -9,10 +9,11 @@ import org.mixdrinks.view.rating.getRating
 import org.mixdrinks.view.v2.controllers.search.CocktailsSourceV2
 import org.mixdrinks.view.v2.controllers.search.Page
 import org.mixdrinks.view.v2.controllers.search.SearchParams
+import org.mixdrinks.view.v2.data.CocktailId
 
 @Serializable
 data class RattingItem(
-    @SerialName("cocktailId") val cocktailId: CocktailsSourceV2.CocktailId,
+    @SerialName("cocktailId") val cocktailId: CocktailId,
     @SerialName("rating") val rating: Float?,
     @SerialName("visitCount") val visitCount: Int,
 )
@@ -32,7 +33,7 @@ class RattingBuilder(
                 query
             }.map {
                 RattingItem(
-                    cocktailId = CocktailsSourceV2.CocktailId(it[CocktailsTable.id]),
+                    cocktailId = CocktailId(it[CocktailsTable.id]),
                     rating = it.getRating(),
                     visitCount = it[CocktailsTable.visitCount],
                 )

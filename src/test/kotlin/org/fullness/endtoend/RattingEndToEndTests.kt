@@ -27,10 +27,11 @@ import org.mixdrinks.data.TagsTable
 import org.mixdrinks.settings.AppSettings
 import org.mixdrinks.view.v2.controllers.score.RattingBuilder
 import org.mixdrinks.view.v2.controllers.score.RattingItem
-import org.mixdrinks.view.v2.controllers.score.ScoreChangeResponse
+import org.mixdrinks.view.v2.controllers.score.CocktailScoreChangeResponse
 import org.mixdrinks.view.v2.controllers.score.rattingSearchView
 import org.mixdrinks.view.v2.controllers.score.scoreV2
 import org.mixdrinks.view.v2.controllers.search.CocktailsSourceV2
+import org.mixdrinks.view.v2.data.CocktailId
 
 class RattingEndToEndTests : FunSpec({
 
@@ -65,17 +66,17 @@ class RattingEndToEndTests : FunSpec({
 
             client.get("v2/search/ratings").let { response ->
                 val result =
-                    Json.decodeFromString<Map<CocktailsSourceV2.CocktailId, RattingItem>>(response.bodyAsText())
+                    Json.decodeFromString<Map<CocktailId, RattingItem>>(response.bodyAsText())
 
-                result[CocktailsSourceV2.CocktailId(0)] shouldBe RattingItem(
-                    cocktailId = CocktailsSourceV2.CocktailId(0),
+                result[CocktailId(0)] shouldBe RattingItem(
+                    cocktailId = CocktailId(0),
                     rating = 2.5F,
                     visitCount = 10,
                 )
             }
 
             client.post("v2/cocktails/visit?id=0").let { response ->
-                val result = Json.decodeFromString<ScoreChangeResponse>(response.bodyAsText())
+                val result = Json.decodeFromString<CocktailScoreChangeResponse>(response.bodyAsText())
                 result.rating shouldBe 2.5
                 result.visitCount shouldBe 11
             }
@@ -83,10 +84,10 @@ class RattingEndToEndTests : FunSpec({
             //Verify ratting return new value
             client.get("v2/search/ratings").let { response ->
                 val result =
-                    Json.decodeFromString<Map<CocktailsSourceV2.CocktailId, RattingItem>>(response.bodyAsText())
+                    Json.decodeFromString<Map<CocktailId, RattingItem>>(response.bodyAsText())
 
-                result[CocktailsSourceV2.CocktailId(0)] shouldBe RattingItem(
-                    cocktailId = CocktailsSourceV2.CocktailId(0),
+                result[CocktailId(0)] shouldBe RattingItem(
+                    cocktailId = CocktailId(0),
                     rating = 2.5F,
                     visitCount = 11,
                 )
@@ -123,16 +124,16 @@ class RattingEndToEndTests : FunSpec({
 
             client.get("v2/search/ratings").let { response ->
                 val result =
-                    Json.decodeFromString<Map<CocktailsSourceV2.CocktailId, RattingItem>>(response.bodyAsText())
+                    Json.decodeFromString<Map<CocktailId, RattingItem>>(response.bodyAsText())
 
-                result[CocktailsSourceV2.CocktailId(0)] shouldBe RattingItem(
-                    cocktailId = CocktailsSourceV2.CocktailId(0),
+                result[CocktailId(0)] shouldBe RattingItem(
+                    cocktailId = CocktailId(0),
                     rating = 2.5F,
                     visitCount = 10,
                 )
 
-                result[CocktailsSourceV2.CocktailId(1)] shouldBe RattingItem(
-                    cocktailId = CocktailsSourceV2.CocktailId(1),
+                result[CocktailId(1)] shouldBe RattingItem(
+                    cocktailId = CocktailId(1),
                     rating = null,
                     visitCount = 1,
                 )
@@ -142,7 +143,7 @@ class RattingEndToEndTests : FunSpec({
                 contentType(ContentType.Application.Json)
                 setBody("{\"value\":5}")
             }.let { response ->
-                val result = Json.decodeFromString<ScoreChangeResponse>(response.bodyAsText())
+                val result = Json.decodeFromString<CocktailScoreChangeResponse>(response.bodyAsText())
                 result.rating shouldBe 2.7F
                 result.visitCount shouldBe 10
             }

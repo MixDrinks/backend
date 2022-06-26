@@ -1,8 +1,8 @@
 package org.mixdrinks.view.v2.search
 
 import io.kotest.core.spec.style.FunSpec
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import org.fullness.CocktailData
 import org.fullness.prepareData
@@ -11,6 +11,7 @@ import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
 import org.mixdrinks.view.v2.controllers.search.CocktailsSourceV2
 import org.mixdrinks.view.v2.controllers.search.SearchParams
+import org.mixdrinks.view.v2.data.CocktailId
 
 internal class CocktailsSourceV2Test : FunSpec({
 
@@ -61,7 +62,7 @@ internal class CocktailsSourceV2Test : FunSpec({
     test("Verify return all with empty search param") {
         CocktailsSourceV2().cocktailsBySearch(searchParams = SearchParams()) shouldContainExactlyInAnyOrder listOf(
             10, 1, 2, 3, 4
-        ).map { CocktailsSourceV2.CocktailId(it) }
+        ).map { CocktailId(it) }
     }
 
     test("Verify return cocktails by one tags") {
@@ -71,7 +72,7 @@ internal class CocktailsSourceV2Test : FunSpec({
                     1
                 )
             )
-        ) shouldContainExactlyInAnyOrder listOf(1, 2, 3, 4).map { CocktailsSourceV2.CocktailId(it) }
+        ) shouldContainExactlyInAnyOrder listOf(1, 2, 3, 4).map { CocktailId(it) }
     }
 
     test("Verify return cocktails by two tags") {
@@ -81,7 +82,7 @@ internal class CocktailsSourceV2Test : FunSpec({
                     1, 100
                 )
             )
-        ) shouldContainExactlyInAnyOrder listOf(3, 4).map { CocktailsSourceV2.CocktailId(it) }
+        ) shouldContainExactlyInAnyOrder listOf(3, 4).map { CocktailId(it) }
     }
 
     test("Verify build search response by goods") {
@@ -92,7 +93,7 @@ internal class CocktailsSourceV2Test : FunSpec({
                     2, 4
                 )
             )
-        ) shouldContainExactlyInAnyOrder listOf(1, 2, 3).map { CocktailsSourceV2.CocktailId(it) }
+        ) shouldContainExactlyInAnyOrder listOf(1, 2, 3).map { CocktailId(it) }
 
         source.cocktailsBySearch(
             searchParams = createSearchParam(
@@ -100,7 +101,7 @@ internal class CocktailsSourceV2Test : FunSpec({
                     100
                 )
             )
-        ) shouldContainExactlyInAnyOrder listOf(3).map { CocktailsSourceV2.CocktailId(it) }
+        ) shouldContainExactlyInAnyOrder listOf(3).map { CocktailId(it) }
     }
 
     test("Verify build search response by tools") {
@@ -110,7 +111,7 @@ internal class CocktailsSourceV2Test : FunSpec({
                     401, 400
                 )
             )
-        ) shouldContainExactlyInAnyOrder listOf(2, 4).map { CocktailsSourceV2.CocktailId(it) }
+        ) shouldContainExactlyInAnyOrder listOf(2, 4).map { CocktailId(it) }
 
         CocktailsSourceV2().cocktailsBySearch(
             searchParams = createSearchParam(
@@ -134,7 +135,7 @@ internal class CocktailsSourceV2Test : FunSpec({
                 tagIds = listOf(1),
                 goodIds = listOf(2),
             )
-        ) shouldContainExactly listOf(1, 2, 3).map { CocktailsSourceV2.CocktailId(it) }
+        ) shouldContainExactly listOf(1, 2, 3).map { CocktailId(it) }
     }
 
     test("Verify filter by all") {
@@ -144,7 +145,7 @@ internal class CocktailsSourceV2Test : FunSpec({
                 goodIds = listOf(101),
                 toolIds = listOf(400),
             )
-        ) shouldContainExactly listOf(4).map { CocktailsSourceV2.CocktailId(it) }
+        ) shouldContainExactly listOf(4).map { CocktailId(it) }
     }
 })
 

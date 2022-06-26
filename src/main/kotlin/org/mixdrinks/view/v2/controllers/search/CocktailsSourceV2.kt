@@ -1,6 +1,5 @@
 package org.mixdrinks.view.v2.controllers.search
 
-import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
@@ -12,12 +11,9 @@ import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.view.cocktail.ItemType
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
+import org.mixdrinks.view.v2.data.CocktailId
 
 class CocktailsSourceV2 {
-
-    @Serializable
-    @JvmInline
-    value class CocktailId(val value: Int)
 
     private val cache: Map<CocktailId, Map<FilterModels.FilterGroupId, List<FilterModels.FilterId>>>
 

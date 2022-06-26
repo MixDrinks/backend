@@ -15,17 +15,19 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsTable.visitCount
+import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.settings.AppSettings
-import org.mixdrinks.view.error.QueryRequire
+import org.mixdrinks.view.error.QueryRequireException
 import org.mixdrinks.view.error.VoteError
 import org.mixdrinks.view.rating.getRating
 import org.mixdrinks.view.scores.ScoreRequest
-import org.mixdrinks.view.v2.controllers.search.CocktailsSourceV2
+import org.mixdrinks.view.v2.data.CocktailId
+import org.mixdrinks.view.v2.data.ItemId
 import org.mixdrinks.view.v2.roundScore
 
 @Serializable
-data class ScoreChangeResponse(
-    @SerialName("cocktailId") val cocktailId: CocktailsSourceV2.CocktailId,
+data class CocktailScoreChangeResponse(
+    @SerialName("cocktailId") val cocktailId: CocktailId,
     @SerialName("rating") val rating: Float?,
     @SerialName("visitCount") val visitCount: Int,
 )
@@ -42,7 +44,7 @@ fun Application.scoreV2(appSettings: AppSettings) {
                     it[ratingCount] = ratingCount + 1
                 }
 
-                scoreChangeResponse(id)
+                scoreCocktailsChangeResponse(id)
             })
         }
         post("v2/cocktails/visit") {
@@ -53,26 +55,26 @@ fun Application.scoreV2(appSettings: AppSettings) {
                     it[visitCount] = visitCount + 1
                 }
 
-                scoreChangeResponse(id)
+                scoreCocktailsChangeResponse(id)
             })
         }
     }
 }
 
-private fun scoreChangeResponse(id: CocktailsSourceV2.CocktailId) =
-    CocktailsTable.select { CocktailsTable.id eq id.value }.firstOrNull()?.let {
-        ScoreChangeResponse(
+private fun scoreCocktailsChangeResponse(id: CocktailId): CocktailScoreChangeResponse {
+    return CocktailsTable.select { CocktailsTable.id eq id.value }.firstOrNull()?.let {
+        CocktailScoreChangeResponse(
             cocktailId = id,
             rating = it.getRating()?.let { notNullScore -> roundScore(notNullScore) },
             visitCount = it[visitCount],
         )
-    } ?: throw QueryRequire("Cocktail not found")
-
-private fun ApplicationCall.getCocktailId(): CocktailsSourceV2.CocktailId {
-    val id = this.request.queryParameters["id"]?.toIntOrNull() ?: throw QueryRequire("id")
-    return CocktailsSourceV2.CocktailId(id)
+    } ?: throw QueryRequireException("Cocktail not found")
 }
 
+private fun ApplicationCall.getCocktailId(): CocktailId {
+    val id = this.request.queryParameters["id"]?.toIntOrNull() ?: throw QueryRequireException("id")
+    return CocktailId(id)
+}
 private suspend fun ApplicationCall.getRatting(appSettings: AppSettings): Int {
     val vote = this.receive<ScoreRequest>().value
 

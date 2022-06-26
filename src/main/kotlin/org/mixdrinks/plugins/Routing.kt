@@ -8,7 +8,7 @@ import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.response.respond
 import org.mixdrinks.view.error.CocktailNotFound
 import org.mixdrinks.view.error.OffsetToBig
-import org.mixdrinks.view.error.QueryRequire
+import org.mixdrinks.view.error.QueryRequireException
 import org.mixdrinks.view.error.SortTypeNotFound
 import org.mixdrinks.view.error.VoteError
 
@@ -17,7 +17,7 @@ fun Application.configureRouting() {
         exception<OffsetToBig> { call, offsetToBig ->
             call.respond(HttpStatusCode.BadRequest, offsetToBig.toString())
         }
-        exception<QueryRequire> { call, cause ->
+        exception<QueryRequireException> { call, cause ->
             call.respond(HttpStatusCode.BadRequest, cause.toString())
         }
         exception<CocktailNotFound> { call, cause ->
