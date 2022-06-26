@@ -15,22 +15,13 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsTable.visitCount
-import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.settings.AppSettings
 import org.mixdrinks.view.error.QueryRequireException
 import org.mixdrinks.view.error.VoteError
 import org.mixdrinks.view.rating.getRating
 import org.mixdrinks.view.scores.ScoreRequest
 import org.mixdrinks.view.v2.data.CocktailId
-import org.mixdrinks.view.v2.data.ItemId
 import org.mixdrinks.view.v2.roundScore
-
-@Serializable
-data class CocktailScoreChangeResponse(
-    @SerialName("cocktailId") val cocktailId: CocktailId,
-    @SerialName("rating") val rating: Float?,
-    @SerialName("visitCount") val visitCount: Int,
-)
 
 fun Application.scoreV2(appSettings: AppSettings) {
     routing {
@@ -61,6 +52,13 @@ fun Application.scoreV2(appSettings: AppSettings) {
     }
 }
 
+@Serializable
+data class CocktailScoreChangeResponse(
+    @SerialName("cocktailId") val cocktailId: CocktailId,
+    @SerialName("rating") val rating: Float?,
+    @SerialName("visitCount") val visitCount: Int,
+)
+
 private fun scoreCocktailsChangeResponse(id: CocktailId): CocktailScoreChangeResponse {
     return CocktailsTable.select { CocktailsTable.id eq id.value }.firstOrNull()?.let {
         CocktailScoreChangeResponse(
@@ -75,6 +73,7 @@ private fun ApplicationCall.getCocktailId(): CocktailId {
     val id = this.request.queryParameters["id"]?.toIntOrNull() ?: throw QueryRequireException("id")
     return CocktailId(id)
 }
+
 private suspend fun ApplicationCall.getRatting(appSettings: AppSettings): Int {
     val vote = this.receive<ScoreRequest>().value
 

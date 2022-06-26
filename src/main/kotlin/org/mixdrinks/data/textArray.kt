@@ -3,7 +3,6 @@ package org.mixdrinks.data
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnType
 import org.jetbrains.exposed.sql.CustomStringFunction
-import org.jetbrains.exposed.sql.EqOp
 import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
 import org.jetbrains.exposed.sql.Table
@@ -31,8 +30,6 @@ private fun <T : Serializable> Table.array(name: String, underlyingType: String,
 public fun <T : Serializable> any(
     expression: Expression<Array<T>>,
 ): ExpressionWithColumnType<String?> = CustomStringFunction("ANY", expression)
-
-private infix fun <T : Serializable> Expression<T>.eqAny(other: Expression<Array<T>>): EqOp = EqOp(this, any(other))
 
 /**
  * Implementation of [ColumnType] for the SQL `ARRAY` type.

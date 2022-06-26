@@ -17,13 +17,6 @@ import org.mixdrinks.data.ItemsTable.visitCount
 import org.mixdrinks.view.error.QueryRequireException
 import org.mixdrinks.view.v2.data.ItemId
 
-@Serializable
-data class ItemScoreChangeResponse(
-    @SerialName("itemId") val cocktailId: ItemId,
-    @SerialName("visitCount") val visitCount: Int,
-)
-
-
 fun Application.itemScoreV2() {
     routing {
         post("v2/item/visit") {
@@ -40,6 +33,12 @@ fun Application.itemScoreV2() {
 
     }
 }
+
+@Serializable
+data class ItemScoreChangeResponse(
+    @SerialName("itemId") val cocktailId: ItemId,
+    @SerialName("visitCount") val visitCount: Int,
+)
 
 private fun scoreItemChangeResponse(id: ItemId): ItemScoreChangeResponse {
     return ItemsTable.select { ItemsTable.id eq id.value }.firstOrNull()?.let {

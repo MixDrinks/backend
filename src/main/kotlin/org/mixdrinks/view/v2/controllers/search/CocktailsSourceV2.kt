@@ -51,16 +51,17 @@ class CocktailsSourceV2 {
 
     private fun getItemIds(cocktailId: CocktailId, itemType: ItemType) =
         CocktailsToItemsTable.slice(CocktailsToItemsTable.cocktailId, CocktailsToItemsTable.goodId)
-            .select { (CocktailsToItemsTable.cocktailId eq cocktailId.value) and (CocktailsToItemsTable.relation eq itemType.relation) }
+            .select {
+                (CocktailsToItemsTable.cocktailId eq cocktailId.value) and
+                        (CocktailsToItemsTable.relation eq itemType.relation)
+            }
             .map { FilterModels.FilterId(it[CocktailsToItemsTable.goodId]) }
 
     fun cocktailsBySearch(searchParams: SearchParams): List<CocktailId> {
-        return cache
-            .filter { (_, meta) ->
-                return@filter searchParams.filters.all { (groupId, filterIds) ->
-                    meta[groupId]!!.containsAll(filterIds)
-                }
+        return cache.filter { (_, meta) ->
+            return@filter searchParams.filters.all { (groupId, filterIds) ->
+                meta[groupId]!!.containsAll(filterIds)
             }
-            .map { it.key }
+        }.map { it.key }
     }
 }

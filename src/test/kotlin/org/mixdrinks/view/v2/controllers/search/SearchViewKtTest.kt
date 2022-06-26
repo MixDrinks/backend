@@ -18,8 +18,6 @@ internal class SearchViewKtTest : FunSpec({
         val call = mockCall(1)
         call.getPage(10) shouldBe Page(10, 10)
     }
-
-
 })
 
 private fun mockCall(pageIndex: Int): ApplicationCall {
