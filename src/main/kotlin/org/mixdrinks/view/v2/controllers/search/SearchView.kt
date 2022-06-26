@@ -13,13 +13,8 @@ import org.mixdrinks.view.v2.controllers.filter.FilterModels
 
 fun Application.searchView(searchResponseBuilder: SearchResponseBuilder, appSettings: AppSettings) {
     routing {
-        get("search/cocktails") {
-            val searchRequest = SearchParam(buildMap {
-                FilterModels.Filters.values().forEach { filterGroup ->
-                    call.getSearchParam(filterGroup)?.let { this[filterGroup.id] = it }
-                }
-            })
-
+        get("v2/search/cocktails") {
+            val searchRequest = call.getSearchParam()
             val page: Page? = call.getPage(appSettings.pageSize)
             val sortKey: SortType = call.getSortType()
 
@@ -33,7 +28,7 @@ data class Page(
     val limit: Int,
 )
 
-data class SearchParam(
+data class SearchParams(
     val filters: Map<FilterModels.FilterGroupId, List<FilterModels.FilterId>> = mapOf(),
 )
 
@@ -45,6 +40,14 @@ fun ApplicationCall.getSortType(): SortType {
     } else {
         SortType.MOST_POPULAR
     }
+}
+
+fun ApplicationCall.getSearchParam(): SearchParams {
+    return SearchParams(buildMap {
+        FilterModels.Filters.values().forEach { filterGroup ->
+            this@getSearchParam.getSearchParam(filterGroup)?.let { this[filterGroup.id] = it }
+        }
+    })
 }
 
 fun ApplicationCall.getSearchParam(filter: FilterModels.Filters): List<FilterModels.FilterId>? {

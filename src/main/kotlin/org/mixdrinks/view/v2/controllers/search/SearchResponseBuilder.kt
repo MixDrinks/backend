@@ -29,10 +29,10 @@ class SearchResponseBuilder(private val cocktailsSourceV2: CocktailsSourceV2) {
         @SerialName("count") val count: Int,
     )
 
-    fun getCocktailsBySearch(searchParam: SearchParam, page: Page?, sortType: SortType): SearchResponse {
-        val cocktailsIds: List<Int> = cocktailsSourceV2.getCocktailsBySearch(searchParam).map { it.value }
+    fun getCocktailsBySearch(searchParams: SearchParams, page: Page?, sortType: SortType): SearchResponse {
+        val cocktailsIds: List<Int> = cocktailsSourceV2.cocktailsBySearch(searchParams).map { it.value }
 
-        val sortColumn : Expression<*> = when (sortType) {
+        val sortColumn: Expression<*> = when (sortType) {
             SortType.MOST_POPULAR -> CocktailsTable.visitCount
             SortType.BIGGEST_RATE -> CocktailsTable.ratingValue
         }
@@ -49,18 +49,18 @@ class SearchResponseBuilder(private val cocktailsSourceV2: CocktailsSourceV2) {
                 query
             }.map(::createCocktails)
 
-            val test: Map<FilterModels.Filters, List<FilterCount>> =
+            val futureCounts: Map<FilterModels.Filters, List<FilterCount>> =
                 FilterModels.Filters.values().associateWith { filter ->
                     val filterIds: List<FilterModels.FilterId> = cocktailsSourceV2.filterIds[filter]!!
 
                     filterIds.map { filterId ->
                         val futureSearchParam: MutableMap<FilterModels.FilterGroupId, List<FilterModels.FilterId>> =
-                            searchParam.filters.toMutableMap()
+                            searchParams.filters.toMutableMap()
                         futureSearchParam[filter.id] = futureSearchParam[filter.id].orEmpty().plus(filterId)
 
                         FilterCount(
                             id = filterId,
-                            count = cocktailsSourceV2.getCocktailsBySearch(SearchParam(futureSearchParam)).count()
+                            count = cocktailsSourceV2.cocktailsBySearch(SearchParams(futureSearchParam)).count()
                         )
                     }
                 }
@@ -68,7 +68,7 @@ class SearchResponseBuilder(private val cocktailsSourceV2: CocktailsSourceV2) {
             return@transaction SearchResponse(
                 totalCount = totalCount,
                 cocktails = cocktails,
-                futureCounts = test.map { (key, value) -> Pair(key.id, value) }.toMap(),
+                futureCounts = futureCounts.map { (key, value) -> Pair(key.id, value) }.toMap(),
             )
         }
     }

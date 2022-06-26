@@ -1,5 +1,6 @@
 package org.mixdrinks.view.v2.controllers.search
 
+import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
@@ -14,6 +15,7 @@ import org.mixdrinks.view.v2.controllers.filter.FilterModels
 
 class CocktailsSourceV2 {
 
+    @Serializable
     @JvmInline
     value class CocktailId(val value: Int)
 
@@ -56,10 +58,10 @@ class CocktailsSourceV2 {
             .select { (CocktailsToItemsTable.cocktailId eq cocktailId.value) and (CocktailsToItemsTable.relation eq itemType.relation) }
             .map { FilterModels.FilterId(it[CocktailsToItemsTable.goodId]) }
 
-    fun getCocktailsBySearch(searchParam: SearchParam): List<CocktailId> {
+    fun cocktailsBySearch(searchParams: SearchParams): List<CocktailId> {
         return cache
             .filter { (_, meta) ->
-                return@filter searchParam.filters.all { (groupId, filterIds) ->
+                return@filter searchParams.filters.all { (groupId, filterIds) ->
                     meta[groupId]!!.containsAll(filterIds)
                 }
             }

@@ -3,8 +3,6 @@ package org.mixdrinks.view.v2.search
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import org.fullness.CocktailData
 import org.fullness.prepareData
@@ -12,7 +10,7 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
 import org.mixdrinks.view.v2.controllers.search.CocktailsSourceV2
-import org.mixdrinks.view.v2.controllers.search.SearchParam
+import org.mixdrinks.view.v2.controllers.search.SearchParams
 
 internal class CocktailsSourceV2Test : FunSpec({
 
@@ -61,14 +59,14 @@ internal class CocktailsSourceV2Test : FunSpec({
     }
 
     test("Verify return all with empty search param") {
-        CocktailsSourceV2().getCocktailsBySearch(searchParam = SearchParam()) shouldContainExactlyInAnyOrder listOf(
+        CocktailsSourceV2().cocktailsBySearch(searchParams = SearchParams()) shouldContainExactlyInAnyOrder listOf(
             10, 1, 2, 3, 4
         ).map { CocktailsSourceV2.CocktailId(it) }
     }
 
     test("Verify return cocktails by one tags") {
-        CocktailsSourceV2().getCocktailsBySearch(
-            searchParam = createSearchParam(
+        CocktailsSourceV2().cocktailsBySearch(
+            searchParams = createSearchParam(
                 tagIds = listOf(
                     1
                 )
@@ -77,8 +75,8 @@ internal class CocktailsSourceV2Test : FunSpec({
     }
 
     test("Verify return cocktails by two tags") {
-        CocktailsSourceV2().getCocktailsBySearch(
-            searchParam = createSearchParam(
+        CocktailsSourceV2().cocktailsBySearch(
+            searchParams = createSearchParam(
                 tagIds = listOf(
                     1, 100
                 )
@@ -88,16 +86,16 @@ internal class CocktailsSourceV2Test : FunSpec({
 
     test("Verify build search response by goods") {
         val source = CocktailsSourceV2()
-        source.getCocktailsBySearch(
-            searchParam = createSearchParam(
+        source.cocktailsBySearch(
+            searchParams = createSearchParam(
                 goodIds = listOf(
                     2, 4
                 )
             )
         ) shouldContainExactlyInAnyOrder listOf(1, 2, 3).map { CocktailsSourceV2.CocktailId(it) }
 
-        source.getCocktailsBySearch(
-            searchParam = createSearchParam(
+        source.cocktailsBySearch(
+            searchParams = createSearchParam(
                 goodIds = listOf(
                     100
                 )
@@ -106,16 +104,16 @@ internal class CocktailsSourceV2Test : FunSpec({
     }
 
     test("Verify build search response by tools") {
-        CocktailsSourceV2().getCocktailsBySearch(
-            searchParam = createSearchParam(
+        CocktailsSourceV2().cocktailsBySearch(
+            searchParams = createSearchParam(
                 toolIds = listOf(
                     401, 400
                 )
             )
         ) shouldContainExactlyInAnyOrder listOf(2, 4).map { CocktailsSourceV2.CocktailId(it) }
 
-        CocktailsSourceV2().getCocktailsBySearch(
-            searchParam = createSearchParam(
+        CocktailsSourceV2().cocktailsBySearch(
+            searchParams = createSearchParam(
                 toolIds = listOf(
                     402, 404
                 )
@@ -124,15 +122,15 @@ internal class CocktailsSourceV2Test : FunSpec({
     }
 
     test("Verify build search response by tags and goods") {
-        CocktailsSourceV2().getCocktailsBySearch(
-            searchParam = createSearchParam(
+        CocktailsSourceV2().cocktailsBySearch(
+            searchParams = createSearchParam(
                 tagIds = listOf(1, 2),
                 goodIds = listOf(100, 101),
             )
         ) shouldBe emptyList()
 
-        CocktailsSourceV2().getCocktailsBySearch(
-            searchParam = createSearchParam(
+        CocktailsSourceV2().cocktailsBySearch(
+            searchParams = createSearchParam(
                 tagIds = listOf(1),
                 goodIds = listOf(2),
             )
@@ -140,8 +138,8 @@ internal class CocktailsSourceV2Test : FunSpec({
     }
 
     test("Verify filter by all") {
-        CocktailsSourceV2().getCocktailsBySearch(
-            searchParam = createSearchParam(
+        CocktailsSourceV2().cocktailsBySearch(
+            searchParams = createSearchParam(
                 tagIds = listOf(2),
                 goodIds = listOf(101),
                 toolIds = listOf(400),
@@ -154,8 +152,8 @@ private fun createSearchParam(
     tagIds: List<Int> = emptyList(),
     goodIds: List<Int> = emptyList(),
     toolIds: List<Int> = emptyList(),
-): SearchParam {
-    return SearchParam(
+): SearchParams {
+    return SearchParams(
         mapOf(
             FilterModels.Filters.TAGS.id to tagIds.map { FilterModels.FilterId(it) },
             FilterModels.Filters.GOODS.id to goodIds.map { FilterModels.FilterId(it) },

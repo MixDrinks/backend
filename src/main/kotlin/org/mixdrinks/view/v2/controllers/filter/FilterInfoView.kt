@@ -8,7 +8,7 @@ import io.ktor.server.routing.routing
 
 fun Application.filterMetaInfo(filterSource: FilterSource) {
     routing {
-        get("filters/v2") {
+        get("v2/filters") {
             call.respond(filterSource.getMetaInfo())
         }
     }

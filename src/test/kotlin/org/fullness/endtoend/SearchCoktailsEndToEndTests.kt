@@ -30,7 +30,7 @@ import org.mixdrinks.view.v2.controllers.search.SearchResponseBuilder
 import org.mixdrinks.view.v2.controllers.search.searchView
 import java.util.concurrent.atomic.AtomicInteger
 
-internal class SearchEndToEndTests : FunSpec({
+internal class SearchCoktailsEndToEndTests : FunSpec({
 
     @Suppress("MemberVisibilityCanBePrivate") val database =
         Database.connect("jdbc:h2:mem:test_db_22;DB_CLOSE_DELAY=-1;IGNORECASE=true;")
@@ -50,13 +50,15 @@ internal class SearchEndToEndTests : FunSpec({
             ratingValue = 3,
         )
 
-        prepareData(listOf(
-            mockCocktails,
-        ).plus(buildList {
-            repeat(10) {
-                this.add(MockCocktail.getDefault())
-            }
-        }))
+        prepareData(
+            listOf(
+                mockCocktails,
+            ).plus(buildList {
+                repeat(10) {
+                    this.add(MockCocktail.getDefault())
+                }
+            })
+        )
         testApplication {
             application {
                 install(ContentNegotiation) {
@@ -64,7 +66,7 @@ internal class SearchEndToEndTests : FunSpec({
                 }
                 searchView(SearchResponseBuilder(CocktailsSourceV2()), createAppSetting(100))
             }
-            val response = client.get("search/cocktails")
+            val response = client.get("v2/search/cocktails")
 
             response.status shouldBe HttpStatusCode.OK
             val result = Json.decodeFromString<SearchResponseBuilder.SearchResponse>(response.bodyAsText())
@@ -95,7 +97,7 @@ internal class SearchEndToEndTests : FunSpec({
                 }
                 searchView(SearchResponseBuilder(CocktailsSourceV2()), createAppSetting(pageSize))
             }
-            val response = client.get("search/cocktails?page=0")
+            val response = client.get("v2/search/cocktails?page=0")
 
             response.status shouldBe HttpStatusCode.OK
             val result = Json.decodeFromString<SearchResponseBuilder.SearchResponse>(response.bodyAsText())
@@ -121,7 +123,7 @@ internal class SearchEndToEndTests : FunSpec({
                 }
                 searchView(SearchResponseBuilder(CocktailsSourceV2()), createAppSetting(pageSize))
             }
-            val response = client.get("search/cocktails?page=1")
+            val response = client.get("v2/search/cocktails?page=1")
 
             response.status shouldBe HttpStatusCode.OK
             val result = Json.decodeFromString<SearchResponseBuilder.SearchResponse>(response.bodyAsText())
@@ -161,7 +163,7 @@ internal class SearchEndToEndTests : FunSpec({
                     searchView(SearchResponseBuilder(CocktailsSourceV2()), createAppSetting(10))
                 }
 
-                val response = client.get("search/cocktails?sort=most-popular")
+                val response = client.get("v2/search/cocktails?sort=most-popular")
 
                 response.status shouldBe HttpStatusCode.OK
                 val result = Json.decodeFromString<SearchResponseBuilder.SearchResponse>(response.bodyAsText())
@@ -206,7 +208,7 @@ internal class SearchEndToEndTests : FunSpec({
                     searchView(SearchResponseBuilder(CocktailsSourceV2()), createAppSetting(10))
                 }
 
-                val response = client.get("search/cocktails?sort=biggest-rate")
+                val response = client.get("v2/search/cocktails?sort=biggest-rate")
 
                 response.status shouldBe HttpStatusCode.OK
                 val result = Json.decodeFromString<SearchResponseBuilder.SearchResponse>(response.bodyAsText())
@@ -225,7 +227,7 @@ private fun createAppSetting(pageSize: Int): AppSettings {
     }
 }
 
-data class MockCocktail(
+private data class MockCocktail(
     val id: Int,
     val name: String,
     val visitCount: Int,

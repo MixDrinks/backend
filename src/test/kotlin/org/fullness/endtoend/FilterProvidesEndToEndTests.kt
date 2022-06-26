@@ -73,7 +73,7 @@ class FilterProvidesEndToEndTests : FunSpec({
                 filterMetaInfo(FilterSource())
             }
 
-            val response = client.get("filters/v2")
+            val response = client.get("v2/filters")
 
             response.status shouldBe HttpStatusCode.OK
             val result = Json.decodeFromString<List<FilterModels.FilterGroup>>(response.bodyAsText())

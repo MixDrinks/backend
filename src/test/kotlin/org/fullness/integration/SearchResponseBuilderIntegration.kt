@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.mixdrinks.view.cocktail.domain.SortType
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
 import org.mixdrinks.view.v2.controllers.search.CocktailsSourceV2
-import org.mixdrinks.view.v2.controllers.search.SearchParam
+import org.mixdrinks.view.v2.controllers.search.SearchParams
 import org.mixdrinks.view.v2.controllers.search.SearchResponseBuilder
 
 class SearchResponseBuilderIntegration : FunSpec({
@@ -46,7 +46,7 @@ class SearchResponseBuilderIntegration : FunSpec({
         val searchResponseBuilder = SearchResponseBuilder(CocktailsSourceV2())
 
         val result = searchResponseBuilder.getCocktailsBySearch(
-            searchParam = SearchParam(), page = null, sortType = SortType.MOST_POPULAR
+            searchParams = SearchParams(), page = null, sortType = SortType.MOST_POPULAR
         )
 
         result.cocktails.map { it.id } shouldContainExactlyInAnyOrder listOf(0, 1, 2)
@@ -101,7 +101,7 @@ class SearchResponseBuilderIntegration : FunSpec({
         val searchResponseBuilder = SearchResponseBuilder(CocktailsSourceV2())
 
         val result = searchResponseBuilder.getCocktailsBySearch(
-            searchParam = createSearchParam(tagIds = listOf(1)),
+            searchParams = createSearchParam(tagIds = listOf(1)),
             page = null,
             sortType = SortType.MOST_POPULAR
         )
@@ -158,7 +158,7 @@ class SearchResponseBuilderIntegration : FunSpec({
         val searchResponseBuilder = SearchResponseBuilder(CocktailsSourceV2())
 
         val result = searchResponseBuilder.getCocktailsBySearch(
-            searchParam = createSearchParam(
+            searchParams = createSearchParam(
                 tagIds = listOf(1),
                 goodIds = listOf(30)
             ),
@@ -198,8 +198,8 @@ private fun createSearchParam(
     tagIds: List<Int> = emptyList(),
     goodIds: List<Int> = emptyList(),
     toolIds: List<Int> = emptyList(),
-): SearchParam {
-    return SearchParam(
+): SearchParams {
+    return SearchParams(
         mapOf(
             FilterModels.Filters.TAGS.id to tagIds.map { FilterModels.FilterId(it) },
             FilterModels.Filters.GOODS.id to goodIds.map { FilterModels.FilterId(it) },
