@@ -5,6 +5,7 @@ import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.call
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
+import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
 import kotlinx.serialization.SerialName
@@ -21,6 +22,7 @@ import org.mixdrinks.view.error.VoteError
 import org.mixdrinks.view.rating.getRating
 import org.mixdrinks.view.scores.ScoreRequest
 import org.mixdrinks.view.v2.data.CocktailId
+import org.mixdrinks.view.v2.getCocktailId
 import org.mixdrinks.view.v2.roundScore
 
 fun Application.scoreV2(appSettings: AppSettings) {
@@ -49,6 +51,10 @@ fun Application.scoreV2(appSettings: AppSettings) {
                 scoreCocktailsChangeResponse(id)
             })
         }
+        get("v2/cocktail/ratting") {
+            val id = call.getCocktailId()
+            call.respond(transaction { scoreCocktailsChangeResponse(id) })
+        }
     }
 }
 
@@ -59,19 +65,21 @@ data class CocktailScoreChangeResponse(
     @SerialName("visitCount") val visitCount: Int,
 )
 
-private fun scoreCocktailsChangeResponse(id: CocktailId): CocktailScoreChangeResponse {
-    return CocktailsTable.select { CocktailsTable.id eq id.value }.firstOrNull()?.let {
-        CocktailScoreChangeResponse(
-            cocktailId = id,
-            rating = it.getRating()?.let { notNullScore -> roundScore(notNullScore) },
-            visitCount = it[visitCount],
+fun scoreCocktailsChangeResponse(id: CocktailId): CocktailScoreChangeResponse {
+    return CocktailsTable
+        .slice(
+            CocktailsTable.id,
+            CocktailsTable.visitCount,
+            CocktailsTable.ratingValue,
+            CocktailsTable.ratingCount,
         )
-    } ?: throw QueryRequireException("Cocktail not found")
-}
-
-private fun ApplicationCall.getCocktailId(): CocktailId {
-    val id = this.request.queryParameters["id"]?.toIntOrNull() ?: throw QueryRequireException("id")
-    return CocktailId(id)
+        .select { CocktailsTable.id eq id.value }.firstOrNull()?.let {
+            CocktailScoreChangeResponse(
+                cocktailId = id,
+                rating = it.getRating()?.let { notNullScore -> roundScore(notNullScore) },
+                visitCount = it[visitCount],
+            )
+        } ?: throw QueryRequireException("Cocktail not found")
 }
 
 private suspend fun ApplicationCall.getRatting(appSettings: AppSettings): Int {
