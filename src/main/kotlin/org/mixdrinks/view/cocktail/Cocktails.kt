@@ -84,6 +84,15 @@ fun Application.cocktails(cocktailsAggregator: CocktailsAggregator) {
                 )
             )
         }
+        get("v2/cocktails/full") {
+            val id = call.request.queryParameters["id"]?.toIntOrNull()
+
+            if (id != null) {
+                call.respond(getFullCocktail(id))
+            } else {
+                call.respond(HttpStatusCode.BadRequest, "Query id is require, and must be integer")
+            }
+        }
         get("cocktails/full") {
             val id = call.request.queryParameters["id"]?.toIntOrNull()
 

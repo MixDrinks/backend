@@ -12,5 +12,8 @@ fun Application.appSetting(appSettings: AppSettings) {
         get("settings") {
             call.respond(appSettings)
         }
+        get("v2/settings") {
+            call.respond(appSettings)
+        }
     }
 }
