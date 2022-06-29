@@ -9,7 +9,6 @@ import io.ktor.server.engine.applicationEngineEnvironment
 import io.ktor.server.engine.connector
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import io.ktor.server.plugins.callloging.CallLogging
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.cors.routing.CORS
 import org.jetbrains.exposed.sql.Database
@@ -25,6 +24,7 @@ import org.mixdrinks.view.filter.filters
 import org.mixdrinks.view.items.items
 import org.mixdrinks.view.scores.scores
 import org.mixdrinks.view.settings.appSetting
+import org.mixdrinks.view.v2.v2
 
 fun main() {
     embeddedServer(Netty, environment = applicationEngineEnvironment {
@@ -34,7 +34,6 @@ fun main() {
             configureRouting()
             configureCache()
             static()
-            install(CallLogging)
 
             install(CORS) {
                 anyHost()
@@ -71,6 +70,8 @@ fun main() {
             items()
             scores(appSettings)
             appSetting(appSettings)
+
+            v2(appSettings)
         }
 
         val port = config.property("ktor.connector.port").getString().toInt()

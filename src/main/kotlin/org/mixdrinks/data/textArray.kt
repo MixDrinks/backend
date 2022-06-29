@@ -3,13 +3,11 @@ package org.mixdrinks.data
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnType
 import org.jetbrains.exposed.sql.CustomStringFunction
-import org.jetbrains.exposed.sql.EqOp
 import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.ExpressionWithColumnType
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.statements.api.PreparedStatementApi
 import org.jetbrains.exposed.sql.statements.jdbc.JdbcPreparedStatementImpl
-import org.jetbrains.exposed.sql.stringLiteral
 import org.jetbrains.exposed.sql.vendors.currentDialect
 import java.io.Serializable
 import kotlin.Array
@@ -27,26 +25,11 @@ private fun <T : Serializable> Table.array(name: String, underlyingType: String,
     registerColumn<Array<T>>(name, ArrayColumnType<T>(underlyingType, size))
 
 /**
- * Checks whether this string is in the [other] expression.
- *
- * Example:
- * ```kotlin
- * productService.find { "tag" eqAny ProductsTable.tags }
- * ```
- *
- * @see any
- */
-public infix fun String.equalsAny(other: Expression<Array<String>>): EqOp =
-    stringLiteral(this) eqAny other
-
-/**
  * Invokes the `ANY` function on [expression].
  */
 public fun <T : Serializable> any(
     expression: Expression<Array<T>>,
 ): ExpressionWithColumnType<String?> = CustomStringFunction("ANY", expression)
-
-private infix fun <T : Serializable> Expression<T>.eqAny(other: Expression<Array<T>>): EqOp = EqOp(this, any(other))
 
 /**
  * Implementation of [ColumnType] for the SQL `ARRAY` type.

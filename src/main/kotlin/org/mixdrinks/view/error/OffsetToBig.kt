@@ -21,7 +21,7 @@ class ItemsNotFound(val id: Int) : Exception() {
     }
 }
 
-class QueryRequire(val queryName: String) : Exception() {
+class QueryRequireException(private val queryName: String) : Exception() {
     override fun toString(): String {
         return "$queryName is require"
     }

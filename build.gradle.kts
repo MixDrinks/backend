@@ -23,6 +23,10 @@ repositories {
     maven { url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap") }
 }
 
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
+}
+
 dependencies {
     implementation("io.ktor:ktor-server-core-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-auth-jvm:$ktorVersion")
@@ -51,4 +55,5 @@ dependencies {
     implementation("org.postgresql:postgresql:42.3.4")
 
     testImplementation("io.mockk:mockk:1.12.4")
+    testImplementation("io.kotest:kotest-runner-junit5:5.3.1")
 }
