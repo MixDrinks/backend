@@ -14,6 +14,16 @@ import org.mixdrinks.view.images.buildImages
 
 fun Application.items() {
     routing {
+        get("v2/items/full") {
+            val id = call.request.queryParameters["id"]?.toIntOrNull()
+
+            if (id != null) {
+                call.respond(getFullItem(id))
+            } else {
+                call.respond(HttpStatusCode.BadRequest, "Query id is require, and must be integer")
+            }
+        }
+
         get("items/full") {
             val id = call.request.queryParameters["id"]?.toIntOrNull()
 

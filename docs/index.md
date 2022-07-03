@@ -1,10 +1,10 @@
 ## The mixdrinks service documentation
 
-- [API](api/api.md)
-    - [Cocktails filter](api/cocktails_filter.md)
-    - [Full cocktails](api/full_cocktails.md)
-    - [Item](api/item.md)
-    - [Meta](api/meta.md)
-    - [Visit](api/visit.md)
-    - [Raiting](api/rating.md)
+- [API](../../docs/docs/api/api.md)
+    - [Cocktails filter](../../docs/docs/api/cocktails_filter.md)
+    - [Full cocktails](../../docs/docs/api/full_cocktails.md)
+    - [Item](../../docs/docs/api/item.md)
+    - [Meta](../../docs/docs/api/meta.md)
+    - [Visit](../../docs/docs/api/visit.md)
+    - [Raiting](../../docs/docs/api/rating.md)
 - [Image](image/image.md)

@@ -8,7 +8,7 @@ The service provide api for
 * Goods
 * Tools
 * Tags
-* Filter by tags, goods, tools and cocktail name
+* Filter by tags, goods, tools
 
 ### Using
 
@@ -23,6 +23,8 @@ The app require the postgres database. Run the postgres database and provide the
 * DB_PASSWORD - the password
 
 ### Deploy your own instance of service by digital ocean app platform
+
+[![Deploy to DO](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/MixDrinks/backend/tree/main)
 
 *Coming soon*
 

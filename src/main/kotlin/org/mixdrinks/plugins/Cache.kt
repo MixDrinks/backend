@@ -28,5 +28,11 @@ fun Application.configureCache() {
 }
 
 private fun isCachedCall(call: ApplicationCall) =
-    call.request.httpMethod == HttpMethod.Get &&
-            (call.request.path().contains("meta/all") || call.request.path().contains("tags/all"))
+    call.request.httpMethod == HttpMethod.Get && (CACHE_RESPONSE_PATHS.any { call.request.path().contains(it) })
+
+private val CACHE_RESPONSE_PATHS = listOf(
+    "meta/all",
+    "tags/all",
+    "v2/filters",
+    "v2/search/cocktails",
+)

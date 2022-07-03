@@ -1,0 +1,17 @@
+spec:
+  name: sample-golang
+  services:
+    - name: web
+      git:
+        branch: main
+        repo_clone_url: https://github.com/MixDrinks/backend.git
+      envs:
+        - key: DB_URL
+          value: "DB-url-testvalue"
+          type: SECRET
+        - key: DB_USER
+          value: "DB-user-testvalue"
+          type: SECRET
+        - key: DB_PASSWORD
+          value: "DB-password-testvalue"
+          type: SECRET

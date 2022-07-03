@@ -5,6 +5,7 @@ import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.call
 import io.ktor.server.response.respond
+import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
 import org.jetbrains.exposed.sql.JoinType
@@ -39,50 +40,15 @@ fun Application.cocktails(cocktailsAggregator: CocktailsAggregator) {
                 }
             })
         }
-        get("cocktails/filter") {
-            val tags = call.getIntArray("tags")
-            val goods = call.getIntArray("goods")
-            val tools = call.getIntArray("tools")
+        oldFilter(cocktailsAggregator)
+        get("v2/cocktails/full") {
+            val id = call.request.queryParameters["id"]?.toIntOrNull()
 
-            val search = call.request.queryParameters["query"]
-
-            var offset = call.request.queryParameters["offset"]?.toIntOrNull()
-            var limit = call.request.queryParameters["limit"]?.toIntOrNull()
-
-            val page = call.request.queryParameters["page"]?.toIntOrNull()
-
-            if (page != null) {
-                offset = (page * DEFAULT_PAGE_SIZE)
-                limit = DEFAULT_PAGE_SIZE
+            if (id != null) {
+                call.respond(getFullCocktail(id))
+            } else {
+                call.respond(HttpStatusCode.BadRequest, "Query id is require, and must be integer")
             }
-
-            val sortKey = call.request.queryParameters["sort"] ?: SortType.MOST_POPULAR.key
-
-            val sortType = SortType.values().firstOrNull { it.key == sortKey } ?: throw SortTypeNotFound()
-
-            val searchParam = CocktailsFilterSearchParam(
-                search, tags, goods, tools,
-            )
-
-            val result = cocktailsAggregator.getCompactCocktail(searchParam, offset, limit, sortType)
-
-            call.respond(
-                FilterResultVM(
-                    totalCount = result.totalCount,
-                    cocktails = result.list.map { cocktailFilter ->
-                        CompactCocktailVM(
-                            cocktailFilter.id,
-                            cocktailFilter.name,
-                            cocktailFilter.rating,
-                            cocktailFilter.visitCount,
-                            buildImages(cocktailFilter.id, ImageType.COCKTAIL),
-                        )
-                    },
-                    cocktailsByGoodCounts = result.counts.goodCounts,
-                    cocktailsByTagCounts = result.counts.tagCounts,
-                    cocktailsByToolCounts = result.counts.toolCounts,
-                )
-            )
         }
         get("cocktails/full") {
             val id = call.request.queryParameters["id"]?.toIntOrNull()
@@ -93,6 +59,54 @@ fun Application.cocktails(cocktailsAggregator: CocktailsAggregator) {
                 call.respond(HttpStatusCode.BadRequest, "Query id is require, and must be integer")
             }
         }
+    }
+}
+
+private fun Routing.oldFilter(cocktailsAggregator: CocktailsAggregator) {
+    get("cocktails/filter") {
+        val tags = call.getIntArray("tags")
+        val goods = call.getIntArray("goods")
+        val tools = call.getIntArray("tools")
+
+        val search = call.request.queryParameters["query"]
+
+        var offset = call.request.queryParameters["offset"]?.toIntOrNull()
+        var limit = call.request.queryParameters["limit"]?.toIntOrNull()
+
+        val page = call.request.queryParameters["page"]?.toIntOrNull()
+
+        if (page != null) {
+            offset = (page * DEFAULT_PAGE_SIZE)
+            limit = DEFAULT_PAGE_SIZE
+        }
+
+        val sortKey = call.request.queryParameters["sort"] ?: SortType.MOST_POPULAR.key
+
+        val sortType = SortType.values().firstOrNull { it.key == sortKey } ?: throw SortTypeNotFound()
+
+        val searchParam = CocktailsFilterSearchParam(
+            search, tags, goods, tools,
+        )
+
+        val result = cocktailsAggregator.getCompactCocktail(searchParam, offset, limit, sortType)
+
+        call.respond(
+            FilterResultVM(
+                totalCount = result.totalCount,
+                cocktails = result.list.map { cocktailFilter ->
+                    CompactCocktailVM(
+                        cocktailFilter.id,
+                        cocktailFilter.name,
+                        cocktailFilter.rating,
+                        cocktailFilter.visitCount,
+                        buildImages(cocktailFilter.id, ImageType.COCKTAIL),
+                    )
+                },
+                cocktailsByGoodCounts = result.counts.goodCounts,
+                cocktailsByTagCounts = result.counts.tagCounts,
+                cocktailsByToolCounts = result.counts.toolCounts,
+            )
+        )
     }
 }
 
