@@ -25,6 +25,7 @@ import org.mixdrinks.view.error.SortTypeNotFound
 import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
 import org.mixdrinks.view.rating.getRating
+import org.mixdrinks.view.v2.data.TagId
 
 const val DEFAULT_PAGE_SIZE = 24
 
@@ -141,12 +142,12 @@ private fun getCocktailTags(id: Int) =
     CocktailToTagTable.join(TagsTable, JoinType.INNER, TagsTable.id, CocktailToTagTable.tagId)
         .select { CocktailToTagTable.cocktailId eq id }.map { tagRow ->
             TagVM(
-                tagRow[TagsTable.id], tagRow[TagsTable.name]
+                TagId(tagRow[TagsTable.id]), tagRow[TagsTable.name]
             )
         }
 
 private fun getFullIngredients(id: Int, relation: ItemType): List<FullIngredient> {
-    return CocktailsToItemsTable.join(ItemsTable, JoinType.INNER, ItemsTable.id, CocktailsToItemsTable.goodId)
+    return CocktailsToItemsTable.join(ItemsTable, JoinType.INNER, ItemsTable.id, CocktailsToItemsTable.itemId)
         .select { CocktailsToItemsTable.cocktailId eq id and (CocktailsToItemsTable.relation eq relation.relation) }
         .map { itemRow ->
             FullIngredient(

@@ -20,7 +20,7 @@ The service provide api for
 
 [![Deploy to DO](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/MixDrinks/backend/tree/main)
 
-*Not stable*
+*Not fully tested at the moment*
 
 ## Install & Run
 

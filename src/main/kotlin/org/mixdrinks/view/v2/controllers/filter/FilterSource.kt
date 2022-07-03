@@ -43,7 +43,7 @@ class FilterSource {
             FilterModels.FilterItem(
                 id = FilterModels.FilterId(goodId),
                 name = itemRow[ItemsTable.name],
-                cocktailCount = CocktailsToItemsTable.select { CocktailsToItemsTable.goodId eq goodId }.count()
+                cocktailCount = CocktailsToItemsTable.select { CocktailsToItemsTable.itemId eq goodId }.count()
             )
         }
     }

@@ -44,7 +44,7 @@ private fun insertCocktails(cocktails: List<CocktailData>) {
         cocktail.goodIds.forEach { newGoodId ->
             CocktailsToItemsTable.insert {
                 it[cocktailId] = cocktail.id
-                it[goodId] = newGoodId
+                it[itemId] = newGoodId
                 it[unit] = ""
                 it[amount] = 10
                 it[relation] = ItemType.GOOD.relation
@@ -53,7 +53,7 @@ private fun insertCocktails(cocktails: List<CocktailData>) {
         cocktail.toolIds.forEach { newToolIds ->
             CocktailsToItemsTable.insert {
                 it[cocktailId] = cocktail.id
-                it[goodId] = newToolIds
+                it[itemId] = newToolIds
                 it[unit] = ""
                 it[amount] = 10
                 it[relation] = ItemType.TOOL.relation

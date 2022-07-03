@@ -25,7 +25,7 @@ object ItemsTable : Table(name = "goods") {
 
 object CocktailsToItemsTable : Table(name = "cocktails_to_items") {
     val cocktailId = integer("cocktail_id")
-    val goodId = integer("good_id")
+    val itemId = integer("good_id")
     val unit = text("unit")
     val amount = integer("amount")
     val relation = integer("relation")

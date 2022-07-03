@@ -50,12 +50,12 @@ class CocktailsSourceV2 {
     }
 
     private fun getItemIds(cocktailId: CocktailId, itemType: ItemType) =
-        CocktailsToItemsTable.slice(CocktailsToItemsTable.cocktailId, CocktailsToItemsTable.goodId)
+        CocktailsToItemsTable.slice(CocktailsToItemsTable.cocktailId, CocktailsToItemsTable.itemId)
             .select {
                 (CocktailsToItemsTable.cocktailId eq cocktailId.value) and
                         (CocktailsToItemsTable.relation eq itemType.relation)
             }
-            .map { FilterModels.FilterId(it[CocktailsToItemsTable.goodId]) }
+            .map { FilterModels.FilterId(it[CocktailsToItemsTable.itemId]) }
 
     fun cocktailsBySearch(searchParams: SearchParams): List<CocktailId> {
         return cache.filter { (_, meta) ->
