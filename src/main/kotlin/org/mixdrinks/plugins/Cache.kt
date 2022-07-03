@@ -35,4 +35,5 @@ private val CACHE_RESPONSE_PATHS = listOf(
     "tags/all",
     "v2/filters",
     "v2/search/cocktails",
+    "v2/snapshot",
 )

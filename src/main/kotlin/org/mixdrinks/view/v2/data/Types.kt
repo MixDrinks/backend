@@ -9,3 +9,7 @@ value class CocktailId(val value: Int)
 @Serializable
 @JvmInline
 value class ItemId(val value: Int)
+
+@Serializable
+@JvmInline
+value class TagId(val value: Int)

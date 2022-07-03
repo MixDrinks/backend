@@ -166,7 +166,7 @@ private fun prepareData(
 
                     repeat(tag.cocktailsCount) {
                         CocktailsToItemsTable.insert {
-                            it[goodId] = tag.id
+                            it[itemId] = tag.id
                             it[cocktailId] = index
                             it[unit] = ""
                             it[amount] = 0
@@ -185,7 +185,7 @@ private fun prepareData(
 
                     repeat(tag.cocktailsCount) {
                         CocktailsToItemsTable.insert {
-                            it[goodId] = tag.id
+                            it[itemId] = tag.id
                             it[cocktailId] = index
                             it[unit] = ""
                             it[amount] = 0
