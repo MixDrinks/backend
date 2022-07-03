@@ -11,6 +11,7 @@ import org.mixdrinks.view.v2.controllers.score.scoreV2
 import org.mixdrinks.view.v2.controllers.search.CocktailsSourceV2
 import org.mixdrinks.view.v2.controllers.search.SearchResponseBuilder
 import org.mixdrinks.view.v2.controllers.search.searchView
+import org.mixdrinks.view.v2.controllers.tools.itemsList
 
 fun Application.v2(appSettings: AppSettings) {
     val cocktailsSource = CocktailsSourceV2()
@@ -19,4 +20,5 @@ fun Application.v2(appSettings: AppSettings) {
     this.rattingSearchView(RattingBuilder(cocktailsSource), appSettings)
     this.scoreV2(appSettings)
     this.itemScoreV2()
+    this.itemsList()
 }
