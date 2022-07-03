@@ -29,7 +29,7 @@ fun Application.snapshot() {
                     Snapshot.Cocktail(
                         CocktailId(it[CocktailsTable.id]),
                         it[CocktailsTable.name],
-                        it[CocktailsTable.steps],
+                        it[CocktailsTable.steps].toList(),
                     )
                 }
 
@@ -115,7 +115,7 @@ data class Snapshot(
     data class Cocktail(
         @SerialName("id") val id: CocktailId,
         @SerialName("name") val name: String,
-        @SerialName("steps") val steps: Array<String>,
+        @SerialName("steps") val steps: List<String>,
     )
 
     @Serializable
