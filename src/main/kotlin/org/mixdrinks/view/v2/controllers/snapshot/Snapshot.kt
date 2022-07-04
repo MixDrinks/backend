@@ -25,22 +25,8 @@ fun Application.snapshot() {
     routing {
         get("v2/snapshot") {
             call.respond(transaction {
-                val cocktails = CocktailsTable.selectAll().map {
-                    Snapshot.Cocktail(
-                        CocktailId(it[CocktailsTable.id]),
-                        it[CocktailsTable.name],
-                        it[CocktailsTable.steps].toList(),
-                    )
-                }
-
-                val items = ItemsTable.selectAll().map {
-                    Snapshot.Item(
-                        ItemId(it[ItemsTable.id]),
-                        it[ItemsTable.name],
-                        it[ItemsTable.about],
-                        it[ItemsTable.relation],
-                    )
-                }
+                val cocktails = getCocktailsSnapshot()
+                val items = getItemsSnapshot()
 
                 val tags = TagsTable.selectAll().map {
                     TagVM(
@@ -49,11 +35,7 @@ fun Application.snapshot() {
                     )
                 }
 
-                val cocktailToTags = CocktailToTagTable.selectAll().map {
-                    Snapshot.CocktailToTag(
-                        CocktailId(it[CocktailToTagTable.cocktailId]), TagId(it[CocktailToTagTable.tagId])
-                    )
-                }
+                val cocktailToTags = getTagsSnapshot()
 
                 val cocktailToGoods =
                     CocktailsToItemsTable.select { CocktailsToItemsTable.relation eq ItemType.GOOD.relation }.map {
@@ -86,6 +68,32 @@ fun Application.snapshot() {
             })
         }
     }
+}
+
+private fun getTagsSnapshot() = CocktailToTagTable.selectAll().map {
+    Snapshot.CocktailToTag(
+        CocktailId(it[CocktailToTagTable.cocktailId]), TagId(it[CocktailToTagTable.tagId])
+    )
+}
+
+private fun getItemsSnapshot() = ItemsTable.selectAll().map {
+    Snapshot.Item(
+        ItemId(it[ItemsTable.id]),
+        it[ItemsTable.name],
+        it[ItemsTable.about],
+        it[ItemsTable.relation],
+    )
+}
+
+private fun getCocktailsSnapshot(): List<Snapshot.Cocktail> {
+    val cocktails = CocktailsTable.selectAll().map {
+        Snapshot.Cocktail(
+            CocktailId(it[CocktailsTable.id]),
+            it[CocktailsTable.name],
+            it[CocktailsTable.steps].toList(),
+        )
+    }
+    return cocktails
 }
 
 @Serializable
