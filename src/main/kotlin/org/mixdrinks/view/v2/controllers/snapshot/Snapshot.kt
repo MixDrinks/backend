@@ -38,6 +38,7 @@ fun Application.snapshot() {
                         ItemId(it[ItemsTable.id]),
                         it[ItemsTable.name],
                         it[ItemsTable.about],
+                        it[ItemsTable.relation],
                     )
                 }
 
@@ -123,5 +124,6 @@ data class Snapshot(
         @SerialName("id") val id: ItemId,
         @SerialName("name") val name: String,
         @SerialName("description") val description: String,
+        @SerialName("relation") val relation: Int,
     )
 }
