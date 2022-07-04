@@ -21,14 +21,6 @@ data class FilterResultVM(
 )
 
 @Serializable
-data class FilterFutureCounts(
-    @SerialName("cocktailsByTagCounts") val tagCounts: Map<Int, Int>,
-    @SerialName("cocktailsByGoodCounts") val goodCounts: Map<Int, Int>,
-    @SerialName("cocktailsByToolCounts") val toolCounts: Map<Int, Int>,
-)
-
-
-@Serializable
 data class CompactCocktailVM(
     @SerialName("id") val id: Int,
     @SerialName("name") val name: String,

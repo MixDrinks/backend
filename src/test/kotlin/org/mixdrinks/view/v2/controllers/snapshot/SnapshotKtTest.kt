@@ -21,8 +21,10 @@ import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsToItemsTable
 import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.data.TagsTable
+import org.mixdrinks.view.cocktail.ItemType
 import org.mixdrinks.view.cocktail.TagVM
 import org.mixdrinks.view.v2.data.CocktailId
+import org.mixdrinks.view.v2.data.ItemId
 import org.mixdrinks.view.v2.data.TagId
 
 internal class SnapshotKtTest : FunSpec({
@@ -57,6 +59,9 @@ internal class SnapshotKtTest : FunSpec({
                 Snapshot.CocktailToTag(CocktailId(1), TagId(2)),
                 Snapshot.CocktailToTag(CocktailId(2), TagId(2)),
             )
+
+            result.items[0] shouldBe Snapshot.Item(ItemId(1), "I1", "About I1", 1)
+            result.items[1] shouldBe Snapshot.Item(ItemId(2), "I2", "About I2", 2)
         }
     }
 
@@ -72,6 +77,9 @@ private fun prepareSnapshot() {
 
         insertTag(1, "T1")
         insertTag(2, "T2")
+
+        insertItem(1, "I1", ItemType.GOOD)
+        insertItem(2, "I2", ItemType.TOOL)
 
         CocktailToTagTable.insert {
             it[cocktailId] = 1
@@ -105,3 +113,12 @@ private fun insertCocktail(id: Int, name: String) = CocktailsTable.insert {
     it[ratingCount] = 10
     it[ratingValue] = 10
 }
+
+private fun insertItem(id: Int, name: String, itemType: ItemType) = ItemsTable.insert {
+    it[this.id] = id
+    it[this.name] = name
+    it[this.relation] = itemType.relation
+    it[this.about] = "About $name"
+    it[visitCount] = 0
+}
+
