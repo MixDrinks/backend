@@ -39,7 +39,7 @@ fun Application.snapshot() {
 
                 val cocktailToGoods =
                     CocktailsToItemsTable.select { CocktailsToItemsTable.relation eq ItemType.GOOD.relation }.map {
-                        Snapshot.CocktailToItem(
+                        Snapshot.CocktailToGood(
                             CocktailId(it[CocktailsToItemsTable.cocktailId]),
                             ItemId(it[CocktailsToItemsTable.itemId]),
                             it[CocktailsToItemsTable.amount],
@@ -49,7 +49,7 @@ fun Application.snapshot() {
 
                 val cocktailToTools =
                     CocktailsToItemsTable.select { CocktailsToItemsTable.relation eq ItemType.TOOL.relation }.map {
-                        Snapshot.CocktailToItem(
+                        Snapshot.CocktailToTool(
                             CocktailId(it[CocktailsToItemsTable.cocktailId]),
                             ItemId(it[CocktailsToItemsTable.itemId]),
                             it[CocktailsToItemsTable.amount],
@@ -58,12 +58,7 @@ fun Application.snapshot() {
                     }
 
                 return@transaction Snapshot(
-                    cocktails,
-                    items,
-                    tags,
-                    cocktailToTags,
-                    cocktailToGoods,
-                    cocktailToTools
+                    cocktails, items, tags, cocktailToTags, cocktailToGoods, cocktailToTools
                 )
             })
         }
@@ -102,8 +97,8 @@ data class Snapshot(
     @SerialName("items") val items: List<Item>,
     @SerialName("tags") val tags: List<TagVM>,
     @SerialName("cocktailToTags") val cocktailToTags: List<CocktailToTag>,
-    @SerialName("cocktailToGoods") val cocktailToGoods: List<CocktailToItem>,
-    @SerialName("cocktailToTools") val cocktailToTools: List<CocktailToItem>,
+    @SerialName("cocktailToGoods") val cocktailToGoods: List<CocktailToGood>,
+    @SerialName("cocktailToTools") val cocktailToTools: List<CocktailToTool>,
 ) {
 
     @Serializable
@@ -113,9 +108,17 @@ data class Snapshot(
     )
 
     @Serializable
-    data class CocktailToItem(
+    data class CocktailToTool(
         @SerialName("cocktailId") val cocktailId: CocktailId,
         @SerialName("toolId") val toolId: ItemId,
+        @SerialName("amount") val amount: Int,
+        @SerialName("unit") val unit: String,
+    )
+
+    @Serializable
+    data class CocktailToGood(
+        @SerialName("cocktailId") val cocktailId: CocktailId,
+        @SerialName("goodId") val toolId: ItemId,
         @SerialName("amount") val amount: Int,
         @SerialName("unit") val unit: String,
     )
