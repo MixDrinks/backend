@@ -102,8 +102,8 @@ data class Snapshot(
     @SerialName("items") val items: List<Item>,
     @SerialName("tags") val tags: List<TagVM>,
     @SerialName("cocktailToTags") val cocktailToTags: List<CocktailToTag>,
-    @SerialName("cocktailToTools") val cocktailToGoods: List<CocktailToItem>,
-    @SerialName("cocktailToGood") val cocktailToTools: List<CocktailToItem>,
+    @SerialName("cocktailToGoods") val cocktailToGoods: List<CocktailToItem>,
+    @SerialName("cocktailToTools") val cocktailToTools: List<CocktailToItem>,
 ) {
 
     @Serializable
