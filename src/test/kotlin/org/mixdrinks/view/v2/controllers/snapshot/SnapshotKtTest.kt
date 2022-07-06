@@ -71,7 +71,6 @@ internal class SnapshotKtTest : FunSpec({
             )
         }
     }
-
 })
 
 private fun prepareSnapshot() {
