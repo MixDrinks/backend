@@ -62,9 +62,15 @@ internal class SnapshotKtTest : FunSpec({
 
             result.items[0] shouldBe Snapshot.Item(ItemId(1), "I1", "About I1", 1)
             result.items[1] shouldBe Snapshot.Item(ItemId(2), "I2", "About I2", 2)
+
+            result.cocktailToGoods[0] shouldBe Snapshot.CocktailToGood(
+                CocktailId(1),
+                ItemId(10),
+                10,
+                "ml"
+            )
         }
     }
-
 })
 
 private fun prepareSnapshot() {
@@ -94,6 +100,14 @@ private fun prepareSnapshot() {
         CocktailToTagTable.insert {
             it[cocktailId] = 2
             it[tagId] = 2
+        }
+
+        CocktailsToItemsTable.insert {
+            it[cocktailId] = 1
+            it[itemId] = 10
+            it[amount] = 10
+            it[unit] = "ml"
+            it[relation] = ItemType.GOOD.relation
         }
     }
 }
