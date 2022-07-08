@@ -7,6 +7,7 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -82,13 +83,31 @@ private fun getItemsSnapshot() = ItemsTable.selectAll().map {
 
 private fun getCocktailsSnapshot(): List<Snapshot.Cocktail> {
     val cocktails = CocktailsTable.selectAll().map {
+        val cocktailId = CocktailId(it[CocktailsTable.id])
         Snapshot.Cocktail(
-            CocktailId(it[CocktailsTable.id]),
-            it[CocktailsTable.name],
-            it[CocktailsTable.steps].toList(),
+            cocktailId, it[CocktailsTable.name], it[CocktailsTable.steps].toList(), getCocktailRelation(cocktailId)
         )
     }
     return cocktails
+}
+
+private fun getCocktailRelation(cocktailId: CocktailId): Snapshot.CocktailRelation {
+    return Snapshot.CocktailRelation(
+        CocktailToTagTable.select {
+            CocktailToTagTable.cocktailId eq cocktailId.value
+        }
+            .map { TagId(it[CocktailToTagTable.tagId]) },
+        CocktailsToItemsTable.select {
+            CocktailsToItemsTable.cocktailId eq cocktailId.value and
+                    (CocktailsToItemsTable.relation eq ItemType.GOOD.relation)
+        }
+            .map { ItemId(it[CocktailsToItemsTable.itemId]) },
+        CocktailsToItemsTable.select {
+            CocktailsToItemsTable.cocktailId eq cocktailId.value and
+                    (CocktailsToItemsTable.relation eq ItemType.TOOL.relation)
+        }
+            .map { ItemId(it[CocktailsToItemsTable.itemId]) },
+    )
 }
 
 @Serializable
@@ -128,6 +147,14 @@ data class Snapshot(
         @SerialName("id") val id: CocktailId,
         @SerialName("name") val name: String,
         @SerialName("steps") val steps: List<String>,
+        @SerialName("relation") val relation: CocktailRelation,
+    )
+
+    @Serializable
+    data class CocktailRelation(
+        @SerialName("tagIds") val tagIds: List<TagId>,
+        @SerialName("goodIds") val goodIds: List<ItemId>,
+        @SerialName("toolIds") val toolIds: List<ItemId>,
     )
 
     @Serializable
