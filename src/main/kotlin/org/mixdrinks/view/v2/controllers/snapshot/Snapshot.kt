@@ -93,11 +93,17 @@ private fun getCocktailsSnapshot(): List<Snapshot.Cocktail> {
 
 private fun getCocktailRelation(cocktailId: CocktailId): Snapshot.CocktailRelation {
     return Snapshot.CocktailRelation(
-        CocktailToTagTable.select { CocktailToTagTable.cocktailId eq cocktailId.value }
+        CocktailToTagTable.select {
+            CocktailToTagTable.cocktailId eq cocktailId.value
+        }
             .map { TagId(it[CocktailToTagTable.tagId]) },
-        CocktailsToItemsTable.select { CocktailsToItemsTable.cocktailId eq cocktailId.value and (CocktailsToItemsTable.relation eq ItemType.GOOD.relation) }
+        CocktailsToItemsTable.select {
+            CocktailsToItemsTable.cocktailId eq cocktailId.value and (CocktailsToItemsTable.relation eq ItemType.GOOD.relation)
+        }
             .map { ItemId(it[CocktailsToItemsTable.itemId]) },
-        CocktailsToItemsTable.select { CocktailsToItemsTable.cocktailId eq cocktailId.value and (CocktailsToItemsTable.relation eq ItemType.TOOL.relation) }
+        CocktailsToItemsTable.select {
+            CocktailsToItemsTable.cocktailId eq cocktailId.value and (CocktailsToItemsTable.relation eq ItemType.TOOL.relation)
+        }
             .map { ItemId(it[CocktailsToItemsTable.itemId]) },
     )
 }
