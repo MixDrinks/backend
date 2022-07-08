@@ -52,6 +52,13 @@ internal class SnapshotKtTest : FunSpec({
             val result = Json.decodeFromString<Snapshot>(response.bodyAsText())
 
             result.cocktails.map { it.id } shouldBe listOf(1, 2).map { CocktailId(it) }
+
+            result.cocktails[0].relation shouldBe Snapshot.CocktailRelation(
+                tagIds = listOf(1, 2).map { TagId(it) },
+                goodIds = listOf(10).map { ItemId(it) },
+                toolIds = emptyList()
+            )
+
             result.tags shouldBe listOf(TagVM(TagId(1), "T1"), TagVM(TagId(2), "T2"))
 
             result.cocktailToTags shouldContainExactlyInAnyOrder listOf(
