@@ -1,4 +1,4 @@
-# The backend service for mixdrinks.org. The service for home cocktails cooking.
+# The backend service for [mixdrinks.org](https://mixdrinks.org/). The service for home cocktails cooking.
 
 [Our website](https://mixdrinks.org/)
 
