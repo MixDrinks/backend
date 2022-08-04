@@ -43,7 +43,8 @@ class SearchResponseBuilder(
 
         return transaction {
             val query =
-                CocktailsTable.select { CocktailsTable.id inList cocktailsIds }.orderBy(sortColumn, SortOrder.DESC)
+                CocktailsTable.select { CocktailsTable.id inList cocktailsIds }
+                    .orderBy(sortColumn, SortOrder.DESC_NULLS_LAST)
 
             val totalCount = query.count().toInt()
 

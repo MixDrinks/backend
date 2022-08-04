@@ -2,6 +2,7 @@ package org.fullness.endtoend
 
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.core.spec.style.featureSpec
+import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -148,6 +149,51 @@ internal class SearchCocktailsEndToEndTests : FunSpec({
                 result.cocktails.map { it.id } shouldBe listOf(2, 1)
             }
         }
+
+        test("verify sort biggest rate with null") {
+            prepareData(
+                listOf(
+                    MockCocktail(
+                        id = 1,
+                        name = "",
+                        visitCount = 3,
+                        ratingCount = 10,
+                        ratingValue = null,
+                    ),
+
+                    MockCocktail(
+                        id = 2,
+                        name = "",
+                        visitCount = 10,
+                        ratingCount = 0,
+                        ratingValue = null,
+                    ),
+
+                    MockCocktail(
+                        id = 3,
+                        name = "",
+                        visitCount = 10,
+                        ratingCount = 10,
+                        ratingValue = 20,
+                    ),
+                )
+            )
+            testApplication {
+                initApp(10)
+
+                val response = client.get("v2/search/cocktails?sort=biggest-rate")
+
+                response.status shouldBe HttpStatusCode.OK
+                val result = Json.decodeFromString<SearchResponseBuilder.SearchResponse>(response.bodyAsText())
+
+                val resultId = result.cocktails.map { it.id }
+
+                resultId[0] shouldBe 3
+
+                resultId shouldContainAll listOf(1, 2)
+            }
+        }
+
 
         test("verify sort biggest rate") {
             prepareData(
