@@ -14,13 +14,17 @@ import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
 
-class SearchResponseBuilder(private val cocktailsSourceV2: CocktailsSourceV2) {
+class SearchResponseBuilder(
+    private val cocktailsSourceV2: CocktailsSourceV2,
+    private val descriptionBuilder: DescriptionBuilder,
+) {
 
     @Serializable
     data class SearchResponse(
         @SerialName("totalCount") val totalCount: Int,
         @SerialName("cocktails") val cocktails: List<CompactCocktailVM>,
         @SerialName("futureCounts") val futureCounts: Map<FilterModels.FilterGroupId, List<FilterCount>>,
+        @SerialName("descriptions") val description: String?,
     )
 
     @Serializable
@@ -69,6 +73,7 @@ class SearchResponseBuilder(private val cocktailsSourceV2: CocktailsSourceV2) {
                 totalCount = totalCount,
                 cocktails = cocktails,
                 futureCounts = futureCounts.map { (key, value) -> Pair(key.id, value) }.toMap(),
+                description = descriptionBuilder.buildDescription(searchParams),
             )
         }
     }

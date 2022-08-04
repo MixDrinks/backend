@@ -9,6 +9,7 @@ import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.mixdrinks.view.cocktail.domain.SortType
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
 import org.mixdrinks.view.v2.controllers.search.CocktailsSourceV2
+import org.mixdrinks.view.v2.controllers.search.DescriptionBuilder
 import org.mixdrinks.view.v2.controllers.search.SearchParams
 import org.mixdrinks.view.v2.controllers.search.SearchResponseBuilder
 
@@ -43,7 +44,7 @@ class SearchResponseBuilderIntegration : FunSpec({
             )
         )
 
-        val searchResponseBuilder = SearchResponseBuilder(CocktailsSourceV2())
+        val searchResponseBuilder = SearchResponseBuilder(CocktailsSourceV2(), DescriptionBuilder())
 
         val result = searchResponseBuilder.getCocktailsBySearch(
             searchParams = SearchParams(), page = null, sortType = SortType.MOST_POPULAR
@@ -98,7 +99,7 @@ class SearchResponseBuilderIntegration : FunSpec({
             )
         )
 
-        val searchResponseBuilder = SearchResponseBuilder(CocktailsSourceV2())
+        val searchResponseBuilder = SearchResponseBuilder(CocktailsSourceV2(), DescriptionBuilder())
 
         val result = searchResponseBuilder.getCocktailsBySearch(
             searchParams = createSearchParam(tagIds = listOf(1)),
@@ -155,7 +156,7 @@ class SearchResponseBuilderIntegration : FunSpec({
             )
         )
 
-        val searchResponseBuilder = SearchResponseBuilder(CocktailsSourceV2())
+        val searchResponseBuilder = SearchResponseBuilder(CocktailsSourceV2(), DescriptionBuilder())
 
         val result = searchResponseBuilder.getCocktailsBySearch(
             searchParams = createSearchParam(
