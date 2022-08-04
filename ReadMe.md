@@ -1,4 +1,4 @@
-# The backend service for mixdrinks.org. The service for home cocktails cooking.
+# The backend service for [mixdrinks.org](https://mixdrinks.org/). The service for home cocktails cooking.
 
 [Our website](https://mixdrinks.org/)
 
@@ -14,7 +14,7 @@ The service provide api for
 
 ### Using
 
-[REST API](https://docs.mixdrinks.org/api/)
+[REST API](https://mixdrinks.github.io/docs/api)
 
 ### Deploy your own instance of service by digital ocean app platform
 
@@ -30,7 +30,7 @@ The app require the postgres database. Run the postgres database and provide the
 * DB_USER - the username. The user must have read access to all database
 * DB_PASSWORD - the password
 
-[More info](https://docs.mixdrinks.org/backend/)
+[More info](https://mixdrinks.github.io/docs/backend/)
 
 ## Find a bug?
 
