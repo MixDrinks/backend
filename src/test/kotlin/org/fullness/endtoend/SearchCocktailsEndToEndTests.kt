@@ -3,13 +3,13 @@ package org.fullness.endtoend
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.core.spec.style.featureSpec
 import io.kotest.matchers.shouldBe
-import io.ktor.client.request.get
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.HttpStatusCode
-import io.ktor.serialization.kotlinx.json.json
-import io.ktor.server.application.install
-import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.server.testing.testApplication
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
+import io.ktor.server.application.*
+import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.testing.*
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.serialization.decodeFromString
@@ -19,18 +19,15 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.mixdrinks.data.CocktailToTagTable
-import org.mixdrinks.data.CocktailsTable
-import org.mixdrinks.data.CocktailsToItemsTable
-import org.mixdrinks.data.ItemsTable
-import org.mixdrinks.data.TagsTable
+import org.mixdrinks.data.*
 import org.mixdrinks.settings.AppSettings
 import org.mixdrinks.view.v2.controllers.search.CocktailsSourceV2
+import org.mixdrinks.view.v2.controllers.search.DescriptionBuilder
 import org.mixdrinks.view.v2.controllers.search.SearchResponseBuilder
 import org.mixdrinks.view.v2.controllers.search.searchView
 import java.util.concurrent.atomic.AtomicInteger
 
-internal class SearchCoktailsEndToEndTests : FunSpec({
+internal class SearchCocktailsEndToEndTests : FunSpec({
 
     @Suppress("MemberVisibilityCanBePrivate") val database =
         Database.connect("jdbc:h2:mem:test_db_22;DB_CLOSE_DELAY=-1;IGNORECASE=true;")
@@ -60,12 +57,7 @@ internal class SearchCoktailsEndToEndTests : FunSpec({
             })
         )
         testApplication {
-            application {
-                install(ContentNegotiation) {
-                    json()
-                }
-                searchView(SearchResponseBuilder(CocktailsSourceV2()), createAppSetting(100))
-            }
+            initApp()
             val response = client.get("v2/search/cocktails")
 
             response.status shouldBe HttpStatusCode.OK
@@ -91,12 +83,7 @@ internal class SearchCoktailsEndToEndTests : FunSpec({
             }
         })
         testApplication {
-            application {
-                install(ContentNegotiation) {
-                    json()
-                }
-                searchView(SearchResponseBuilder(CocktailsSourceV2()), createAppSetting(pageSize))
-            }
+            initApp(pageSize)
             val response = client.get("v2/search/cocktails?page=0")
 
             response.status shouldBe HttpStatusCode.OK
@@ -117,12 +104,7 @@ internal class SearchCoktailsEndToEndTests : FunSpec({
             }
         })
         testApplication {
-            application {
-                install(ContentNegotiation) {
-                    json()
-                }
-                searchView(SearchResponseBuilder(CocktailsSourceV2()), createAppSetting(pageSize))
-            }
+            initApp(pageSize)
             val response = client.get("v2/search/cocktails?page=1")
 
             response.status shouldBe HttpStatusCode.OK
@@ -156,12 +138,7 @@ internal class SearchCoktailsEndToEndTests : FunSpec({
                 )
             )
             testApplication {
-                application {
-                    install(ContentNegotiation) {
-                        json()
-                    }
-                    searchView(SearchResponseBuilder(CocktailsSourceV2()), createAppSetting(10))
-                }
+                initApp(10)
 
                 val response = client.get("v2/search/cocktails?sort=most-popular")
 
@@ -201,12 +178,7 @@ internal class SearchCoktailsEndToEndTests : FunSpec({
                 )
             )
             testApplication {
-                application {
-                    install(ContentNegotiation) {
-                        json()
-                    }
-                    searchView(SearchResponseBuilder(CocktailsSourceV2()), createAppSetting(10))
-                }
+                initApp(10)
 
                 val response = client.get("v2/search/cocktails?sort=biggest-rate")
 
@@ -220,6 +192,15 @@ internal class SearchCoktailsEndToEndTests : FunSpec({
 
     }
 })
+
+private fun ApplicationTestBuilder.initApp(pageSize: Int = 100) {
+    application {
+        install(ContentNegotiation) {
+            json()
+        }
+        searchView(SearchResponseBuilder(CocktailsSourceV2(), DescriptionBuilder()), createAppSetting(pageSize))
+    }
+}
 
 private fun createAppSetting(pageSize: Int): AppSettings {
     return mockk() {
