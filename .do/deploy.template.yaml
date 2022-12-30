@@ -7,11 +7,8 @@ spec:
         repo_clone_url: https://github.com/MixDrinks/backend.git
       envs:
         - key: DB_URL
-          value: "DB-url-testvalue"
-          type: SECRET
+          scope: RUN_TIME
         - key: DB_USER
-          value: "DB-user-testvalue"
-          type: SECRET
+          scope: RUN_TIME
         - key: DB_PASSWORD
-          value: "DB-password-testvalue"
-          type: SECRET
+          scope: RUN_TIME
