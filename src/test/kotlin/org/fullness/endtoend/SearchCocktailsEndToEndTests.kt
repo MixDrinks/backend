@@ -21,6 +21,11 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.mixdrinks.data.CocktailToTagTable
+import org.mixdrinks.data.CocktailsTable
+import org.mixdrinks.data.CocktailsToItemsTable
+import org.mixdrinks.data.ItemsTable
+import org.mixdrinks.data.TagsTable
 import org.mixdrinks.settings.AppSettings
 import org.mixdrinks.view.v2.controllers.search.CocktailsSourceV2
 import org.mixdrinks.view.v2.controllers.search.DescriptionBuilder
