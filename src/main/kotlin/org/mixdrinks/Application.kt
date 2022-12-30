@@ -17,9 +17,6 @@ import org.mixdrinks.plugins.configureRouting
 import org.mixdrinks.plugins.static
 import org.mixdrinks.settings.AppSettings
 import org.mixdrinks.view.cocktail.cocktails
-import org.mixdrinks.view.cocktail.data.CocktailsSource
-import org.mixdrinks.view.cocktail.domain.CocktailsAggregator
-import org.mixdrinks.view.cocktail.domain.CocktailsFutureCountCalculator
 import org.mixdrinks.view.filter.filters
 import org.mixdrinks.view.items.items
 import org.mixdrinks.view.scores.scores
@@ -58,14 +55,13 @@ fun main() {
                 password = password,
             )
 
-            val cocktailsSource = CocktailsSource()
             val appSettings = AppSettings(
                 minVote = config.property("ktor.settings.minVote").getString().toInt(),
                 maxVote = config.property("ktor.settings.maxVote").getString().toInt(),
                 pageSize = config.property("ktor.settings.pageSize").getString().toInt()
             )
 
-            cocktails(CocktailsAggregator(cocktailsSource, CocktailsFutureCountCalculator(cocktailsSource)))
+            cocktails()
             filters()
             items()
             scores(appSettings)
