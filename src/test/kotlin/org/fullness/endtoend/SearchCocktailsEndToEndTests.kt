@@ -26,7 +26,7 @@ import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsToItemsTable
 import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.data.TagsTable
-import org.mixdrinks.settings.AppSettings
+import org.mixdrinks.view.v2.controllers.settings.AppSettings
 import org.mixdrinks.view.v2.controllers.search.CocktailsSourceV2
 import org.mixdrinks.view.v2.controllers.search.DescriptionBuilder
 import org.mixdrinks.view.v2.controllers.search.SearchResponseBuilder

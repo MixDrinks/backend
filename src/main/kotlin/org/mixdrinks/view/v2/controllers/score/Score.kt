@@ -16,11 +16,10 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsTable.visitCount
-import org.mixdrinks.settings.AppSettings
+import org.mixdrinks.view.v2.controllers.settings.AppSettings
 import org.mixdrinks.view.error.QueryRequireException
 import org.mixdrinks.view.error.VoteError
 import org.mixdrinks.view.rating.getRating
-import org.mixdrinks.view.scores.ScoreRequest
 import org.mixdrinks.view.v2.data.CocktailId
 import org.mixdrinks.view.v2.getCocktailId
 import org.mixdrinks.view.v2.roundScore
@@ -91,3 +90,9 @@ private suspend fun ApplicationCall.getRatting(appSettings: AppSettings): Int {
 
     return vote
 }
+
+@Serializable
+data class ScoreRequest(
+    @SerialName("value") val value: Int,
+)
+

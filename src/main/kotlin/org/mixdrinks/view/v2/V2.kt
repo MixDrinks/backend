@@ -1,7 +1,7 @@
 package org.mixdrinks.view.v2
 
 import io.ktor.server.application.Application
-import org.mixdrinks.settings.AppSettings
+import org.mixdrinks.view.v2.controllers.settings.AppSettings
 import org.mixdrinks.view.v2.controllers.filter.FilterSource
 import org.mixdrinks.view.v2.controllers.filter.filterMetaInfo
 import org.mixdrinks.view.v2.controllers.score.RattingBuilder

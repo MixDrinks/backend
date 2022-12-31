@@ -1,4 +1,4 @@
-package org.mixdrinks.view.items
+package org.mixdrinks.view.v2.controllers.items
 
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
@@ -15,16 +15,6 @@ import org.mixdrinks.view.images.buildImages
 fun Application.items() {
     routing {
         get("v2/items/full") {
-            val id = call.request.queryParameters["id"]?.toIntOrNull()
-
-            if (id != null) {
-                call.respond(getFullItem(id))
-            } else {
-                call.respond(HttpStatusCode.BadRequest, "Query id is require, and must be integer")
-            }
-        }
-
-        get("items/full") {
             val id = call.request.queryParameters["id"]?.toIntOrNull()
 
             if (id != null) {
