@@ -15,12 +15,6 @@ class CocktailNotFound(val id: Int) : Exception() {
     }
 }
 
-class ItemsNotFound(val id: Int) : Exception() {
-    override fun toString(): String {
-        return "Item with id: $id not found"
-    }
-}
-
 class QueryRequireException(private val queryName: String) : Exception() {
     override fun toString(): String {
         return "$queryName is require"

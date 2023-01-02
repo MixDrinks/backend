@@ -15,12 +15,10 @@ import org.jetbrains.exposed.sql.Database
 import org.mixdrinks.plugins.configureCache
 import org.mixdrinks.plugins.configureRouting
 import org.mixdrinks.plugins.static
-import org.mixdrinks.settings.AppSettings
+import org.mixdrinks.view.v2.controllers.settings.AppSettings
 import org.mixdrinks.view.cocktail.cocktails
-import org.mixdrinks.view.filter.filters
-import org.mixdrinks.view.items.items
-import org.mixdrinks.view.scores.scores
-import org.mixdrinks.view.settings.appSetting
+import org.mixdrinks.view.v2.controllers.items.items
+import org.mixdrinks.view.v2.controllers.settings.appSetting
 import org.mixdrinks.view.v2.v2
 
 fun main() {
@@ -62,9 +60,7 @@ fun main() {
             )
 
             cocktails()
-            filters()
             items()
-            scores(appSettings)
             appSetting(appSettings)
 
             v2(appSettings)

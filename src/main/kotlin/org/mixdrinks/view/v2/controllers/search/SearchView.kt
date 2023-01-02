@@ -6,7 +6,7 @@ import io.ktor.server.application.call
 import io.ktor.server.response.respond
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
-import org.mixdrinks.settings.AppSettings
+import org.mixdrinks.view.v2.controllers.settings.AppSettings
 import org.mixdrinks.view.cocktail.domain.SortType
 import org.mixdrinks.view.error.SortTypeNotFound
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
