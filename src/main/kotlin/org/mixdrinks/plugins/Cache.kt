@@ -17,7 +17,7 @@ fun Application.configureCache() {
             when {
                 isCachedCall(call) -> CachingOptions(
                     CacheControl.MaxAge(
-                        maxAgeSeconds = TimeUnit.MINUTES.toSeconds(1).toInt(),
+                        maxAgeSeconds = TimeUnit.HOURS.toSeconds(1).toInt(),
                         visibility = CacheControl.Visibility.Public
                     )
                 )
