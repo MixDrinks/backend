@@ -36,6 +36,18 @@ object TagsTable : Table(name = "tags") {
     val name = text("name")
 }
 
+object TastesTable : Table(name = "tastes") {
+    val id = integer("id")
+    val name = text("name")
+
+    override val primaryKey: PrimaryKey = PrimaryKey(id)
+}
+
+object CocktailsToTastesTable : Table(name = "cocktails_to_tastes") {
+    val tasteId = integer("taste_id") references TastesTable.id
+    val cocktailId = integer("cocktail_id") references CocktailsTable.id
+}
+
 object CocktailToTagTable : Table(name = "cocktails_to_tags") {
     val cocktailId = integer("cocktail_id")
     val tagId = integer("tag_id")

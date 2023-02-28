@@ -19,6 +19,7 @@ class DescriptionBuilder {
             return when (key) {
                 FilterModels.Filters.TAGS.id -> buildTagDescription(searchParams.filters[key].orEmpty())
                 FilterModels.Filters.GOODS.id -> buildGoodDescription(searchParams.filters[key].orEmpty())
+                FilterModels.Filters.TASTE.id -> buildGoodDescription(searchParams.filters[key].orEmpty())
                 FilterModels.Filters.TOOLS.id -> null
                 else -> null
             }

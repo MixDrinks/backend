@@ -29,6 +29,9 @@ class FilterModels {
             queryName = FilterQueryName("tools"),
             translation = "Приладдя",
         ),
+        TASTE(
+            id = FilterGroupId(3), queryName = FilterQueryName("taste"), translation = "Смак",
+        ),
     }
 
     @Serializable
