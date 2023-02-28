@@ -32,6 +32,7 @@ data class FullCocktailVM(
     @SerialName("goods") val goods: List<FullIngredient>,
     @SerialName("tools") val tools: List<FullIngredient>,
     @SerialName("tags") val tags: List<TagVM>,
+    @SerialName("tastes") val tastes: List<TagVM>,
 )
 
 @Serializable

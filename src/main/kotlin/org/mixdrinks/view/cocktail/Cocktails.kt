@@ -14,8 +14,10 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsToItemsTable
+import org.mixdrinks.data.CocktailsToTastesTable
 import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.data.TagsTable
+import org.mixdrinks.data.TastesTable
 import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
 import org.mixdrinks.view.rating.getRating
@@ -64,9 +66,18 @@ private fun getFullCocktail(id: Int): FullCocktailVM {
             goods = getFullIngredients(cocktailId, ItemType.GOOD),
             tools = getFullIngredients(cocktailId, ItemType.TOOL),
             tags = getCocktailTags(cocktailId),
+            tastes = getTastes(cocktailId),
         )
     }
 }
+
+private fun getTastes(id: Int) =
+    CocktailsToTastesTable.join(TastesTable, JoinType.INNER, TastesTable.id, CocktailsToTastesTable.tasteId)
+        .select { CocktailsToTastesTable.cocktailId eq id }.map { tasteRow ->
+            TagVM(
+                TagId(tasteRow[TastesTable.id]), tasteRow[TastesTable.name]
+            )
+        }
 
 private fun getCocktailTags(id: Int) =
     CocktailToTagTable.join(TagsTable, JoinType.INNER, TagsTable.id, CocktailToTagTable.tagId)
