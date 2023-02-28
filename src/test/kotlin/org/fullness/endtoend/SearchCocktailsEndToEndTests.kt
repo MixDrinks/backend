@@ -26,11 +26,12 @@ import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsToItemsTable
 import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.data.TagsTable
-import org.mixdrinks.view.v2.controllers.settings.AppSettings
+import org.mixdrinks.data.TastesTable
 import org.mixdrinks.view.v2.controllers.search.CocktailsSourceV2
 import org.mixdrinks.view.v2.controllers.search.DescriptionBuilder
 import org.mixdrinks.view.v2.controllers.search.SearchResponseBuilder
 import org.mixdrinks.view.v2.controllers.search.searchView
+import org.mixdrinks.view.v2.controllers.settings.AppSettings
 import java.util.concurrent.atomic.AtomicInteger
 
 internal class SearchCocktailsEndToEndTests : FunSpec({
@@ -287,8 +288,24 @@ private data class MockCocktail(
 
 private fun prepareData(cocktails: List<MockCocktail>) {
     transaction {
-        SchemaUtils.drop(CocktailsTable, CocktailsToItemsTable, CocktailToTagTable, TagsTable, ItemsTable)
-        SchemaUtils.create(CocktailsTable, CocktailsToItemsTable, CocktailToTagTable, TagsTable, ItemsTable)
+        SchemaUtils.drop(
+            CocktailsTable,
+            CocktailsToItemsTable,
+            CocktailToTagTable,
+            TagsTable,
+            ItemsTable,
+            TastesTable,
+            TagsTable
+        )
+        SchemaUtils.create(
+            CocktailsTable,
+            CocktailsToItemsTable,
+            CocktailToTagTable,
+            TagsTable,
+            ItemsTable,
+            TastesTable,
+            TagsTable
+        )
 
         cocktails.forEach { cocktail ->
             CocktailsTable.insert {
