@@ -6,16 +6,34 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsToItemsTable
+import org.mixdrinks.data.CocktailsToTastesTable
 import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.data.TagsTable
+import org.mixdrinks.data.TastesTable
 import org.mixdrinks.view.cocktail.ItemType
 
 fun prepareData(
     cocktails: List<CocktailData>
 ) {
     transaction {
-        SchemaUtils.drop(CocktailsTable, CocktailsToItemsTable, CocktailToTagTable, TagsTable, ItemsTable)
-        SchemaUtils.create(CocktailsTable, CocktailsToItemsTable, CocktailToTagTable, TagsTable, ItemsTable)
+        SchemaUtils.drop(
+            CocktailsTable,
+            CocktailsToItemsTable,
+            CocktailToTagTable,
+            TagsTable,
+            ItemsTable,
+            TastesTable,
+            CocktailsToTastesTable,
+        )
+        SchemaUtils.create(
+            CocktailsTable,
+            CocktailsToItemsTable,
+            CocktailToTagTable,
+            TagsTable,
+            ItemsTable,
+            TastesTable,
+            CocktailsToTastesTable,
+        )
 
         insertDependencies(cocktails)
 

@@ -17,6 +17,7 @@ class FilterModels {
     @Serializable
     value class FilterQueryName(val value: String)
 
+    @Suppress("MagicNumber")
     enum class Filters(val id: FilterGroupId, val queryName: FilterQueryName, val translation: String) {
         TAGS(
             id = FilterGroupId(0), queryName = FilterQueryName("tags"), translation = "Інше",
@@ -28,6 +29,9 @@ class FilterModels {
             id = FilterGroupId(2),
             queryName = FilterQueryName("tools"),
             translation = "Приладдя",
+        ),
+        TASTE(
+            id = FilterGroupId(3), queryName = FilterQueryName("taste"), translation = "Смак",
         ),
     }
 

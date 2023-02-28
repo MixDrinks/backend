@@ -5,8 +5,10 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsToItemsTable
+import org.mixdrinks.data.CocktailsToTastesTable
 import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.data.TagsTable
+import org.mixdrinks.data.TastesTable
 import org.mixdrinks.view.cocktail.ItemType
 
 class FilterSource {
@@ -25,14 +27,28 @@ class FilterSource {
                 )
             }
 
+            val tastes = TastesTable.selectAll().map { tasteRow ->
+                val tasteId = tasteRow[TastesTable.id]
+                FilterModels.FilterItem(
+                    id = FilterModels.FilterId(tasteId),
+                    name = tasteRow[TastesTable.name],
+                    cocktailCount = CocktailsToTastesTable.select { CocktailsToTastesTable.tasteId eq tasteId }.count()
+                )
+            }
+
             listOf(
+                FilterModels.FilterGroup(
+                    FilterModels.Filters.TASTE, tastes.sortedBy { it.cocktailCount }.reversed()
+                ),
                 FilterModels.FilterGroup(
                     FilterModels.Filters.GOODS, getItemList(ItemType.GOOD).sortedBy { it.cocktailCount }.reversed()
                 ),
-                FilterModels.FilterGroup(FilterModels.Filters.TAGS, tags.sortedBy { it.cocktailCount }.reversed()),
+                FilterModels.FilterGroup(
+                    FilterModels.Filters.TAGS, tags.sortedBy { it.cocktailCount }.reversed()
+                ),
                 FilterModels.FilterGroup(
                     FilterModels.Filters.TOOLS, getItemList(ItemType.TOOL).sortedBy { it.cocktailCount }.reversed()
-                ),
+                )
             )
         }
     }

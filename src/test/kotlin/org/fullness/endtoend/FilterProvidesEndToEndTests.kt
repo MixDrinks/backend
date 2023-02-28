@@ -18,8 +18,10 @@ import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsToItemsTable
+import org.mixdrinks.data.CocktailsToTastesTable
 import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.data.TagsTable
+import org.mixdrinks.data.TastesTable
 import org.mixdrinks.view.cocktail.ItemType
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
 import org.mixdrinks.view.v2.controllers.filter.FilterSource
@@ -78,7 +80,7 @@ class FilterProvidesEndToEndTests : FunSpec({
             response.status shouldBe HttpStatusCode.OK
             val result = Json.decodeFromString<List<FilterModels.FilterGroup>>(response.bodyAsText())
 
-            result[0].let { filterGroup: FilterModels.FilterGroup ->
+            result[1].let { filterGroup: FilterModels.FilterGroup ->
                 verifyFilterGroup(filterGroup, FilterModels.Filters.GOODS)
 
                 verifyItems(
@@ -89,7 +91,7 @@ class FilterProvidesEndToEndTests : FunSpec({
                 )
             }
 
-            result[1].let { filterGroup: FilterModels.FilterGroup ->
+            result[2].let { filterGroup: FilterModels.FilterGroup ->
                 verifyFilterGroup(filterGroup, FilterModels.Filters.TAGS)
 
                 verifyItems(
@@ -100,7 +102,7 @@ class FilterProvidesEndToEndTests : FunSpec({
                 )
             }
 
-            result[2].let { filterGroup: FilterModels.FilterGroup ->
+            result[3].let { filterGroup: FilterModels.FilterGroup ->
                 verifyFilterGroup(filterGroup, FilterModels.Filters.TOOLS)
 
                 verifyItems(
@@ -138,7 +140,7 @@ private fun prepareData(
     tags: List<FilterData>,
 ) {
     transaction {
-        SchemaUtils.create(TagsTable, CocktailToTagTable, ItemsTable, CocktailsToItemsTable)
+        createDataBase()
 
         tags.forEachIndexed { index, tag ->
             when (tag.type) {
@@ -155,6 +157,7 @@ private fun prepareData(
                         }
                     }
                 }
+
                 FilterModels.Filters.GOODS -> {
                     ItemsTable.insert {
                         it[id] = tag.id
@@ -174,6 +177,7 @@ private fun prepareData(
                         }
                     }
                 }
+
                 FilterModels.Filters.TOOLS -> {
                     ItemsTable.insert {
                         it[id] = tag.id
@@ -196,4 +200,17 @@ private fun prepareData(
             }
         }
     }
+}
+
+private fun createDataBase() {
+    SchemaUtils.create(
+        TagsTable,
+        CocktailToTagTable,
+        ItemsTable,
+        CocktailsToItemsTable,
+        TastesTable,
+        CocktailsToTastesTable,
+        TastesTable,
+        CocktailsToTastesTable,
+    )
 }

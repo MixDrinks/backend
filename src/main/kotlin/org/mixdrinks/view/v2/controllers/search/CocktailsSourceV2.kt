@@ -7,8 +7,10 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsToItemsTable
+import org.mixdrinks.data.CocktailsToTastesTable
 import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.data.TagsTable
+import org.mixdrinks.data.TastesTable
 import org.mixdrinks.view.cocktail.ItemType
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
 import org.mixdrinks.view.v2.data.CocktailId
@@ -19,11 +21,14 @@ class CocktailsSourceV2 {
 
     val filterIds: Map<FilterModels.Filters, List<FilterModels.FilterId>> = transaction {
         return@transaction mapOf(
-            FilterModels.Filters.TAGS to TagsTable.selectAll().map { FilterModels.FilterId(it[TagsTable.id]) },
+            FilterModels.Filters.TAGS to TagsTable.selectAll()
+                .map { FilterModels.FilterId(it[TagsTable.id]) },
             FilterModels.Filters.GOODS to ItemsTable.select { ItemsTable.relation eq ItemType.GOOD.relation }
                 .map { FilterModels.FilterId(it[ItemsTable.id]) },
             FilterModels.Filters.TOOLS to ItemsTable.select { ItemsTable.relation eq ItemType.TOOL.relation }
                 .map { FilterModels.FilterId(it[ItemsTable.id]) },
+            FilterModels.Filters.TASTE to TastesTable.selectAll()
+                .map { FilterModels.FilterId(it[TastesTable.id]) }
         )
 
     }
@@ -40,10 +45,14 @@ class CocktailsSourceV2 {
                 val goodIds = getItemIds(cocktailId, ItemType.GOOD)
                 val toolIds = getItemIds(cocktailId, ItemType.TOOL)
 
+                val tasteIds = CocktailsToTastesTable.select { CocktailsToTastesTable.cocktailId eq cocktailId.value }
+                    .map { FilterModels.FilterId(it[CocktailsToTastesTable.tasteId]) }
+
                 return@associateWith mapOf(
                     FilterModels.Filters.TAGS.id to tagIds,
                     FilterModels.Filters.GOODS.id to goodIds,
                     FilterModels.Filters.TOOLS.id to toolIds,
+                    FilterModels.Filters.TASTE.id to tasteIds,
                 )
             }
         }
