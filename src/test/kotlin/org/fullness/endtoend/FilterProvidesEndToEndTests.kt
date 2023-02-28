@@ -140,16 +140,7 @@ private fun prepareData(
     tags: List<FilterData>,
 ) {
     transaction {
-        SchemaUtils.create(
-            TagsTable,
-            CocktailToTagTable,
-            ItemsTable,
-            CocktailsToItemsTable,
-            TastesTable,
-            CocktailsToTastesTable,
-            TastesTable,
-            CocktailsToTastesTable,
-        )
+        createDataBase()
 
         tags.forEachIndexed { index, tag ->
             when (tag.type) {
@@ -209,4 +200,17 @@ private fun prepareData(
             }
         }
     }
+}
+
+private fun createDataBase() {
+    SchemaUtils.create(
+        TagsTable,
+        CocktailToTagTable,
+        ItemsTable,
+        CocktailsToItemsTable,
+        TastesTable,
+        CocktailsToTastesTable,
+        TastesTable,
+        CocktailsToTastesTable,
+    )
 }
