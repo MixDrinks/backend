@@ -21,11 +21,13 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsToItemsTable
+import org.mixdrinks.data.CocktailsToTastesTable
 import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.data.TagsTable
-import org.mixdrinks.view.v2.controllers.settings.AppSettings
+import org.mixdrinks.data.TastesTable
 import org.mixdrinks.view.v2.controllers.score.CocktailScoreChangeResponse
 import org.mixdrinks.view.v2.controllers.score.scoreV2
+import org.mixdrinks.view.v2.controllers.settings.AppSettings
 
 class CocktailEndToEndTests : FunSpec({
 
@@ -81,8 +83,14 @@ private data class MockCocktailVisit(
 
 private fun prepareData(cocktails: List<MockCocktailVisit>) {
     transaction {
-        SchemaUtils.drop(CocktailsTable, CocktailsToItemsTable, CocktailToTagTable, TagsTable, ItemsTable)
-        SchemaUtils.create(CocktailsTable, CocktailsToItemsTable, CocktailToTagTable, TagsTable, ItemsTable)
+        SchemaUtils.drop(
+            CocktailsTable, CocktailsToItemsTable, CocktailToTagTable, TagsTable, ItemsTable, TastesTable,
+            CocktailsToTastesTable
+        )
+        SchemaUtils.create(
+            CocktailsTable, CocktailsToItemsTable, CocktailToTagTable, TagsTable, ItemsTable, TastesTable,
+            CocktailsToTastesTable,
+        )
 
         cocktails.forEach { cocktail ->
             CocktailsTable.insert {

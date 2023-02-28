@@ -24,6 +24,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsToItemsTable
+import org.mixdrinks.data.CocktailsToTastesTable
 import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.data.TastesTable
@@ -295,7 +296,7 @@ private fun prepareData(cocktails: List<MockCocktail>) {
             TagsTable,
             ItemsTable,
             TastesTable,
-            TagsTable
+            CocktailsToTastesTable,
         )
         SchemaUtils.create(
             CocktailsTable,
@@ -304,7 +305,7 @@ private fun prepareData(cocktails: List<MockCocktail>) {
             TagsTable,
             ItemsTable,
             TastesTable,
-            TagsTable
+            CocktailsToTastesTable,
         )
 
         cocktails.forEach { cocktail ->

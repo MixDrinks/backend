@@ -6,6 +6,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsToItemsTable
+import org.mixdrinks.data.CocktailsToTastesTable
 import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.data.TastesTable
@@ -22,7 +23,7 @@ fun prepareData(
             TagsTable,
             ItemsTable,
             TastesTable,
-            TagsTable
+            CocktailsToTastesTable,
         )
         SchemaUtils.create(
             CocktailsTable,
@@ -31,7 +32,7 @@ fun prepareData(
             TagsTable,
             ItemsTable,
             TastesTable,
-            TagsTable
+            CocktailsToTastesTable,
         )
 
         insertDependencies(cocktails)

@@ -18,8 +18,10 @@ import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsToItemsTable
+import org.mixdrinks.data.CocktailsToTastesTable
 import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.data.TagsTable
+import org.mixdrinks.data.TastesTable
 import org.mixdrinks.view.cocktail.ItemType
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
 import org.mixdrinks.view.v2.controllers.filter.FilterSource
@@ -138,7 +140,16 @@ private fun prepareData(
     tags: List<FilterData>,
 ) {
     transaction {
-        SchemaUtils.create(TagsTable, CocktailToTagTable, ItemsTable, CocktailsToItemsTable)
+        SchemaUtils.create(
+            TagsTable,
+            CocktailToTagTable,
+            ItemsTable,
+            CocktailsToItemsTable,
+            TastesTable,
+            CocktailsToTastesTable,
+            TastesTable,
+            CocktailsToTastesTable,
+        )
 
         tags.forEachIndexed { index, tag ->
             when (tag.type) {
@@ -155,6 +166,7 @@ private fun prepareData(
                         }
                     }
                 }
+
                 FilterModels.Filters.GOODS -> {
                     ItemsTable.insert {
                         it[id] = tag.id
@@ -174,6 +186,7 @@ private fun prepareData(
                         }
                     }
                 }
+
                 FilterModels.Filters.TOOLS -> {
                     ItemsTable.insert {
                         it[id] = tag.id

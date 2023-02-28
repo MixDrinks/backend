@@ -22,15 +22,17 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsToItemsTable
+import org.mixdrinks.data.CocktailsToTastesTable
 import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.data.TagsTable
-import org.mixdrinks.view.v2.controllers.settings.AppSettings
+import org.mixdrinks.data.TastesTable
+import org.mixdrinks.view.v2.controllers.score.CocktailScoreChangeResponse
 import org.mixdrinks.view.v2.controllers.score.RattingBuilder
 import org.mixdrinks.view.v2.controllers.score.RattingItem
-import org.mixdrinks.view.v2.controllers.score.CocktailScoreChangeResponse
 import org.mixdrinks.view.v2.controllers.score.rattingSearchView
 import org.mixdrinks.view.v2.controllers.score.scoreV2
 import org.mixdrinks.view.v2.controllers.search.CocktailsSourceV2
+import org.mixdrinks.view.v2.controllers.settings.AppSettings
 import org.mixdrinks.view.v2.data.CocktailId
 
 class RattingEndToEndTests : FunSpec({
@@ -160,8 +162,14 @@ private data class MockCocktailRatting(
 
 private fun prepareData(cocktails: List<MockCocktailRatting>) {
     transaction {
-        SchemaUtils.drop(CocktailsTable, CocktailsToItemsTable, CocktailToTagTable, TagsTable, ItemsTable)
-        SchemaUtils.create(CocktailsTable, CocktailsToItemsTable, CocktailToTagTable, TagsTable, ItemsTable)
+        SchemaUtils.drop(
+            CocktailsTable, CocktailsToItemsTable, CocktailToTagTable, TagsTable, ItemsTable, TastesTable,
+            CocktailsToTastesTable,
+        )
+        SchemaUtils.create(
+            CocktailsTable, CocktailsToItemsTable, CocktailToTagTable, TagsTable, ItemsTable, TastesTable,
+            CocktailsToTastesTable,
+        )
 
         cocktails.forEach { cocktail ->
             CocktailsTable.insert {
