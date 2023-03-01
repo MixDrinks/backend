@@ -5,12 +5,13 @@ val logbackVersion: String by project
 plugins {
     application
     kotlin("jvm") version "1.8.10"
-    kotlin("plugin.serialization") version "1.8.10"
     id("io.ktor.plugin") version "2.2.3"
+    kotlin("plugin.serialization") version "1.8.10"
 }
 
 group = "org.mixdrinks"
-version = "0.0.1"
+version = "0.0.2"
+
 application {
     mainClass.set("org.mixdrinks.ApplicationKt")
 
