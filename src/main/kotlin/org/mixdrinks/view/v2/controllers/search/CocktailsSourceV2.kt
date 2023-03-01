@@ -24,15 +24,15 @@ class CocktailsSourceV2 {
     val filterIds: Map<FilterModels.Filters, List<FilterModels.FilterId>> = transaction {
         return@transaction mapOf(
             FilterModels.Filters.TAGS to TagsTable.selectAll()
-                .map { FilterModels.FilterId(it[TagsTable.id]) },
+                .map { FilterModels.FilterId(it[TagsTable.id].value) },
             FilterModels.Filters.GOODS to ItemsTable.select { ItemsTable.relation eq ItemType.GOOD.relation }
-                .map { FilterModels.FilterId(it[ItemsTable.id]) },
+                .map { FilterModels.FilterId(it[ItemsTable.id].value) },
             FilterModels.Filters.TOOLS to ItemsTable.select { ItemsTable.relation eq ItemType.TOOL.relation }
-                .map { FilterModels.FilterId(it[ItemsTable.id]) },
+                .map { FilterModels.FilterId(it[ItemsTable.id].value) },
             FilterModels.Filters.TASTE to TastesTable.selectAll()
-                .map { FilterModels.FilterId(it[TastesTable.id]) },
+                .map { FilterModels.FilterId(it[TastesTable.id].value) },
             FilterModels.Filters.ALCOHOL_VOLUME to AlcoholVolumesTable.selectAll()
-                .map { FilterModels.FilterId(it[AlcoholVolumesTable.id]) },
+                .map { FilterModels.FilterId(it[AlcoholVolumesTable.id].value) },
         )
 
     }
@@ -40,7 +40,7 @@ class CocktailsSourceV2 {
     init {
         cache = transaction {
             val cocktailIds =
-                CocktailsTable.slice(CocktailsTable.id).selectAll().map { CocktailId(it[CocktailsTable.id]) }
+                CocktailsTable.slice(CocktailsTable.id).selectAll().map { CocktailId(it[CocktailsTable.id].value) }
 
             return@transaction cocktailIds.associateWith { cocktailId ->
                 val alcoholVolume =

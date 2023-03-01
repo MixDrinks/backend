@@ -29,7 +29,7 @@ fun Application.items() {
 private fun getFullItem(id: Int): ItemVm {
     return transaction {
         val item = ItemsTable.select { ItemsTable.id eq id }.limit(1).first()
-        val itemId = item[ItemsTable.id]
+        val itemId = item[ItemsTable.id].value
 
         return@transaction ItemVm(
             id = itemId,

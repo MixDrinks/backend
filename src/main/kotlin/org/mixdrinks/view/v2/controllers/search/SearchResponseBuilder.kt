@@ -80,7 +80,7 @@ class SearchResponseBuilder(
     }
 
     private fun createCocktails(row: ResultRow): CompactCocktailVM {
-        val id = row[CocktailsTable.id]
+        val id = row[CocktailsTable.id].value
         val ratingValue = row[CocktailsTable.ratingValue]
 
         val rating = ratingValue?.let {

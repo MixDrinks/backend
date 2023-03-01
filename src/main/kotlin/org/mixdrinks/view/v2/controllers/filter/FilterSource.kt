@@ -21,7 +21,7 @@ class FilterSource {
     fun getMetaInfo(): List<FilterModels.FilterGroup> {
         return transaction {
             val alcoholVolume = AlcoholVolumesTable.selectAll().map { alcoholVolume ->
-                val alcoholVolumeId = alcoholVolume[AlcoholVolumesTable.id]
+                val alcoholVolumeId = alcoholVolume[AlcoholVolumesTable.id].value
                 FilterModels.FilterItem(
                     id = FilterModels.FilterId(alcoholVolumeId),
                     name = alcoholVolume[AlcoholVolumesTable.name],
@@ -31,7 +31,7 @@ class FilterSource {
                 )
             }
             val tags = TagsTable.selectAll().map { tagRow ->
-                val tagId = tagRow[TagsTable.id]
+                val tagId = tagRow[TagsTable.id].value
                 FilterModels.FilterItem(
                     id = FilterModels.FilterId(tagId),
                     name = tagRow[TagsTable.name],
@@ -40,7 +40,7 @@ class FilterSource {
             }
 
             val tastes = TastesTable.selectAll().map { tasteRow ->
-                val tasteId = tasteRow[TastesTable.id]
+                val tasteId = tasteRow[TastesTable.id].value
                 FilterModels.FilterItem(
                     id = FilterModels.FilterId(tasteId),
                     name = tasteRow[TastesTable.name],
@@ -70,7 +70,7 @@ class FilterSource {
 
     private fun getItemList(itemType: ItemType): List<FilterModels.FilterItem> {
         return ItemsTable.select { ItemsTable.relation eq itemType.relation }.map { itemRow ->
-            val goodId = itemRow[ItemsTable.id]
+            val goodId = itemRow[ItemsTable.id].value
             FilterModels.FilterItem(
                 id = FilterModels.FilterId(goodId),
                 name = itemRow[ItemsTable.name],
