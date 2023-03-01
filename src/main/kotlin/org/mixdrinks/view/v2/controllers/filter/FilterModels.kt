@@ -33,6 +33,11 @@ class FilterModels {
         TASTE(
             id = FilterGroupId(3), queryName = FilterQueryName("taste"), translation = "Смак",
         ),
+        ALCOHOL_VOLUME(
+            id = FilterGroupId(4),
+            queryName = FilterQueryName("alcoholVolume"),
+            translation = "Алкоголь",
+        )
     }
 
     @Serializable

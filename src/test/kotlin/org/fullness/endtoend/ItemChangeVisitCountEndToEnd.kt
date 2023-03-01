@@ -11,6 +11,7 @@ import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.testing.testApplication
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import org.createDataBase
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
@@ -68,8 +69,7 @@ private data class MockItem(
 
 private fun prepareDatabase(items: List<MockItem>) {
     transaction {
-        SchemaUtils.drop(ItemsTable)
-        SchemaUtils.create(ItemsTable)
+        createDataBase()
 
         items.forEach { item ->
             ItemsTable.insert {

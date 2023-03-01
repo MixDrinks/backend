@@ -14,6 +14,7 @@ import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.testing.testApplication
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import org.createDataBase
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
@@ -162,14 +163,7 @@ private data class MockCocktailRatting(
 
 private fun prepareData(cocktails: List<MockCocktailRatting>) {
     transaction {
-        SchemaUtils.drop(
-            CocktailsTable, CocktailsToItemsTable, CocktailToTagTable, TagsTable, ItemsTable, TastesTable,
-            CocktailsToTastesTable,
-        )
-        SchemaUtils.create(
-            CocktailsTable, CocktailsToItemsTable, CocktailToTagTable, TagsTable, ItemsTable, TastesTable,
-            CocktailsToTastesTable,
-        )
+        createDataBase()
 
         cocktails.forEach { cocktail ->
             CocktailsTable.insert {
