@@ -29,7 +29,7 @@ fun Application.cocktails() {
             call.respond(transaction {
                 CocktailsTable.selectAll().map { row ->
                     SimpleCocktailVM(
-                        row[CocktailsTable.id],
+                        row[CocktailsTable.id].value,
                         row[CocktailsTable.name],
                     )
                 }
@@ -51,7 +51,7 @@ private fun getFullCocktail(id: Int): FullCocktailVM {
     return transaction {
         val cocktail = CocktailsTable.select { CocktailsTable.id eq id }.first()
 
-        val cocktailId = cocktail[CocktailsTable.id]
+        val cocktailId = cocktail[CocktailsTable.id].value
 
         val rating: Float? = cocktail.getRating()
 
@@ -75,7 +75,7 @@ private fun getTastes(id: Int) =
     CocktailsToTastesTable.join(TastesTable, JoinType.INNER, TastesTable.id, CocktailsToTastesTable.tasteId)
         .select { CocktailsToTastesTable.cocktailId eq id }.map { tasteRow ->
             TagVM(
-                TagId(tasteRow[TastesTable.id]), tasteRow[TastesTable.name]
+                TagId(tasteRow[TastesTable.id].value), tasteRow[TastesTable.name]
             )
         }
 
@@ -83,7 +83,7 @@ private fun getCocktailTags(id: Int) =
     CocktailToTagTable.join(TagsTable, JoinType.INNER, TagsTable.id, CocktailToTagTable.tagId)
         .select { CocktailToTagTable.cocktailId eq id }.map { tagRow ->
             TagVM(
-                TagId(tagRow[TagsTable.id]), tagRow[TagsTable.name]
+                TagId(tagRow[TagsTable.id].value), tagRow[TagsTable.name]
             )
         }
 
@@ -92,9 +92,9 @@ private fun getFullIngredients(id: Int, relation: ItemType): List<FullIngredient
         .select { CocktailsToItemsTable.cocktailId eq id and (CocktailsToItemsTable.relation eq relation.relation) }
         .map { itemRow ->
             FullIngredient(
-                id = itemRow[ItemsTable.id],
+                id = itemRow[ItemsTable.id].value,
                 name = itemRow[ItemsTable.name],
-                images = buildImages(itemRow[ItemsTable.id], ImageType.ITEM),
+                images = buildImages(itemRow[ItemsTable.id].value, ImageType.ITEM),
                 amount = itemRow[CocktailsToItemsTable.amount],
                 unit = itemRow[CocktailsToItemsTable.unit],
             )

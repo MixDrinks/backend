@@ -31,7 +31,7 @@ fun Application.snapshot() {
 
                 val tags = TagsTable.selectAll().map {
                     TagVM(
-                        TagId(it[TagsTable.id]),
+                        TagId(it[TagsTable.id].value),
                         it[TagsTable.name],
                     )
                 }
@@ -74,7 +74,7 @@ private fun getTagsSnapshot() = CocktailToTagTable.selectAll().map {
 
 private fun getItemsSnapshot() = ItemsTable.selectAll().map {
     Snapshot.Item(
-        ItemId(it[ItemsTable.id]),
+        ItemId(it[ItemsTable.id].value),
         it[ItemsTable.name],
         it[ItemsTable.about],
         it[ItemsTable.relation],
@@ -83,7 +83,7 @@ private fun getItemsSnapshot() = ItemsTable.selectAll().map {
 
 private fun getCocktailsSnapshot(): List<Snapshot.Cocktail> {
     val cocktails = CocktailsTable.selectAll().map {
-        val cocktailId = CocktailId(it[CocktailsTable.id])
+        val cocktailId = CocktailId(it[CocktailsTable.id].value)
         Snapshot.Cocktail(
             cocktailId, it[CocktailsTable.name], it[CocktailsTable.steps].toList(), getCocktailRelation(cocktailId)
         )

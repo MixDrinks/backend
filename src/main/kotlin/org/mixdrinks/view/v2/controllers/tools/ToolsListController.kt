@@ -32,7 +32,7 @@ fun Application.itemsList() {
 }
 
 private fun ResultRow.toItem(): Item {
-    val id = this[ItemsTable.id]
+    val id = this[ItemsTable.id].value
     return Item(
         id = id,
         name = this[ItemsTable.name],

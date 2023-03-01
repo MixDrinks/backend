@@ -195,6 +195,7 @@ private fun prepareData(
                         }
                     }
                 }
+                else -> {}
             }
         }
     }

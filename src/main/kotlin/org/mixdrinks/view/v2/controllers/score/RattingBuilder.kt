@@ -33,7 +33,7 @@ class RattingBuilder(
                 query
             }.map {
                 RattingItem(
-                    cocktailId = CocktailId(it[CocktailsTable.id]),
+                    cocktailId = CocktailId(it[CocktailsTable.id].value),
                     rating = it.getRating(),
                     visitCount = it[CocktailsTable.visitCount],
                 )
