@@ -4,8 +4,8 @@ val logbackVersion: String by project
 
 plugins {
     application
-    kotlin("jvm") version "1.6.21"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.6.21"
+    kotlin("jvm") version "1.8.10"
+    kotlin("plugin.serialization") version "1.8.10"
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
@@ -46,9 +46,9 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
 
 
-    implementation("org.jetbrains.exposed", "exposed-core", "0.38.2")
-    implementation("org.jetbrains.exposed", "exposed-dao", "0.38.2")
-    implementation("org.jetbrains.exposed", "exposed-jdbc", "0.38.2")
+    implementation("org.jetbrains.exposed", "exposed-core", "0.41.1")
+    implementation("org.jetbrains.exposed", "exposed-dao", "0.41.1")
+    implementation("org.jetbrains.exposed", "exposed-jdbc", "0.41.1")
     implementation("com.h2database", "h2", "2.1.210")
 
     implementation("com.zaxxer:HikariCP:5.0.1")
