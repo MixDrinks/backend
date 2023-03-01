@@ -25,7 +25,8 @@ class FilterSource {
                 FilterModels.FilterItem(
                     id = FilterModels.FilterId(alcoholVolumeId),
                     name = alcoholVolume[AlcoholVolumesTable.name],
-                    cocktailCount = CocktailsToAlcoholVolumesTable.select { CocktailsToAlcoholVolumesTable.alcoholVolumeId eq alcoholVolumeId }
+                    cocktailCount = CocktailsToAlcoholVolumesTable
+                        .select { CocktailsToAlcoholVolumesTable.alcoholVolumeId eq alcoholVolumeId }
                         .count(),
                 )
             }
