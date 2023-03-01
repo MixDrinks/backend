@@ -1,5 +1,8 @@
 package org.mixdrinks.data
 
+import org.jetbrains.exposed.dao.IntEntity
+import org.jetbrains.exposed.dao.IntEntityClass
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Table
 
@@ -9,6 +12,23 @@ object CocktailsTable : IntIdTable(name = "cocktails", columnName = "id") {
     val visitCount = integer("visit_count")
     val ratingCount = integer("rating_count")
     val ratingValue = integer("rating_value").nullable()
+}
+
+class Cocktail(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<Cocktail>(CocktailsTable)
+
+    val name by CocktailsTable.name
+    var visitCount by CocktailsTable.visitCount
+    var ratingCount by CocktailsTable.ratingCount
+    var ratingValue by CocktailsTable.ratingValue
+
+    fun getRatting(): Float? {
+        return ratingValue?.let { ratingValue ->
+            ratingCount.takeIf { it != 0 }?.let { ratingCount ->
+                ratingValue.toFloat() / ratingCount.toFloat()
+            }
+        }
+    }
 }
 
 object ItemsTable : IntIdTable(name = "goods", columnName = "id") {

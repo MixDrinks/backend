@@ -11,18 +11,15 @@ import io.ktor.server.routing.routing
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
+import org.mixdrinks.data.Cocktail
 import org.mixdrinks.data.CocktailsTable
-import org.mixdrinks.data.CocktailsTable.visitCount
-import org.mixdrinks.view.v2.controllers.settings.AppSettings
 import org.mixdrinks.view.error.QueryRequireException
 import org.mixdrinks.view.error.VoteError
-import org.mixdrinks.view.rating.getRating
+import org.mixdrinks.view.v2.controllers.settings.AppSettings
 import org.mixdrinks.view.v2.data.CocktailId
 import org.mixdrinks.view.v2.getCocktailId
-import org.mixdrinks.view.v2.roundScore
 
 fun Application.scoreV2(appSettings: AppSettings) {
     routing {
@@ -65,20 +62,13 @@ data class CocktailScoreChangeResponse(
 )
 
 fun scoreCocktailsChangeResponse(id: CocktailId): CocktailScoreChangeResponse {
-    return CocktailsTable
-        .slice(
-            CocktailsTable.id,
-            CocktailsTable.visitCount,
-            CocktailsTable.ratingValue,
-            CocktailsTable.ratingCount,
-        )
-        .select { CocktailsTable.id eq id.value }.firstOrNull()?.let {
-            CocktailScoreChangeResponse(
-                cocktailId = id,
-                rating = it.getRating()?.let { notNullScore -> roundScore(notNullScore) },
-                visitCount = it[visitCount],
-            )
-        } ?: throw QueryRequireException("Cocktail not found")
+    val cocktail = Cocktail.findById(id.value) ?: throw QueryRequireException("Cocktail not found")
+
+    return CocktailScoreChangeResponse(
+        cocktailId = id,
+        rating = cocktail.getRatting(),
+        visitCount = cocktail.visitCount,
+    )
 }
 
 private suspend fun ApplicationCall.getRatting(appSettings: AppSettings): Int {
