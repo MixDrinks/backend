@@ -20,6 +20,7 @@ import org.mixdrinks.view.error.VoteError
 import org.mixdrinks.view.v2.controllers.settings.AppSettings
 import org.mixdrinks.view.v2.data.CocktailId
 import org.mixdrinks.view.v2.getCocktailId
+import org.mixdrinks.view.v2.roundScore
 
 fun Application.scoreV2(appSettings: AppSettings) {
     routing {
@@ -66,7 +67,7 @@ fun scoreCocktailsChangeResponse(id: CocktailId): CocktailScoreChangeResponse {
 
     return CocktailScoreChangeResponse(
         cocktailId = id,
-        rating = cocktail.getRatting(),
+        rating = cocktail.getRatting()?.let { notNullScore -> roundScore(notNullScore) },
         visitCount = cocktail.visitCount,
     )
 }
