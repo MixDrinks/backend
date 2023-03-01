@@ -11,17 +11,15 @@ import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.testing.testApplication
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import org.createDataBase
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsToItemsTable
-import org.mixdrinks.data.CocktailsToTastesTable
 import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.data.TagsTable
-import org.mixdrinks.data.TastesTable
 import org.mixdrinks.view.cocktail.ItemType
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
 import org.mixdrinks.view.v2.controllers.filter.FilterSource
@@ -80,7 +78,7 @@ class FilterProvidesEndToEndTests : FunSpec({
             response.status shouldBe HttpStatusCode.OK
             val result = Json.decodeFromString<List<FilterModels.FilterGroup>>(response.bodyAsText())
 
-            result[1].let { filterGroup: FilterModels.FilterGroup ->
+            result[2].let { filterGroup: FilterModels.FilterGroup ->
                 verifyFilterGroup(filterGroup, FilterModels.Filters.GOODS)
 
                 verifyItems(
@@ -91,7 +89,7 @@ class FilterProvidesEndToEndTests : FunSpec({
                 )
             }
 
-            result[2].let { filterGroup: FilterModels.FilterGroup ->
+            result[3].let { filterGroup: FilterModels.FilterGroup ->
                 verifyFilterGroup(filterGroup, FilterModels.Filters.TAGS)
 
                 verifyItems(
@@ -102,7 +100,7 @@ class FilterProvidesEndToEndTests : FunSpec({
                 )
             }
 
-            result[3].let { filterGroup: FilterModels.FilterGroup ->
+            result[4].let { filterGroup: FilterModels.FilterGroup ->
                 verifyFilterGroup(filterGroup, FilterModels.Filters.TOOLS)
 
                 verifyItems(
@@ -200,17 +198,4 @@ private fun prepareData(
             }
         }
     }
-}
-
-private fun createDataBase() {
-    SchemaUtils.create(
-        TagsTable,
-        CocktailToTagTable,
-        ItemsTable,
-        CocktailsToItemsTable,
-        TastesTable,
-        CocktailsToTastesTable,
-        TastesTable,
-        CocktailsToTastesTable,
-    )
 }

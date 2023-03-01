@@ -14,18 +14,12 @@ import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.testing.testApplication
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import org.createDataBase
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsTable
-import org.mixdrinks.data.CocktailsToItemsTable
-import org.mixdrinks.data.CocktailsToTastesTable
-import org.mixdrinks.data.ItemsTable
-import org.mixdrinks.data.TagsTable
-import org.mixdrinks.data.TastesTable
 import org.mixdrinks.view.v2.controllers.score.CocktailScoreChangeResponse
 import org.mixdrinks.view.v2.controllers.score.RattingBuilder
 import org.mixdrinks.view.v2.controllers.score.RattingItem
@@ -162,14 +156,7 @@ private data class MockCocktailRatting(
 
 private fun prepareData(cocktails: List<MockCocktailRatting>) {
     transaction {
-        SchemaUtils.drop(
-            CocktailsTable, CocktailsToItemsTable, CocktailToTagTable, TagsTable, ItemsTable, TastesTable,
-            CocktailsToTastesTable,
-        )
-        SchemaUtils.create(
-            CocktailsTable, CocktailsToItemsTable, CocktailToTagTable, TagsTable, ItemsTable, TastesTable,
-            CocktailsToTastesTable,
-        )
+        createDataBase()
 
         cocktails.forEach { cocktail ->
             CocktailsTable.insert {
