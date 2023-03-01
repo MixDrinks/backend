@@ -19,6 +19,12 @@ application {
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
+ktor {
+    docker {
+        jreVersion.set(io.ktor.plugin.features.JreVersion.JRE_17)
+    }
+}
+
 repositories {
     mavenCentral()
     maven { url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap") }
