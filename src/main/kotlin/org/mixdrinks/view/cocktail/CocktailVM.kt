@@ -3,11 +3,12 @@ package org.mixdrinks.view.cocktail
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.mixdrinks.view.images.Image
+import org.mixdrinks.view.v2.data.CocktailId
 import org.mixdrinks.view.v2.data.TagId
 
 @Serializable
 data class SimpleCocktailVM(
-    @SerialName("id") val id: Int,
+    @SerialName("id") val id: CocktailId,
     @SerialName("name") val name: String,
 )
 

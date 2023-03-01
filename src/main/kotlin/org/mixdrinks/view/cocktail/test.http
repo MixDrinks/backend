@@ -1,3 +1,2 @@
-
-GET http://0.0.0.0:8080/v2/cocktails/full?id=96
+GET http://0.0.0.0:8080/cocktails/all
 

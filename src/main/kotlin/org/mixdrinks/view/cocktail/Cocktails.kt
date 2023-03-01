@@ -9,8 +9,8 @@ import io.ktor.server.routing.routing
 import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.mixdrinks.data.Cocktail
 import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsToItemsTable
@@ -21,16 +21,17 @@ import org.mixdrinks.data.TastesTable
 import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
 import org.mixdrinks.view.rating.getRating
+import org.mixdrinks.view.v2.data.CocktailId
 import org.mixdrinks.view.v2.data.TagId
 
 fun Application.cocktails() {
     routing {
         get("cocktails/all") {
             call.respond(transaction {
-                CocktailsTable.selectAll().map { row ->
+                Cocktail.all().map {
                     SimpleCocktailVM(
-                        row[CocktailsTable.id].value,
-                        row[CocktailsTable.name],
+                        CocktailId(it.id.value),
+                        it.name
                     )
                 }
             })
