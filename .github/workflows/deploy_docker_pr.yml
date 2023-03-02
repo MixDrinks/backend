@@ -1,15 +1,14 @@
 name: deploy_docker_pull_request
 
-on:
-  pull_request:
-
+on: pull_request
 jobs:
-  docker:
-    runs-on: macos-latest
+  gradle:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: gradle/gradle-build-action@v2
-        with:
-          gradle-version: 7.6
-      - name: Execute Gradle build
-        run: ./gradlew publishImage
+      - name: Checkout project sources
+        uses: actions/checkout@v3
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+      - name: Run build with Gradle wrapper
+        id: gradle
+        run: ./gradlew buildImage publishImage
