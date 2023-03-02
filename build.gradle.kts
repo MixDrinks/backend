@@ -23,6 +23,8 @@ application {
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
+jib.to.image = "vovochkastelmashchuk/mixdrinks"
+
 ktor {
     docker {
         localImageName.set("vovochkastelmashchuk/mixdrinks")
