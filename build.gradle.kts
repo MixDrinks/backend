@@ -24,7 +24,7 @@ application {
 
 ktor {
     docker {
-        imageTag.set("32")
+        localImageName.set("vovochkastelmashchuk/mixdrinks")
         jreVersion.set(JreVersion.JRE_17)
         externalRegistry.set(
             DockerImageRegistry.dockerHub(
