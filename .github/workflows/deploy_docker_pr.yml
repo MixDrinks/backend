@@ -11,12 +11,10 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 11
+      - name: Get the PR number
+        uses: FranzDiebold/github-env-vars-action@v2
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
-      - uses: FranzDiebold/github-env-vars-action@v2
-        name: Get the PR number
       - name: Execute Gradle build
-        run:
-          - ./gradlew buildImage -Papp_tag="pr-$CI_PR_NUMBER"
-          - ./gradlew publishImage -Papp_tag="pr-$CI_PR_NUMBER"
+        run: ./gradlew publishImage -Papp_tag="pr-$CI_PR_NUMBER"
