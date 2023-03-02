@@ -17,4 +17,6 @@ jobs:
       - uses: FranzDiebold/github-env-vars-action@v2
         name: Get the PR number
       - name: Execute Gradle build
-        run: ./gradlew publishImage -Papp_tag="pr-$CI_PR_NUMBER"
+        run:
+          - ./gradlew buildImage -Papp_tag="pr-$CI_PR_NUMBER"
+          - ./gradlew publishImage -Papp_tag="pr-$CI_PR_NUMBER"
