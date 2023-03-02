@@ -22,15 +22,9 @@ application {
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
-jib {
-    to {
-        image = "vovochkastelmashchuk/mixdrinks"
-    }
-}
-
 ktor {
     docker {
-        imageTag.set(properties.getOrDefault("app_tag", "latest") as String)
+        imageTag.set("32")
         jreVersion.set(JreVersion.JRE_17)
         externalRegistry.set(
             DockerImageRegistry.dockerHub(

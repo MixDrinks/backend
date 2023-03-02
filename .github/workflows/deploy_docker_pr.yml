@@ -1,4 +1,4 @@
-name: ci
+name: deploy_docker_pull_request
 
 on:
   pull_request:
@@ -12,12 +12,7 @@ jobs:
         with:
           distribution: temurin
           java-version: 11
-      - name: Get the PR number
-        uses: FranzDiebold/github-env-vars-action@v2
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
       - name: Execute Gradle build
-        run: |
-          echo "PR number: $CI_PR_NUMBER"
-          ./gradlew buildImage -Papp_tag="pr-$CI_PR_NUMBER"
-          ./gradlew publishImage -Papp_tag="pr-$CI_PR_NUMBER"
+        run: ./gradlew publishImage
