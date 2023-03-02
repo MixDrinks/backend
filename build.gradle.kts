@@ -10,6 +10,7 @@ plugins {
     kotlin("jvm") version "1.8.10"
     id("io.ktor.plugin") version "2.2.4"
     kotlin("plugin.serialization") version "1.8.10"
+    id("com.google.cloud.tools.jib") version "3.3.1"
 }
 
 group = "org.mixdrinks"
@@ -25,6 +26,7 @@ application {
 ktor {
     docker {
         localImageName.set("vovochkastelmashchuk/mixdrinks")
+        imageTag.set("0.0.2-preview")
         jreVersion.set(JreVersion.JRE_17)
         externalRegistry.set(
             DockerImageRegistry.dockerHub(
