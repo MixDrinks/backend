@@ -1,3 +1,6 @@
+import io.ktor.plugin.features.DockerImageRegistry
+import io.ktor.plugin.features.JreVersion
+
 val ktorVersion: String by project
 val kotlinVersion: String by project
 val logbackVersion: String by project
@@ -5,7 +8,7 @@ val logbackVersion: String by project
 plugins {
     application
     kotlin("jvm") version "1.8.10"
-    id("io.ktor.plugin") version "2.2.3"
+    id("io.ktor.plugin") version "2.2.4"
     kotlin("plugin.serialization") version "1.8.10"
 }
 
@@ -22,9 +25,9 @@ application {
 ktor {
     docker {
         imageTag.set(properties.getOrDefault("app_tag", "latest") as String)
-        jreVersion.set(io.ktor.plugin.features.JreVersion.JRE_17)
+        jreVersion.set(JreVersion.JRE_17)
         externalRegistry.set(
-            io.ktor.plugin.features.DockerImageRegistry.dockerHub(
+            DockerImageRegistry.dockerHub(
                 appName = provider { "mixdrinks" },
                 username = providers.environmentVariable("DOCKER_HUB_USERNAME"),
                 password = providers.environmentVariable("DOCKER_HUB_PASSWORD")
