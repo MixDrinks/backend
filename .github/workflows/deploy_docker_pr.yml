@@ -17,4 +17,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
       - name: Execute Gradle build
-        run: ./gradlew publishImage -Papp_tag="pr-$CI_PR_NUMBER"
+        run: |
+          echo "PR number: $CI_PR_NUMBER"
+          ./gradlew buildImage -Papp_tag="pr-$CI_PR_NUMBER"
+          ./gradlew publishImage -Papp_tag="pr-$CI_PR_NUMBER"
