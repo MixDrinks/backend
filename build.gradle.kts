@@ -21,7 +21,15 @@ application {
 
 ktor {
     docker {
+        imageTag.set(properties.getOrDefault("app_tag", "latest") as String)
         jreVersion.set(io.ktor.plugin.features.JreVersion.JRE_17)
+        externalRegistry.set(
+            io.ktor.plugin.features.DockerImageRegistry.dockerHub(
+                appName = provider { "mixdrinks" },
+                username = providers.environmentVariable("DOCKER_HUB_USERNAME"),
+                password = providers.environmentVariable("DOCKER_HUB_PASSWORD")
+            )
+        )
     }
 }
 
