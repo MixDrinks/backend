@@ -1,10 +1,24 @@
-FROM gradle:7-jdk11 AS build
-COPY --chown=gradle:gradle . /home/gradle/src
-WORKDIR /home/gradle/src
-RUN gradle buildImage
+FROM gradle:7.6.0-jdk11 AS build
+
+COPY . /appbuild
+WORKDIR /appbuild
+
+RUN gradle clean build
+RUN gradle buildFatJar
 
 FROM openjdk:11
-EXPOSE 8080:8080
-RUN mkdir /app
-COPY --from=build /home/gradle/src/build/libs/*.jar /app/ktor-docker-sample.jar
-ENTRYPOINT ["java","-jar","/app/ktor-docker-sample.jar"]
+
+ENV APPLICATION_USER 1033
+RUN useradd -ms /bin/bash $APPLICATION_USER
+
+COPY --from=build /appbuild/build/libs/MixDrinks.jar /app/MixDrinks.jar
+COPY --from=build /appbuild/src/main/resources/ /app/resources/
+
+RUN chown -R $APPLICATION_USER /app
+RUN chmod -R 755 /app
+
+USER $APPLICATION_USER
+
+WORKDIR /app
+
+ENTRYPOINT ["java","-jar","/app/MixDrinks.jar"]

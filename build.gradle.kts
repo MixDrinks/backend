@@ -4,9 +4,9 @@ val logbackVersion: String by project
 
 plugins {
     application
-    kotlin("jvm") version "1.8.10"
+    kotlin("jvm") version "1.8.0"
+    kotlin("plugin.serialization") version "1.8.0"
     id("io.ktor.plugin") version "2.2.3"
-    kotlin("plugin.serialization") version "1.8.10"
 }
 
 group = "org.mixdrinks"
@@ -17,6 +17,12 @@ application {
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
+}
+
+ktor {
+    fatJar {
+        archiveFileName.set("MixDrinks.jar")
+    }
 }
 
 repositories {
@@ -45,7 +51,6 @@ dependencies {
 
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktorVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
-
 
     implementation("org.jetbrains.exposed", "exposed-core", "0.41.1")
     implementation("org.jetbrains.exposed", "exposed-dao", "0.41.1")

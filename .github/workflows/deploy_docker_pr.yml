@@ -1,9 +1,10 @@
-name: ci
+name: deploy_docker
 
 on:
   push:
     branches:
       - 'main'
+  pull_request:
 
 jobs:
   docker:
@@ -18,8 +19,22 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            vovochkastelmashchuk/mixdrinks
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: vovochkastelmashchuk/mixdrinks:latest
+          tags: ${{ steps.meta.outputs.tags }}

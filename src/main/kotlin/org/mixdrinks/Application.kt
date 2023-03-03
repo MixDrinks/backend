@@ -16,6 +16,7 @@ import org.mixdrinks.plugins.configureCache
 import org.mixdrinks.plugins.configureRouting
 import org.mixdrinks.plugins.static
 import org.mixdrinks.view.cocktail.cocktails
+import org.mixdrinks.view.service
 import org.mixdrinks.view.v2.controllers.items.items
 import org.mixdrinks.view.v2.controllers.settings.AppSettings
 import org.mixdrinks.view.v2.controllers.settings.appSetting
@@ -64,6 +65,7 @@ fun main() {
             appSetting(appSettings)
 
             v2(appSettings)
+            service()
         }
 
         val port = config.property("ktor.connector.port").getString().toInt()
