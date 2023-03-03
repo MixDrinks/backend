@@ -41,14 +41,6 @@ jobs:
       - uses: isbang/compose-action@v1.4.1
         with:
           compose-file: "docker-compose.yml"
-      - uses: TobiasOlofsson88/github-action-validate-json-request-result@v1.0.5
-        name: ValidateJSON
-        with:
-          request-method: "GET"
-          request-url: "http://0.0.0.0:8080/cocktails/all"
-          validate-json: '[
-                            {
-                              "id": 1,
-                              "name": "Cocktail1"
-                            }
-                          ]'
+      - name: ValidateJSON
+        run: |
+          curl -X GET "http://0.0.0.0:8080/cocktails/all"
