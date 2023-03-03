@@ -46,7 +46,7 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
           images: '[
                         {
-                          "name": "backend",
+                          "name": "vovochkastelmashchuk-mixdrinks",
                           "image":{
                             "registry_type": "DOCKER_HUB",
                             "registry": "vovochkastelmashchuk",
