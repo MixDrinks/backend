@@ -42,11 +42,11 @@ jobs:
       - name: DigitalOcean App Platform deployment
         uses: digitalocean/app_action@main
         with:
-          app_name: sample-golang
+          app_name: backend
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
           images: '[
                         {
-                          "name": "sample-add",
+                          "name": "backend",
                           "image":{
                             "registry_type": "DOCKER_HUB",
                             "registry": "vovochkastelmashchuk",
