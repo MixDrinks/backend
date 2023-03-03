@@ -17,11 +17,11 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Get Pull Request Number
         id: pr
-        run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
+        run: echo "PR_NUMBER=$(gh pr view --json number -q .number)" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: vovochkastelmashchuk/app:${{ steps.pr.outputs.pull_request_number }}
+          tags: vovochkastelmashchuk/mixdrinks:${{ steps.pr.outputs.PR_NUMBER }}
