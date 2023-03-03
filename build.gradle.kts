@@ -22,10 +22,12 @@ application {
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
+jib.to.image = "vovochkastelmashchuk/mixdrinks"
+
 ktor {
     docker {
         jreVersion.set(JreVersion.JRE_17)
-        imageTag.set("0.0.10")
+        imageTag.set("0.0.11")
         localImageName.set("vovochkastelmashchuk/mixdrinks")
         externalRegistry.set(
             DockerImageRegistry.dockerHub(
