@@ -15,10 +15,13 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Print environment variables
-        uses: FranzDiebold/github-env-vars-action@v2
+      - name: Get Pull Request Number
+        id: pr
+        run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: vovochkastelmashchuk/mixdrinks:${{ CI_REF }}
+          tags: vovochkastelmashchuk/app:${{ steps.pr.outputs.pull_request_number }}
