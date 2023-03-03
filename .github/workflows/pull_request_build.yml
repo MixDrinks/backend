@@ -38,11 +38,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Build the docker-compose stack
-        run: docker-compose -f docker-compose.yml build
-      - name: Run the docker-compose stack
-        run: docker-compose -f docker-compose.yml up -d
-      - name: ValidateJSON
-        run: |
-          curl -v -X GET "http://localhost:8080/"
-          curl -v -X GET "http://localhost:8080/cocktails/all"
+      - uses: isbang/compose-action@v1.4.1

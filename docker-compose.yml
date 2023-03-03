@@ -1,6 +1,10 @@
 version: "3.6"
 
 services:
+  app-tests:
+    command:
+      - curl -v -X GET http://app:8080/
+      - curl -v -X GET http://app:8080/cocktails/all
   app:
     build: .
     ports:
