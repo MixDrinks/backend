@@ -54,4 +54,5 @@ jobs:
                             \"repository\": \"mixdrinks\",
                             \"tag\": \"sha-${{env.SHORT_SHA}}\"
                           }
+                        }
                       ]"
