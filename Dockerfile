@@ -21,4 +21,4 @@ USER $APPLICATION_USER
 
 WORKDIR /app
 
-ENTRYPOINT ["java","-jar","/app/KtorEasy.jar"]
+ENTRYPOINT ["java","-jar","/app/MixDrinks.jar"]
