@@ -39,7 +39,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
       - name: Add SHORT_SHA env property with commit short sha
         id: github-sha
-        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-7`" >> $GITHUB_ENV
       - name: DigitalOcean App Platform deployment
         uses: digitalocean/app_action@main
         with:
