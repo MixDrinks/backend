@@ -1,6 +1,3 @@
-import io.ktor.plugin.features.DockerImageRegistry
-import io.ktor.plugin.features.JreVersion
-
 val ktorVersion: String by project
 val kotlinVersion: String by project
 val logbackVersion: String by project
@@ -8,8 +5,8 @@ val logbackVersion: String by project
 plugins {
     application
     kotlin("jvm") version "1.8.0"
-    id("io.ktor.plugin") version "2.2.1"
     kotlin("plugin.serialization") version "1.8.0"
+    id("io.ktor.plugin") version "2.2.3"
 }
 
 group = "org.mixdrinks"
@@ -22,20 +19,9 @@ application {
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
-jib.to.image = "vovochkastelmashchuk/mixdrinks"
-
 ktor {
-    docker {
-        jreVersion.set(JreVersion.JRE_17)
-        imageTag.set("0.0.12")
-        localImageName.set("vovochkastelmashchuk/mixdrinks")
-        externalRegistry.set(
-            DockerImageRegistry.dockerHub(
-                appName = provider { "mixdrinks" },
-                username = providers.environmentVariable("DOCKER_HUB_USERNAME"),
-                password = providers.environmentVariable("DOCKER_HUB_PASSWORD")
-            )
-        )
+    fatJar {
+        archiveFileName.set("MixDrinks.jar")
     }
 }
 
@@ -65,7 +51,6 @@ dependencies {
 
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktorVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
-
 
     implementation("org.jetbrains.exposed", "exposed-core", "0.41.1")
     implementation("org.jetbrains.exposed", "exposed-dao", "0.41.1")
