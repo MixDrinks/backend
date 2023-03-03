@@ -23,3 +23,8 @@ jobs:
         with:
           push: true
           tags: vovochkastelmashchuk/mixdrinks:latest
+      - name: DigitalOcean App Platform deployment
+        uses: digitalocean/app_action@main
+        with:
+          app_name: vovochkastelmashchuk-mixdrinks
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
