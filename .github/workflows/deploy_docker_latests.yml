@@ -1,4 +1,4 @@
-name: deploy_docker
+name: deploy_docker_latest
 
 on:
   push:
@@ -26,5 +26,5 @@ jobs:
       - name: DigitalOcean App Platform deployment
         uses: digitalocean/app_action@main
         with:
-          app_name: vovochkastelmashchuk-mixdrinks
+          app_name: backend
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
