@@ -1,10 +1,6 @@
 name: Deploy
 
-on:
-  push:
-    branches:
-      - 'main'
-  pull_request:
+on: pull_request
 
 jobs:
   docker:
@@ -37,22 +33,3 @@ jobs:
         with:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
-      - name: Add SHORT_SHA env property with commit short sha
-        id: github-sha
-        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-7`" >> $GITHUB_ENV
-      - name: DigitalOcean App Platform deployment
-        uses: digitalocean/app_action@main
-        with:
-          app_name: backend
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-          images: "[
-                        {
-                         \"name\": \"vovochkastelmashchuk-mixdrinks\",
-                          \"image\":{
-                            \"registry_type\": \"DOCKER_HUB\",
-                            \"registry\": \"vovochkastelmashchuk\",
-                            \"repository\": \"mixdrinks\",
-                            \"tag\": \"sha-${{env.SHORT_SHA}}\"
-                          }
-                        }
-                      ]"
