@@ -43,4 +43,5 @@ jobs:
           compose-file: "docker-compose.yml"
       - name: ValidateJSON
         run: |
-          curl -X GET "http://localhost:8080/cocktails/all"
+          curl -v -X GET "http://localhost:8080/"
+          curl -v -X GET "http://localhost:8080/cocktails/all"
