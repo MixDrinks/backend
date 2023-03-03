@@ -58,7 +58,7 @@ dependencies {
     implementation("com.h2database", "h2", "2.1.210")
 
     implementation("com.zaxxer:HikariCP:5.0.1")
-    implementation("org.postgresql:postgresql:42.5.1")
+    implementation("org.postgresql:postgresql:42.5.4")
 
     testImplementation("io.mockk:mockk:1.13.2")
     testImplementation("io.kotest:kotest-runner-junit5:5.5.4")
