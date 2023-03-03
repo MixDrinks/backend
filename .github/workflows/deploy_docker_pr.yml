@@ -15,8 +15,10 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Print environment variables
+        uses: FranzDiebold/github-env-vars-action@v2
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: vovochkastelmashchuk/mixdrinks:0.0.17
+          tags: vovochkastelmashchuk/mixdrinks:${{ CI_REF }}
