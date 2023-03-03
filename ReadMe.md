@@ -18,13 +18,13 @@ The service provide api for
 
 ### Deploy your own instance of service by digital ocean app platform
 
---Un supported yet--
+--Un supported yet, will rewrite to deploy by docker image--
 [![Deploy to DO](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/MixDrinks/backend/tree/main)
 
 *Not fully tested at the moment*
 
 ### Get the docker image
-
+[Link to docker hub](https://hub.docker.com/r/vovochkastelmashchuk/mixdrinks)
 ```bash
 docker pull vovochkastelmashchuk/mixdrinks:tagname
 ```
@@ -36,7 +36,7 @@ docker pull vovochkastelmashchuk/mixdrinks:tagname
 - sha-{{commit_short_sha}}, example: `sha-1234567`
 - {{branch_name}} - the latest commit from the main branch, example: `main`
 
-## Install & Run
+## Environment variables
 
 The app require the postgres database. Run the postgres database and provide the following environment variables:
 
@@ -58,4 +58,9 @@ The job verify the code style, run the tests and build the docker image for each
 After push to the main branch the job build the docker image with tags latest and sha-{short_commit_sha} and push it to
 the docker hub. After the push the job trigger the digital ocean app platform to deploy the new version of the app, we
 use the sha for identify the version, we cannot use the latest tag because the latest tag is not immutable, and be
-doesn't have opportunity to rollback.  
+doesn't have opportunity to rollback.
+
+### Deploy process
+
+All changes from main branch immediately deploy to production. The project doesn't have stage environment I trust the
+tests and the deployment workflow.
