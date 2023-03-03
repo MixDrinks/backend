@@ -1,10 +1,6 @@
-name: deploy_docker
+name: Deploy
 
-on:
-  push:
-    branches:
-      - 'main'
-  pull_request:
+on: pull_request
 
 jobs:
   docker:
@@ -26,7 +22,6 @@ jobs:
           images: |
             vovochkastelmashchuk/mixdrinks
           tags: |
-            type=schedule
             type=ref,event=branch
             type=ref,event=pr
             type=semver,pattern={{version}}
