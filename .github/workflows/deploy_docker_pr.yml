@@ -24,4 +24,4 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: vovochkastelmashchuk/mixdrinks:${{ steps.pr.outputs.PR_NUMBER }}
+          tags: "vovochkastelmashchuk/mixdrinks:${{ steps.pr.outputs.PR_NUMBER }}"
