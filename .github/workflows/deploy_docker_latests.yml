@@ -1,4 +1,4 @@
-name: deploy_docker_pull_request
+name: deploy_docker_latest
 
 on: pull_request
 
