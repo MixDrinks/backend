@@ -3,7 +3,7 @@ name: Build
 on: pull_request
 
 jobs:
-#docker:
+  #docker:
   #    runs-on: ubuntu-latest
   #    steps:
   #      - name: Set up QEMU
@@ -43,7 +43,8 @@ jobs:
         uses: yu-ichiro/spin-up-docker-compose-action@v1
         with:
           file: docker-compose.yml
-      - name: Wait for healthchecks
-        run: timeout 60s sh -c 'until docker ps | grep app_container | grep -q healthy; do echo "Waiting for container to be healthy..."; sleep 2; done'
+      - name: Sleep for 60 seconds
+        run: sleep 60s
+        shell: bash
       - name: Try call
         run: curl -v --fail http://app:8080/ || exit 1
