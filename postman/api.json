@@ -1,0 +1,42 @@
+{
+	"info": {
+		"_postman_id": "ab5bfe02-136f-42f6-b320-269eb28b531a",
+		"name": "MixDrinks",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1080447"
+	},
+	"item": [
+		{
+			"name": "Get version",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{HOST}}/cocktails/all",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"cocktails",
+						"all"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
