@@ -44,4 +44,4 @@ jobs:
         with:
           file: docker-compose.yml
       - name: Try call
-        run: curl -v --fail http://localhost:8080/ || exit 1
+        run: curl -v --fail http://app:8080/ || exit 1
