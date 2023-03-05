@@ -47,4 +47,4 @@ jobs:
         run: sleep 60s
         shell: bash
       - name: Try call
-        run: curl -v --fail http://app:8080/ || exit 1
+        run: curl -v --fail http://localhost:8080/ || exit 1
