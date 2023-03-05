@@ -1,4 +1,4 @@
-FROM node:10.8.0-slim
+FROM node:19.7.0-slim
 
 ENV DOCKERIZE_VERSION v0.6.1
 
