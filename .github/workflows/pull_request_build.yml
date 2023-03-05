@@ -3,7 +3,8 @@ name: Build
 on: pull_request
 
 jobs:
-#  docker:
+#
+docker:
 #    runs-on: ubuntu-latest
 #    steps:
 #      - name: Set up QEMU
@@ -37,8 +38,11 @@ jobs:
   end2end:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Up docker compose
-        run: docker-compose -f docker-compose.yml up --build --abort-on-container-exit --exit-code-from app
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup docker compose
+        uses: yu-ichiro/spin-up-docker-compose-action@v1
+        with:
+          file: docker-compose.yml
       - name: Try call
         run: curl -v --fail http://localhost:8080/ || exit 1
