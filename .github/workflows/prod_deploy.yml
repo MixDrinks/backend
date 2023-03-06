@@ -28,6 +28,8 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/mixdrinks:sha-${{env.SHORT_SHA}}
             ${{ secrets.DOCKERHUB_USERNAME }}/mixdrinks:latest
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Setup docker compose prod
         shell: bash
         run: |
