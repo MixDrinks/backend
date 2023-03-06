@@ -1,0 +1,10 @@
+name: Linter (detekt)
+on: pull_request
+jobs:
+  detekt:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "checkout"
+        uses: actions/checkout@v3
+      - name: "detekt"
+        uses: natiginfo/action-detekt-all@1.22.0

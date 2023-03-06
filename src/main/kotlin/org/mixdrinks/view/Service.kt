@@ -9,7 +9,7 @@ import io.ktor.server.routing.routing
 fun Application.service() {
     routing {
         get("/") {
-            call.respond("Version 1.0.1")
+            call.respond("Version 1.2.0")
         }
     }
 }

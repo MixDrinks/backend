@@ -6,7 +6,7 @@ plugins {
     application
     kotlin("jvm") version "1.8.0"
     kotlin("plugin.serialization") version "1.8.0"
-    id("io.ktor.plugin") version "2.2.3"
+    id("io.ktor.plugin") version "2.2.4"
 }
 
 group = "org.mixdrinks"
@@ -55,11 +55,11 @@ dependencies {
     implementation("org.jetbrains.exposed", "exposed-core", "0.41.1")
     implementation("org.jetbrains.exposed", "exposed-dao", "0.41.1")
     implementation("org.jetbrains.exposed", "exposed-jdbc", "0.41.1")
-    implementation("com.h2database", "h2", "2.1.210")
+    implementation("com.h2database", "h2", "2.1.214")
 
     implementation("com.zaxxer:HikariCP:5.0.1")
     implementation("org.postgresql:postgresql:42.5.1")
 
-    testImplementation("io.mockk:mockk:1.13.2")
-    testImplementation("io.kotest:kotest-runner-junit5:5.5.4")
+    testImplementation("io.mockk:mockk:1.13.4")
+    testImplementation("io.kotest:kotest-runner-junit5:5.5.5")
 }

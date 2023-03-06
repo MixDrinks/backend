@@ -18,11 +18,25 @@ The service provide api for
 
 ### Deploy your own instance of service by digital ocean app platform
 
+--Un supported yet, will rewrite to deploy by docker image--
 [![Deploy to DO](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/MixDrinks/backend/tree/main)
 
 *Not fully tested at the moment*
 
-## Install & Run
+### Get the docker image
+[Link to docker hub](https://hub.docker.com/r/vovochkastelmashchuk/mixdrinks)
+```bash
+docker pull vovochkastelmashchuk/mixdrinks:tagname
+```
+
+`tagname` - the tag of the image. Can be one of the following:
+
+- `latest` - the production version of the app
+- pr-{{pull_request_number}}, example: `pr-1`
+- sha-{{commit_short_sha}}, example: `sha-1234567`
+- {{branch_name}} - the latest commit from the main branch, example: `main`
+
+## Environment variables
 
 The app require the postgres database. Run the postgres database and provide the following environment variables:
 
@@ -36,3 +50,17 @@ The app require the postgres database. Run the postgres database and provide the
 
 If you found an issue or would like to submit an improvement to this project, please submit an issue using the issues
 tab above. If you would like to submit a PR with a fix, reference the issue you created!
+
+## CI/CD
+
+The project use github actions for CI/CD. The CI/CD pipelines is described in the folder `.github/workflows/`
+The job verify the code style, run the tests and build the docker image for each pull request.
+After push to the main branch the job build the docker image with tags latest and sha-{short_commit_sha} and push it to
+the docker hub. After the push the job trigger the digital ocean app platform to deploy the new version of the app, we
+use the sha for identify the version, we cannot use the latest tag because the latest tag is not immutable, and be
+doesn't have opportunity to rollback.
+
+### Deploy process
+
+All changes from main branch immediately deploy to production. The project doesn't have stage environment I trust the
+tests and the deployment workflow.

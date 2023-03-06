@@ -1,10 +1,6 @@
-name: deploy_docker
+name: Build
 
-on:
-  push:
-    branches:
-      - 'main'
-  pull_request:
+on: pull_request
 
 jobs:
   docker:
@@ -26,7 +22,6 @@ jobs:
           images: |
             vovochkastelmashchuk/mixdrinks
           tags: |
-            type=schedule
             type=ref,event=branch
             type=ref,event=pr
             type=semver,pattern={{version}}
@@ -38,3 +33,18 @@ jobs:
         with:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
+
+  end2end:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup docker compose
+        uses: yu-ichiro/spin-up-docker-compose-action@v1
+        with:
+          file: docker-compose.yml
+      - name: Sleep for 60 seconds
+        run: sleep 60s
+        shell: bash
+      - name: Try call
+        run: curl -v --fail http://localhost:8080/ || exit 1
