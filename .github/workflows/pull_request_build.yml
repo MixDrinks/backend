@@ -51,5 +51,5 @@ jobs:
       - uses: matt-ball/newman-action@master
         name: Run Postman tests
         with:
-          collection: postman_collection.json
-          environment: postman_environment.json
+          collection: postman/api.json
+          environment: postman/env.json
