@@ -46,5 +46,10 @@ jobs:
       - name: Sleep for 60 seconds
         run: sleep 60s
         shell: bash
-      - name: Try call
+      - name: Verify app is up
         run: curl -v --fail http://localhost:8080/ || exit 1
+      - uses: matt-ball/newman-action@master
+        name: Run Postman tests
+        with:
+          collection: postman/api.json
+          environment: postman/env.json

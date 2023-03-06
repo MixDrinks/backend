@@ -23,6 +23,8 @@ create table cocktails
 insert into cocktails (id, name, recipe, visit_count, rating_count, rating_value)
 values (1, 'Cocktail1', '{"1", "2", "3"}', 1, 1, 1);
 
+insert into cocktails (id, name, recipe, visit_count, rating_count, rating_value)
+values (2, 'Cocktail2', '{"1_1", "2_2", "3_3"}', 1, 1, 1);
 
 create table cocktails_to_tags
 (
