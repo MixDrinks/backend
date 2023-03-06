@@ -1,4 +1,4 @@
-FROM gradle:7.6.0-jdk11 AS build
+FROM gradle:7.6.1-jdk11 AS build
 
 COPY . /appbuild
 WORKDIR /appbuild
