@@ -4,8 +4,8 @@ val logbackVersion: String by project
 
 plugins {
     application
-    kotlin("jvm") version "1.8.0"
-    kotlin("plugin.serialization") version "1.8.0"
+    kotlin("jvm") version "1.8.10"
+    kotlin("plugin.serialization") version "1.8.10"
     id("io.ktor.plugin") version "2.2.4"
 }
 
@@ -58,7 +58,7 @@ dependencies {
     implementation("com.h2database", "h2", "2.1.214")
 
     implementation("com.zaxxer:HikariCP:5.0.1")
-    implementation("org.postgresql:postgresql:42.5.1")
+    implementation("org.postgresql:postgresql:42.5.4")
 
     testImplementation("io.mockk:mockk:1.13.4")
     testImplementation("io.kotest:kotest-runner-junit5:5.5.5")
