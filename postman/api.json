@@ -7,7 +7,76 @@
 	},
 	"item": [
 		{
-			"name": "Get version",
+			"name": "Filters",
+			"item": [
+				{
+					"name": "Empty filters",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{HOST}}/cocktails/all",
+							"protocol": "http",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"cocktails",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filter with tag filter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{HOST}}/cocktails/all",
+							"protocol": "http",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"cocktails",
+								"all"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get all cocktails",
 			"event": [
 				{
 					"listen": "test",
@@ -33,6 +102,55 @@
 					"path": [
 						"cocktails",
 						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Full cocktail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Verify json\", function () {",
+							"    var cocktail = pm.response.json();",
+							"    pm.expect(cocktail.id).to.eql(1);",
+							"    pm.expect(cocktail.name).to.eql(\"Cocktail1\");",
+							"",
+							"    receipt = [\"1\", \"2\", \"3\"]",
+							"",
+							"    pm.expect(cocktail.receipt).to.eql(receipt)",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{HOST}}/v2/cocktails/full?id=1",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"v2",
+						"cocktails",
+						"full"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						}
 					]
 				}
 			},
