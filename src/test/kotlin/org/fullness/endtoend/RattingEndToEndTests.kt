@@ -24,7 +24,7 @@ import org.mixdrinks.view.v2.controllers.score.CocktailScoreChangeResponse
 import org.mixdrinks.view.v2.controllers.score.RattingBuilder
 import org.mixdrinks.view.v2.controllers.score.RattingItem
 import org.mixdrinks.view.v2.controllers.score.rattingSearchView
-import org.mixdrinks.view.v2.controllers.score.scoreV2
+import org.mixdrinks.view.v2.controllers.score.score
 import org.mixdrinks.view.v2.controllers.search.CocktailsSourceV2
 import org.mixdrinks.view.v2.controllers.settings.AppSettings
 import org.mixdrinks.view.v2.data.CocktailId
@@ -57,7 +57,7 @@ class RattingEndToEndTests : FunSpec({
                 }
                 val appSetting = AppSettings(1, 5, 10)
                 rattingSearchView(RattingBuilder(CocktailsSourceV2()), appSetting)
-                scoreV2(appSetting)
+                score(appSetting)
             }
 
             client.get("v2/search/ratings").let { response ->
@@ -115,7 +115,7 @@ class RattingEndToEndTests : FunSpec({
                 }
                 val appSetting = AppSettings(1, 5, 10)
                 rattingSearchView(RattingBuilder(CocktailsSourceV2()), appSetting)
-                scoreV2(appSetting)
+                score(appSetting)
             }
 
             client.get("v2/search/ratings").let { response ->

@@ -17,7 +17,7 @@ import org.mixdrinks.data.ItemsTable.visitCount
 import org.mixdrinks.view.error.QueryRequireException
 import org.mixdrinks.view.v2.data.ItemId
 
-fun Application.itemScoreV2() {
+fun Application.itemScore() {
     routing {
         post("v2/item/visit") {
             val id = call.getItemId()

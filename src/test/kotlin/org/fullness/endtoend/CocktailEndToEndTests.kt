@@ -20,7 +20,7 @@ import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.view.v2.controllers.score.CocktailScoreChangeResponse
-import org.mixdrinks.view.v2.controllers.score.scoreV2
+import org.mixdrinks.view.v2.controllers.score.score
 import org.mixdrinks.view.v2.controllers.settings.AppSettings
 
 class CocktailEndToEndTests : FunSpec({
@@ -47,7 +47,7 @@ class CocktailEndToEndTests : FunSpec({
                 install(ContentNegotiation) {
                     json()
                 }
-                this.scoreV2(AppSettings(1, 1, 1))
+                this.score(AppSettings(1, 1, 1))
             }
 
             verifyVisitCount(10)
