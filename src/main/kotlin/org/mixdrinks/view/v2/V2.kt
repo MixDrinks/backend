@@ -1,7 +1,6 @@
 package org.mixdrinks.view.v2
 
 import io.ktor.server.application.Application
-import org.mixdrinks.view.v2.controllers.settings.AppSettings
 import org.mixdrinks.view.v2.controllers.filter.FilterSource
 import org.mixdrinks.view.v2.controllers.filter.filterMetaInfo
 import org.mixdrinks.view.v2.controllers.score.RattingBuilder
@@ -12,7 +11,7 @@ import org.mixdrinks.view.v2.controllers.search.CocktailsSourceV2
 import org.mixdrinks.view.v2.controllers.search.DescriptionBuilder
 import org.mixdrinks.view.v2.controllers.search.SearchResponseBuilder
 import org.mixdrinks.view.v2.controllers.search.searchView
-import org.mixdrinks.view.v2.controllers.snapshot.snapshot
+import org.mixdrinks.view.v2.controllers.settings.AppSettings
 import org.mixdrinks.view.v2.controllers.tools.itemsList
 
 fun Application.v2(appSettings: AppSettings) {
@@ -23,5 +22,4 @@ fun Application.v2(appSettings: AppSettings) {
     this.scoreV2(appSettings)
     this.itemScoreV2()
     this.itemsList()
-    this.snapshot()
 }

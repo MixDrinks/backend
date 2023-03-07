@@ -14,9 +14,12 @@ import kotlinx.serialization.json.Json
 import org.createDataBase
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.insertAndGetId
+import org.jetbrains.exposed.sql.insertIgnore
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailToTagTable
+import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsToItemsTable
 import org.mixdrinks.data.CocktailsToToolsTable
 import org.mixdrinks.data.ItemsTable
@@ -168,9 +171,16 @@ private fun prepareData(
                     }
 
                     repeat(tag.cocktailsCount) {
+                        val createdId = CocktailsTable.insertAndGetId {
+                            it[name] = "Cocktail$index"
+                            it[steps] = arrayOf()
+                            it[visitCount] = 0
+                            it[ratingCount] = 10
+                            it[ratingValue] = 34
+                        }
                         CocktailsToItemsTable.insert {
                             it[itemId] = tag.id
-                            it[cocktailId] = index
+                            it[cocktailId] = createdId
                             it[unit] = ""
                             it[amount] = 0
                             it[relation] = ItemType.GOOD.relation
