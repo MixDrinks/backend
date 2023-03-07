@@ -1,4 +1,4 @@
-FROM gradle:7.6.1-jdk11 AS build
+FROM gradle:8.0.2-jdk11 AS build
 
 COPY . /appbuild
 WORKDIR /appbuild
@@ -6,7 +6,7 @@ WORKDIR /appbuild
 RUN gradle clean build
 RUN gradle buildFatJar
 
-FROM openjdk:11
+FROM openjdk:11.0.16
 
 ENV APPLICATION_USER 1033
 RUN useradd -ms /bin/bash $APPLICATION_USER
