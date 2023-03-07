@@ -18,7 +18,12 @@
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
-									"});"
+									"});",
+									"",
+									"pm.test(\"Verify cocktail count of filter\", function() {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.totalCount).to.eql(2);  ",
+									"})"
 								],
 								"type": "text/javascript"
 							}
@@ -28,14 +33,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{HOST}}/cocktails/all",
-							"protocol": "http",
+							"raw": "{{SCHEME}}://{{HOST}}/v2/search/cocktails",
+							"protocol": "{{SCHEME}}",
 							"host": [
 								"{{HOST}}"
 							],
 							"path": [
-								"cocktails",
-								"all"
+								"v2",
+								"search",
+								"cocktails"
 							]
 						}
 					},
@@ -50,7 +56,12 @@
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
-									"});"
+									"});",
+									"",
+									"pm.test(\"Verify cocktail count of filter\", function() {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.totalCount).to.eql(1);",
+									"})"
 								],
 								"type": "text/javascript"
 							}
@@ -60,14 +71,21 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{HOST}}/cocktails/all",
-							"protocol": "http",
+							"raw": "{{SCHEME}}://{{HOST}}/v2/search/cocktails?tags=1",
+							"protocol": "{{SCHEME}}",
 							"host": [
 								"{{HOST}}"
 							],
 							"path": [
-								"cocktails",
-								"all"
+								"v2",
+								"search",
+								"cocktails"
+							],
+							"query": [
+								{
+									"key": "tags",
+									"value": "1"
+								}
 							]
 						}
 					},
@@ -84,6 +102,12 @@
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Verify json\", function () {",
+							"    var cocktail = pm.response.json()[0];",
+							"    pm.expect(cocktail.name).to.eql(\"Cocktail1\");",
+							"    pm.expect(cocktail.id).to.eql(1);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -94,8 +118,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://{{HOST}}/cocktails/all",
-					"protocol": "http",
+					"raw": "{{SCHEME}}://{{HOST}}/cocktails/all",
+					"protocol": "{{SCHEME}}",
 					"host": [
 						"{{HOST}}"
 					],
@@ -136,8 +160,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://{{HOST}}/v2/cocktails/full?id=1",
-					"protocol": "http",
+					"raw": "{{SCHEME}}://{{HOST}}/v2/cocktails/full?id=1",
+					"protocol": "{{SCHEME}}",
 					"host": [
 						"{{HOST}}"
 					],
@@ -151,6 +175,52 @@
 							"key": "id",
 							"value": "1"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get meta info",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Verify tools\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    let tools = jsonData.filter(a => a.queryName === \"tools\")",
+							"    pm.expect(tools[0].id).to.eql(2)",
+							"});",
+							"",
+							"pm.test(\"Verify tool items count\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    let tools = jsonData.filter(a => a.queryName === \"tools\")",
+							"    pm.expect(tools[0].items[0].cocktailCount).to.eql(1)",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SCHEME}}://{{HOST}}/v2/filters",
+					"protocol": "{{SCHEME}}",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"v2",
+						"filters"
 					]
 				}
 			},

@@ -10,9 +10,11 @@ import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsToAlcoholVolumesTable
 import org.mixdrinks.data.CocktailsToItemsTable
 import org.mixdrinks.data.CocktailsToTastesTable
+import org.mixdrinks.data.CocktailsToToolsTable
 import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.data.TastesTable
+import org.mixdrinks.data.ToolsTable
 import org.mixdrinks.view.cocktail.ItemType
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
 import org.mixdrinks.view.v2.data.CocktailId
@@ -27,8 +29,8 @@ class CocktailsSourceV2 {
                 .map { FilterModels.FilterId(it[TagsTable.id].value) },
             FilterModels.Filters.GOODS to ItemsTable.select { ItemsTable.relation eq ItemType.GOOD.relation }
                 .map { FilterModels.FilterId(it[ItemsTable.id].value) },
-            FilterModels.Filters.TOOLS to ItemsTable.select { ItemsTable.relation eq ItemType.TOOL.relation }
-                .map { FilterModels.FilterId(it[ItemsTable.id].value) },
+            FilterModels.Filters.TOOLS to ToolsTable.selectAll()
+                .map { FilterModels.FilterId(it[ToolsTable.id].value) },
             FilterModels.Filters.TASTE to TastesTable.selectAll()
                 .map { FilterModels.FilterId(it[TastesTable.id].value) },
             FilterModels.Filters.ALCOHOL_VOLUME to AlcoholVolumesTable.selectAll()
@@ -53,11 +55,14 @@ class CocktailsSourceV2 {
                     .map { FilterModels.FilterId(it[CocktailToTagTable.tagId]) }
 
                 val goodIds = getItemIds(cocktailId, ItemType.GOOD)
-                val toolIds = getItemIds(cocktailId, ItemType.TOOL)
+
+                val toolIds = CocktailsToToolsTable
+                    .select { CocktailsToToolsTable.cocktailId eq cocktailId.value }
+                    .map { FilterModels.FilterId(it[CocktailsToToolsTable.toolId].value) }
 
                 val tasteIds = CocktailsToTastesTable
                     .select { CocktailsToTastesTable.cocktailId eq cocktailId.value }
-                    .map { FilterModels.FilterId(it[CocktailsToTastesTable.tasteId]) }
+                    .map { FilterModels.FilterId(it[CocktailsToTastesTable.tasteId].value) }
 
                 return@associateWith mapOf(
                     FilterModels.Filters.TAGS.id to tagIds,
@@ -76,7 +81,7 @@ class CocktailsSourceV2 {
                 (CocktailsToItemsTable.cocktailId eq cocktailId.value) and
                         (CocktailsToItemsTable.relation eq itemType.relation)
             }
-            .map { FilterModels.FilterId(it[CocktailsToItemsTable.itemId]) }
+            .map { FilterModels.FilterId(it[CocktailsToItemsTable.itemId].value) }
 
     fun cocktailsBySearch(searchParams: SearchParams): List<CocktailId> {
         return cache.filter { (_, meta) ->

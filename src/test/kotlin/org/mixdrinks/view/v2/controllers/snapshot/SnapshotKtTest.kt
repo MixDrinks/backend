@@ -21,6 +21,7 @@ import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsToItemsTable
 import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.data.TagsTable
+import org.mixdrinks.data.ToolsTable
 import org.mixdrinks.view.cocktail.ItemType
 import org.mixdrinks.view.cocktail.TagVM
 import org.mixdrinks.view.v2.data.CocktailId
@@ -91,7 +92,12 @@ private fun prepareSnapshot() {
         insertTag(2, "T2")
 
         insertItem(1, "I1", ItemType.GOOD)
-        insertItem(2, "I2", ItemType.TOOL)
+
+        ToolsTable.insert {
+            it[id] = 2
+            it[name] = "I2"
+            it[about] = ""
+        }
 
         CocktailToTagTable.insert {
             it[cocktailId] = 1

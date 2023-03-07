@@ -14,6 +14,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsToItemsTable
+import org.mixdrinks.data.CocktailsToToolsTable
 import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.view.cocktail.ItemType
@@ -41,20 +42,20 @@ fun Application.snapshot() {
                 val cocktailToGoods =
                     CocktailsToItemsTable.select { CocktailsToItemsTable.relation eq ItemType.GOOD.relation }.map {
                         Snapshot.CocktailToGood(
-                            CocktailId(it[CocktailsToItemsTable.cocktailId]),
-                            ItemId(it[CocktailsToItemsTable.itemId]),
+                            CocktailId(it[CocktailsToItemsTable.cocktailId].value),
+                            ItemId(it[CocktailsToItemsTable.itemId].value),
                             it[CocktailsToItemsTable.amount],
                             it[CocktailsToItemsTable.unit]
                         )
                     }
 
                 val cocktailToTools =
-                    CocktailsToItemsTable.select { CocktailsToItemsTable.relation eq ItemType.TOOL.relation }.map {
+                    CocktailsToToolsTable.selectAll().map {
                         Snapshot.CocktailToTool(
-                            CocktailId(it[CocktailsToItemsTable.cocktailId]),
-                            ItemId(it[CocktailsToItemsTable.itemId]),
-                            it[CocktailsToItemsTable.amount],
-                            it[CocktailsToItemsTable.unit]
+                            CocktailId(it[CocktailsToToolsTable.cocktailId].value),
+                            ItemId(it[CocktailsToToolsTable.toolId].value),
+                            0,
+                            ""
                         )
                     }
 
@@ -93,20 +94,19 @@ private fun getCocktailsSnapshot(): List<Snapshot.Cocktail> {
 
 private fun getCocktailRelation(cocktailId: CocktailId): Snapshot.CocktailRelation {
     return Snapshot.CocktailRelation(
-        CocktailToTagTable.select {
+        tagIds = CocktailToTagTable.select {
             CocktailToTagTable.cocktailId eq cocktailId.value
         }
             .map { TagId(it[CocktailToTagTable.tagId]) },
-        CocktailsToItemsTable.select {
+        goodIds = CocktailsToItemsTable.select {
             CocktailsToItemsTable.cocktailId eq cocktailId.value and
                     (CocktailsToItemsTable.relation eq ItemType.GOOD.relation)
         }
-            .map { ItemId(it[CocktailsToItemsTable.itemId]) },
-        CocktailsToItemsTable.select {
-            CocktailsToItemsTable.cocktailId eq cocktailId.value and
-                    (CocktailsToItemsTable.relation eq ItemType.TOOL.relation)
+            .map { ItemId(it[CocktailsToItemsTable.itemId].value) },
+        toolIds = CocktailsToToolsTable.select {
+            CocktailsToToolsTable.cocktailId eq cocktailId.value
         }
-            .map { ItemId(it[CocktailsToItemsTable.itemId]) },
+            .map { ItemId(it[CocktailsToItemsTable.itemId].value) },
     )
 }
 
