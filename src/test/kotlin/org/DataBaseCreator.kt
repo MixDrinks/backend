@@ -2,6 +2,7 @@ package org
 
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Transaction
+import org.mixdrinks.data.AlcoholVolumesTable
 import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsToAlcoholVolumesTable
@@ -26,6 +27,7 @@ fun Transaction.createDataBase() {
         CocktailToTagTable,
         ToolsTable,
         CocktailsToToolsTable,
+        AlcoholVolumesTable,
     )
     SchemaUtils.create(
         CocktailsTable,
@@ -39,5 +41,6 @@ fun Transaction.createDataBase() {
         CocktailToTagTable,
         ToolsTable,
         CocktailsToToolsTable,
+        AlcoholVolumesTable,
     )
 }
