@@ -11,6 +11,7 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.ItemsTable
+import org.mixdrinks.data.Tool
 import org.mixdrinks.view.cocktail.ItemType
 import org.mixdrinks.view.images.Image
 import org.mixdrinks.view.images.ImageType
@@ -20,7 +21,14 @@ fun Application.itemsList() {
     routing {
         get("v2/tools/all") {
             call.respond(transaction {
-                ItemsTable.select { ItemsTable.relation eq ItemType.TOOL.relation }.map(ResultRow::toItem)
+                Tool.all().map {
+                    ToolsVM(
+                        id = it.id.value,
+                        name = it.name,
+                        description = it.about,
+                        image = buildImages(it.id.value, ImageType.ITEM)
+                    )
+                }
             })
         }
         get("v2/goods/all") {
@@ -43,6 +51,14 @@ private fun ResultRow.toItem(): Item {
 
 @Serializable
 data class Item(
+    @SerialName("id") val id: Int,
+    @SerialName("name") val name: String,
+    @SerialName("description") val description: String,
+    @SerialName("image") val image: List<Image>,
+)
+
+@Serializable
+data class ToolsVM(
     @SerialName("id") val id: Int,
     @SerialName("name") val name: String,
     @SerialName("description") val description: String,

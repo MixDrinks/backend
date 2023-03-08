@@ -14,12 +14,16 @@ import kotlinx.serialization.json.Json
 import org.createDataBase
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailToTagTable
+import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsToItemsTable
+import org.mixdrinks.data.CocktailsToToolsTable
 import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.data.TagsTable
+import org.mixdrinks.data.ToolsTable
 import org.mixdrinks.view.cocktail.ItemType
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
 import org.mixdrinks.view.v2.controllers.filter.FilterSource
@@ -134,6 +138,7 @@ private data class FilterData(
     val type: FilterModels.Filters, val id: Int, val cocktailsCount: Int, val name: String = "Name$id"
 )
 
+@Suppress("LongMethod")
 private fun prepareData(
     tags: List<FilterData>,
 ) {
@@ -166,9 +171,16 @@ private fun prepareData(
                     }
 
                     repeat(tag.cocktailsCount) {
+                        val createdId = CocktailsTable.insertAndGetId {
+                            it[name] = "Cocktail$index"
+                            it[steps] = arrayOf()
+                            it[visitCount] = 0
+                            it[ratingCount] = 10
+                            it[ratingValue] = 34
+                        }
                         CocktailsToItemsTable.insert {
                             it[itemId] = tag.id
-                            it[cocktailId] = index
+                            it[cocktailId] = createdId
                             it[unit] = ""
                             it[amount] = 0
                             it[relation] = ItemType.GOOD.relation
@@ -177,24 +189,21 @@ private fun prepareData(
                 }
 
                 FilterModels.Filters.TOOLS -> {
-                    ItemsTable.insert {
+                    ToolsTable.insert {
                         it[id] = tag.id
                         it[name] = tag.name
                         it[about] = ""
-                        it[relation] = ItemType.TOOL.relation
                         it[visitCount] = 0
                     }
 
                     repeat(tag.cocktailsCount) {
-                        CocktailsToItemsTable.insert {
-                            it[itemId] = tag.id
+                        CocktailsToToolsTable.insert {
+                            it[toolId] = tag.id
                             it[cocktailId] = index
-                            it[unit] = ""
-                            it[amount] = 0
-                            it[relation] = ItemType.TOOL.relation
                         }
                     }
                 }
+
                 else -> {}
             }
         }

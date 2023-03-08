@@ -7,9 +7,11 @@ import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsToAlcoholVolumesTable
 import org.mixdrinks.data.CocktailsToItemsTable
 import org.mixdrinks.data.CocktailsToTastesTable
+import org.mixdrinks.data.CocktailsToToolsTable
 import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.data.TastesTable
+import org.mixdrinks.data.ToolsTable
 
 fun Transaction.createDataBase() {
     SchemaUtils.drop(
@@ -22,6 +24,8 @@ fun Transaction.createDataBase() {
         CocktailsToTastesTable,
         CocktailsToAlcoholVolumesTable,
         CocktailToTagTable,
+        ToolsTable,
+        CocktailsToToolsTable,
     )
     SchemaUtils.create(
         CocktailsTable,
@@ -33,5 +37,7 @@ fun Transaction.createDataBase() {
         CocktailsToTastesTable,
         CocktailsToAlcoholVolumesTable,
         CocktailToTagTable,
+        ToolsTable,
+        CocktailsToToolsTable,
     )
 }

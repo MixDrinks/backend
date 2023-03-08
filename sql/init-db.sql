@@ -107,4 +107,31 @@ create table cocktails_to_alcohol_volume
 insert into cocktails_to_alcohol_volume (alcohol_volume_id, cocktail_id)
 values (1, 1);
 
+create table tools
+(
+    id          integer           not null
+        constraint tools_pk
+            primary key,
+    name        text              not null,
+    about       text              not null,
+    visit_count integer default 0 not null
+);
 
+insert into tools (id, name, about, visit_count)
+values (1, 'Tool1', 'About1', 1);
+
+insert into tools (id, name, about, visit_count)
+values (2, 'Tool2', 'About2', 1);
+
+create table cocktails_to_tools
+(
+    cocktail_id integer not null
+        constraint cocktalis_to_tools_cocktails_null_fk
+            references cocktails,
+    tool_id     integer not null
+        constraint cocktalis_to_tools_tools_null_fk
+            references tools
+);
+
+insert into cocktails_to_tools (cocktail_id, tool_id)
+values (1, 1);
