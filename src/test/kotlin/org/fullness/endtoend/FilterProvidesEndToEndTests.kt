@@ -15,7 +15,6 @@ import org.createDataBase
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.insertAndGetId
-import org.jetbrains.exposed.sql.insertIgnore
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailToTagTable
@@ -139,6 +138,7 @@ private data class FilterData(
     val type: FilterModels.Filters, val id: Int, val cocktailsCount: Int, val name: String = "Name$id"
 )
 
+@Suppress("LongMethod")
 private fun prepareData(
     tags: List<FilterData>,
 ) {
