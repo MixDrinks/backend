@@ -40,24 +40,22 @@ create table goods
     name        text,
     about       text,
     id          integer,
-    relation    integer default 1,
     visit_count integer default 0 not null
 );
 
-insert into goods (id, name, about, relation, visit_count)
-values (1, 'Good1', 'About1', 1, 1);
+insert into goods (id, name, about, visit_count)
+values (1, 'Good1', 'About1', 1);
 
 create table cocktails_to_items
 (
     cocktail_id integer not null,
     good_id     integer not null,
     amount      integer not null,
-    unit        text,
-    relation    integer
+    unit        text
 );
 
-insert into cocktails_to_items (cocktail_id, good_id, amount, unit, relation)
-values (1, 1, 1, 'ml', 1);
+insert into cocktails_to_items (cocktail_id, good_id, amount, unit)
+values (1, 1, 1, 'ml');
 
 create table tastes
 (
