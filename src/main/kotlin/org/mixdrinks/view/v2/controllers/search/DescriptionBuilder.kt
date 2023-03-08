@@ -1,11 +1,9 @@
 package org.mixdrinks.view.v2.controllers.search
 
-import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.mixdrinks.data.ItemsTable
+import org.mixdrinks.data.GoodsTable
 import org.mixdrinks.data.TagsTable
-import org.mixdrinks.view.cocktail.ItemType
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
 
 class DescriptionBuilder {
@@ -41,12 +39,11 @@ class DescriptionBuilder {
 
     private fun buildGoodDescription(goodIds: List<FilterModels.FilterId>): String {
         val description = transaction {
-            ItemsTable
+            GoodsTable
                 .select {
-                    ItemsTable.id inList goodIds.map(FilterModels.FilterId::value) and
-                            (ItemsTable.relation eq ItemType.GOOD.relation)
+                    GoodsTable.id inList goodIds.map(FilterModels.FilterId::value)
                 }
-                .joinToString(separator = ", ") { it[ItemsTable.name] }
+                .joinToString(separator = ", ") { it[GoodsTable.name] }
         }
 
         return "Коктейлі з $description"

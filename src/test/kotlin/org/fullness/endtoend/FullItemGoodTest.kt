@@ -16,7 +16,7 @@ import org.createDataBase
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.mixdrinks.data.Item
+import org.mixdrinks.data.Good
 import org.mixdrinks.data.Tool
 import org.mixdrinks.view.v2.controllers.items.ItemVm
 import org.mixdrinks.view.v2.controllers.items.items
@@ -79,10 +79,9 @@ fun prepareDatabase() {
     transaction {
         createDataBase()
 
-        Item.new(id = 1) {
+        Good.new(id = 1) {
             name = "Good"
             about = "About Good"
-            relation = 1
         }
 
         Tool.new(id = 2) {

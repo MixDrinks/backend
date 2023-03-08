@@ -6,14 +6,13 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.AlcoholVolumesTable
 import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsToAlcoholVolumesTable
-import org.mixdrinks.data.CocktailsToItemsTable
+import org.mixdrinks.data.CocktailsToGoodsTable
 import org.mixdrinks.data.CocktailsToTastesTable
 import org.mixdrinks.data.CocktailsToToolsTable
-import org.mixdrinks.data.ItemsTable
+import org.mixdrinks.data.Good
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.data.TastesTable
 import org.mixdrinks.data.ToolsTable
-import org.mixdrinks.view.cocktail.ItemType
 
 class FilterSource {
 
@@ -22,42 +21,11 @@ class FilterSource {
      */
     fun getMetaInfo(): List<FilterModels.FilterGroup> {
         return transaction {
-            val alcoholVolume = AlcoholVolumesTable.selectAll().map { alcoholVolume ->
-                val alcoholVolumeId = alcoholVolume[AlcoholVolumesTable.id].value
-                FilterModels.FilterItem(
-                    id = FilterModels.FilterId(alcoholVolumeId),
-                    name = alcoholVolume[AlcoholVolumesTable.name],
-                    cocktailCount = CocktailsToAlcoholVolumesTable
-                        .select { CocktailsToAlcoholVolumesTable.alcoholVolumeId eq alcoholVolumeId }
-                        .count(),
-                )
-            }
-            val tags = TagsTable.selectAll().map { tagRow ->
-                val tagId = tagRow[TagsTable.id].value
-                FilterModels.FilterItem(
-                    id = FilterModels.FilterId(tagId),
-                    name = tagRow[TagsTable.name],
-                    cocktailCount = CocktailToTagTable.select { CocktailToTagTable.tagId eq tagId }.count()
-                )
-            }
-
-            val tastes = TastesTable.selectAll().map { tasteRow ->
-                val tasteId = tasteRow[TastesTable.id].value
-                FilterModels.FilterItem(
-                    id = FilterModels.FilterId(tasteId),
-                    name = tasteRow[TastesTable.name],
-                    cocktailCount = CocktailsToTastesTable.select { CocktailsToTastesTable.tasteId eq tasteId }.count()
-                )
-            }
-
-            val tools = ToolsTable.selectAll().map { toolRow ->
-                val toolId = toolRow[ToolsTable.id].value
-                FilterModels.FilterItem(
-                    id = FilterModels.FilterId(toolId),
-                    name = toolRow[ToolsTable.name],
-                    cocktailCount = CocktailsToToolsTable.select { CocktailsToToolsTable.toolId eq toolId }.count()
-                )
-            }
+            val alcoholVolume = getAlcoholVolume()
+            val tags = getTags()
+            val tastes = getTastes()
+            val tools = getTools()
+            val goods = getGoods()
 
             listOf(
                 FilterModels.FilterGroup(
@@ -67,7 +35,7 @@ class FilterSource {
                     FilterModels.Filters.TASTE, tastes.sortedBy { it.cocktailCount }.reversed()
                 ),
                 FilterModels.FilterGroup(
-                    FilterModels.Filters.GOODS, getItemList(ItemType.GOOD).sortedBy { it.cocktailCount }.reversed()
+                    FilterModels.Filters.GOODS, goods.sortedBy { it.cocktailCount }.reversed()
                 ),
                 FilterModels.FilterGroup(
                     FilterModels.Filters.TAGS, tags.sortedBy { it.cocktailCount }.reversed()
@@ -79,14 +47,49 @@ class FilterSource {
         }
     }
 
-    private fun getItemList(itemType: ItemType): List<FilterModels.FilterItem> {
-        return ItemsTable.select { ItemsTable.relation eq itemType.relation }.map { itemRow ->
-            val goodId = itemRow[ItemsTable.id].value
-            FilterModels.FilterItem(
-                id = FilterModels.FilterId(goodId),
-                name = itemRow[ItemsTable.name],
-                cocktailCount = CocktailsToItemsTable.select { CocktailsToItemsTable.itemId eq goodId }.count()
-            )
-        }
+    private fun getGoods() = Good.all().map {
+        FilterModels.FilterItem(
+            id = FilterModels.FilterId(it.id.value),
+            name = it.name,
+            cocktailCount = CocktailsToGoodsTable.select { CocktailsToGoodsTable.goodId eq it.id.value }.count()
+        )
+    }
+
+    private fun getTools() = ToolsTable.selectAll().map { toolRow ->
+        val toolId = toolRow[ToolsTable.id].value
+        FilterModels.FilterItem(
+            id = FilterModels.FilterId(toolId),
+            name = toolRow[ToolsTable.name],
+            cocktailCount = CocktailsToToolsTable.select { CocktailsToToolsTable.toolId eq toolId }.count()
+        )
+    }
+
+    private fun getTastes() = TastesTable.selectAll().map { tasteRow ->
+        val tasteId = tasteRow[TastesTable.id].value
+        FilterModels.FilterItem(
+            id = FilterModels.FilterId(tasteId),
+            name = tasteRow[TastesTable.name],
+            cocktailCount = CocktailsToTastesTable.select { CocktailsToTastesTable.tasteId eq tasteId }.count()
+        )
+    }
+
+    private fun getTags() = TagsTable.selectAll().map { tagRow ->
+        val tagId = tagRow[TagsTable.id].value
+        FilterModels.FilterItem(
+            id = FilterModels.FilterId(tagId),
+            name = tagRow[TagsTable.name],
+            cocktailCount = CocktailToTagTable.select { CocktailToTagTable.tagId eq tagId }.count()
+        )
+    }
+
+    private fun getAlcoholVolume() = AlcoholVolumesTable.selectAll().map { alcoholVolume ->
+        val alcoholVolumeId = alcoholVolume[AlcoholVolumesTable.id].value
+        FilterModels.FilterItem(
+            id = FilterModels.FilterId(alcoholVolumeId),
+            name = alcoholVolume[AlcoholVolumesTable.name],
+            cocktailCount = CocktailsToAlcoholVolumesTable
+                .select { CocktailsToAlcoholVolumesTable.alcoholVolumeId eq alcoholVolumeId }
+                .count(),
+        )
     }
 }

@@ -8,17 +8,16 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
 import org.jetbrains.exposed.sql.JoinType
-import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.Cocktail
 import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsTable
-import org.mixdrinks.data.CocktailsToItemsTable
+import org.mixdrinks.data.CocktailsToGoodsTable
 import org.mixdrinks.data.CocktailsToTastesTable
 import org.mixdrinks.data.CocktailsToToolsTable
 import org.mixdrinks.data.FullCocktail
-import org.mixdrinks.data.ItemsTable
+import org.mixdrinks.data.GoodsTable
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.data.TastesTable
 import org.mixdrinks.data.ToolsTable
@@ -88,18 +87,15 @@ private fun getCocktailTags(id: Int) =
         }
 
 private fun getFullIngredients(id: Int): List<FullIngredient> {
-    return CocktailsToItemsTable.join(ItemsTable, JoinType.INNER, ItemsTable.id, CocktailsToItemsTable.itemId)
-        .select {
-            CocktailsToItemsTable.cocktailId eq id and
-                    (CocktailsToItemsTable.relation eq ItemType.GOOD.relation)
-        }
+    return CocktailsToGoodsTable.join(GoodsTable, JoinType.INNER, GoodsTable.id, CocktailsToGoodsTable.goodId)
+        .select { CocktailsToGoodsTable.cocktailId eq id }
         .map { itemRow ->
             FullIngredient(
-                id = itemRow[ItemsTable.id].value,
-                name = itemRow[ItemsTable.name],
-                images = buildImages(itemRow[ItemsTable.id].value, ImageType.ITEM),
-                amount = itemRow[CocktailsToItemsTable.amount],
-                unit = itemRow[CocktailsToItemsTable.unit],
+                id = itemRow[GoodsTable.id].value,
+                name = itemRow[GoodsTable.name],
+                images = buildImages(itemRow[GoodsTable.id].value, ImageType.ITEM),
+                amount = itemRow[CocktailsToGoodsTable.amount],
+                unit = itemRow[CocktailsToGoodsTable.unit],
             )
         }
 }
@@ -116,9 +112,4 @@ private fun getFullTools(id: Int): List<FullIngredient> {
                 unit = "",
             )
         }
-}
-
-
-enum class ItemType(val relation: Int) {
-    GOOD(1)
 }

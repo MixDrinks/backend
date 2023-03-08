@@ -1,6 +1,5 @@
 package org.mixdrinks.view.v2.controllers.search
 
-import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -8,14 +7,13 @@ import org.mixdrinks.data.AlcoholVolumesTable
 import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsToAlcoholVolumesTable
-import org.mixdrinks.data.CocktailsToItemsTable
+import org.mixdrinks.data.CocktailsToGoodsTable
 import org.mixdrinks.data.CocktailsToTastesTable
 import org.mixdrinks.data.CocktailsToToolsTable
-import org.mixdrinks.data.ItemsTable
+import org.mixdrinks.data.GoodsTable
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.data.TastesTable
 import org.mixdrinks.data.ToolsTable
-import org.mixdrinks.view.cocktail.ItemType
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
 import org.mixdrinks.view.v2.data.CocktailId
 
@@ -27,8 +25,8 @@ class CocktailsSourceV2 {
         return@transaction mapOf(
             FilterModels.Filters.TAGS to TagsTable.selectAll()
                 .map { FilterModels.FilterId(it[TagsTable.id].value) },
-            FilterModels.Filters.GOODS to ItemsTable.select { ItemsTable.relation eq ItemType.GOOD.relation }
-                .map { FilterModels.FilterId(it[ItemsTable.id].value) },
+            FilterModels.Filters.GOODS to GoodsTable.selectAll()
+                .map { FilterModels.FilterId(it[GoodsTable.id].value) },
             FilterModels.Filters.TOOLS to ToolsTable.selectAll()
                 .map { FilterModels.FilterId(it[ToolsTable.id].value) },
             FilterModels.Filters.TASTE to TastesTable.selectAll()
@@ -54,7 +52,7 @@ class CocktailsSourceV2 {
                     .select { CocktailToTagTable.cocktailId eq cocktailId.value }
                     .map { FilterModels.FilterId(it[CocktailToTagTable.tagId]) }
 
-                val goodIds = getItemIds(cocktailId, ItemType.GOOD)
+                val goodIds = getItemIds(cocktailId)
 
                 val toolIds = CocktailsToToolsTable
                     .select { CocktailsToToolsTable.cocktailId eq cocktailId.value }
@@ -75,13 +73,10 @@ class CocktailsSourceV2 {
         }
     }
 
-    private fun getItemIds(cocktailId: CocktailId, itemType: ItemType) =
-        CocktailsToItemsTable.slice(CocktailsToItemsTable.cocktailId, CocktailsToItemsTable.itemId)
-            .select {
-                (CocktailsToItemsTable.cocktailId eq cocktailId.value) and
-                        (CocktailsToItemsTable.relation eq itemType.relation)
-            }
-            .map { FilterModels.FilterId(it[CocktailsToItemsTable.itemId].value) }
+    private fun getItemIds(cocktailId: CocktailId) =
+        CocktailsToGoodsTable.slice(CocktailsToGoodsTable.cocktailId, CocktailsToGoodsTable.goodId)
+            .select { CocktailsToGoodsTable.cocktailId eq cocktailId.value }
+            .map { FilterModels.FilterId(it[CocktailsToGoodsTable.goodId].value) }
 
     fun cocktailsBySearch(searchParams: SearchParams): List<CocktailId> {
         return cache.filter { (_, meta) ->
