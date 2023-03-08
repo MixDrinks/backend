@@ -17,7 +17,7 @@ object CocktailsTable : IntIdTable(name = "cocktails", columnName = "id") {
 class Cocktail(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<Cocktail>(CocktailsTable)
 
-    val name by CocktailsTable.name
+    var name by CocktailsTable.name
     var visitCount by CocktailsTable.visitCount
     var ratingCount by CocktailsTable.ratingCount
     var ratingValue by CocktailsTable.ratingValue
@@ -31,16 +31,48 @@ class Cocktail(id: EntityID<Int>) : IntEntity(id) {
     }
 }
 
+class FullCocktail(id: EntityID<Int>) : IntEntity(id) {
+
+    companion object : IntEntityClass<FullCocktail>(CocktailsTable)
+
+    val name by CocktailsTable.name
+    val steps: Array<String> by CocktailsTable.steps
+    val visitCount by CocktailsTable.visitCount
+    val ratingCount by CocktailsTable.ratingCount
+    val ratingValue by CocktailsTable.ratingValue
+
+    val ratting: Float?
+        get() {
+            return ratingValue?.let { ratingValue ->
+                ratingCount.takeIf { it != 0 }?.let { ratingCount ->
+                    ratingValue.toFloat() / ratingCount.toFloat()
+                }
+            }
+        }
+
+    val goods by Item via CocktailsToItemsTable
+
+}
+
 object ItemsTable : IntIdTable(name = "goods", columnName = "id") {
     val name = text("name")
     val about = text("about")
     val relation = integer("relation")
-    val visitCount = integer("visit_count")
+    val visitCount = integer("visit_count").default(0)
+}
+
+class Item(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<Item>(ItemsTable)
+
+    var name by ItemsTable.name
+    var about by ItemsTable.about
+    var relation by ItemsTable.relation
+    var visitCount by ItemsTable.visitCount
 }
 
 object CocktailsToItemsTable : Table(name = "cocktails_to_items") {
-    val cocktailId = integer("cocktail_id")
-    val itemId = integer("good_id")
+    val cocktailId = reference("cocktail_id", CocktailsTable.id)
+    val itemId = reference("good_id", ItemsTable.id)
     val unit = text("unit")
     val amount = integer("amount")
     val relation = integer("relation")
@@ -54,9 +86,15 @@ object TastesTable : IntIdTable(name = "tastes", columnName = "id") {
     val name = text("name")
 }
 
+class Taste(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<Taste>(TastesTable)
+
+    var name by TastesTable.name
+}
+
 object CocktailsToTastesTable : Table(name = "cocktails_to_tastes") {
-    val tasteId = integer("taste_id").references(TastesTable.id)
-    val cocktailId = integer("cocktail_id").references(CocktailsTable.id)
+    val tasteId = reference("taste_id", TastesTable.id)
+    val cocktailId = reference("cocktail_id", CocktailsTable.id)
 }
 
 object AlcoholVolumesTable : IntIdTable(name = "alcohol_volumes", columnName = "id") {
@@ -71,4 +109,23 @@ object CocktailsToAlcoholVolumesTable : Table(name = "cocktails_to_alcohol_volum
 object CocktailToTagTable : Table(name = "cocktails_to_tags") {
     val cocktailId = integer("cocktail_id")
     val tagId = integer("tag_id")
+}
+
+object ToolsTable : IntIdTable(name = "tools", columnName = "id") {
+    val name = text("name")
+    val about = text("about")
+    val visitCount = integer("visit_count").default(0)
+}
+
+class Tool(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<Tool>(ToolsTable)
+
+    var name by ToolsTable.name
+    var about by ToolsTable.about
+    var visitCount by ToolsTable.visitCount
+}
+
+object CocktailsToToolsTable : Table(name = "cocktails_to_tools") {
+    val cocktailId = reference("cocktail_id", CocktailsTable.id)
+    val toolId = reference("tool_id", ToolsTable.id)
 }

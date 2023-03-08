@@ -8,9 +8,11 @@ import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsToAlcoholVolumesTable
 import org.mixdrinks.data.CocktailsToItemsTable
 import org.mixdrinks.data.CocktailsToTastesTable
+import org.mixdrinks.data.CocktailsToToolsTable
 import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.data.TastesTable
+import org.mixdrinks.data.ToolsTable
 import org.mixdrinks.view.cocktail.ItemType
 
 class FilterSource {
@@ -48,6 +50,15 @@ class FilterSource {
                 )
             }
 
+            val tools = ToolsTable.selectAll().map { toolRow ->
+                val toolId = toolRow[ToolsTable.id].value
+                FilterModels.FilterItem(
+                    id = FilterModels.FilterId(toolId),
+                    name = toolRow[ToolsTable.name],
+                    cocktailCount = CocktailsToToolsTable.select { CocktailsToToolsTable.toolId eq toolId }.count()
+                )
+            }
+
             listOf(
                 FilterModels.FilterGroup(
                     FilterModels.Filters.ALCOHOL_VOLUME, alcoholVolume.sortedBy { it.cocktailCount }.reversed()
@@ -62,7 +73,7 @@ class FilterSource {
                     FilterModels.Filters.TAGS, tags.sortedBy { it.cocktailCount }.reversed()
                 ),
                 FilterModels.FilterGroup(
-                    FilterModels.Filters.TOOLS, getItemList(ItemType.TOOL).sortedBy { it.cocktailCount }.reversed()
+                    FilterModels.Filters.TOOLS, tools.sortedBy { it.cocktailCount }.reversed()
                 )
             )
         }

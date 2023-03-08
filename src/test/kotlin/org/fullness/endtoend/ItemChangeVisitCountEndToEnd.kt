@@ -18,7 +18,7 @@ import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.ItemsTable
 import org.mixdrinks.view.v2.controllers.score.item.ItemScoreChangeResponse
-import org.mixdrinks.view.v2.controllers.score.item.itemScoreV2
+import org.mixdrinks.view.v2.controllers.score.item.itemScore
 import org.mixdrinks.view.v2.data.ItemId
 
 class ItemChangeVisitCountEndToEnd : FunSpec({
@@ -46,7 +46,7 @@ class ItemChangeVisitCountEndToEnd : FunSpec({
                     json()
                 }
 
-                itemScoreV2()
+                itemScore()
             }
 
             client.post("v2/item/visit?id=0").let { response ->

@@ -22,7 +22,7 @@ import org.mixdrinks.view.v2.data.CocktailId
 import org.mixdrinks.view.v2.getCocktailId
 import org.mixdrinks.view.v2.roundScore
 
-fun Application.scoreV2(appSettings: AppSettings) {
+fun Application.score(appSettings: AppSettings) {
     routing {
         post("v2/cocktails/score") {
             val id = call.getCocktailId()

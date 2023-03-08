@@ -15,11 +15,8 @@ import org.jetbrains.exposed.sql.Database
 import org.mixdrinks.plugins.configureCache
 import org.mixdrinks.plugins.configureRouting
 import org.mixdrinks.plugins.static
-import org.mixdrinks.view.cocktail.cocktails
 import org.mixdrinks.view.service
-import org.mixdrinks.view.v2.controllers.items.items
 import org.mixdrinks.view.v2.controllers.settings.AppSettings
-import org.mixdrinks.view.v2.controllers.settings.appSetting
 import org.mixdrinks.view.v2.v2
 
 fun main() {
@@ -59,10 +56,6 @@ fun main() {
                 maxVote = config.property("ktor.settings.maxVote").getString().toInt(),
                 pageSize = config.property("ktor.settings.pageSize").getString().toInt()
             )
-
-            cocktails()
-            items()
-            appSetting(appSettings)
 
             v2(appSettings)
             service()
