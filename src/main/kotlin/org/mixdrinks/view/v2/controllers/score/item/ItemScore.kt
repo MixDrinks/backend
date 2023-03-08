@@ -12,8 +12,8 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
-import org.mixdrinks.data.ItemsTable
-import org.mixdrinks.data.ItemsTable.visitCount
+import org.mixdrinks.data.GoodsTable
+import org.mixdrinks.data.GoodsTable.visitCount
 import org.mixdrinks.view.error.QueryRequireException
 import org.mixdrinks.view.v2.data.ItemId
 
@@ -23,7 +23,7 @@ fun Application.itemScore() {
             val id = call.getItemId()
 
             call.respond(transaction {
-                ItemsTable.update({ ItemsTable.id eq id.value }) {
+                GoodsTable.update({ GoodsTable.id eq id.value }) {
                     it[visitCount] = visitCount + 1
                 }
 
@@ -41,7 +41,7 @@ data class ItemScoreChangeResponse(
 )
 
 private fun scoreItemChangeResponse(id: ItemId): ItemScoreChangeResponse {
-    return ItemsTable.select { ItemsTable.id eq id.value }.firstOrNull()?.let {
+    return GoodsTable.select { GoodsTable.id eq id.value }.firstOrNull()?.let {
         ItemScoreChangeResponse(
             cocktailId = id, visitCount = it[visitCount]
         )

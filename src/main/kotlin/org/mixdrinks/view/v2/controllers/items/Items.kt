@@ -8,7 +8,7 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.mixdrinks.data.Item
+import org.mixdrinks.data.Good
 import org.mixdrinks.data.Tool
 import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
@@ -29,7 +29,7 @@ fun Application.items() {
 
 private fun getFullItem(id: Int): ItemVm {
     return transaction {
-        Item.findById(id)?.let { item ->
+        Good.findById(id)?.let { item ->
             val itemId = item.id.value
 
             return@transaction ItemVm(

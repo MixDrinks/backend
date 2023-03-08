@@ -5,12 +5,11 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsTable
-import org.mixdrinks.data.CocktailsToItemsTable
+import org.mixdrinks.data.CocktailsToGoodsTable
 import org.mixdrinks.data.CocktailsToToolsTable
-import org.mixdrinks.data.ItemsTable
+import org.mixdrinks.data.GoodsTable
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.data.ToolsTable
-import org.mixdrinks.view.cocktail.ItemType
 
 fun prepareData(
     cocktails: List<CocktailData>
@@ -42,12 +41,11 @@ private fun insertCocktails(cocktails: List<CocktailData>) {
         }
 
         cocktail.goodIds.forEach { newGoodId ->
-            CocktailsToItemsTable.insert {
+            CocktailsToGoodsTable.insert {
                 it[cocktailId] = cocktail.id
-                it[itemId] = newGoodId
+                it[goodId] = newGoodId
                 it[unit] = ""
                 it[amount] = 10
-                it[relation] = ItemType.GOOD.relation
             }
         }
         cocktail.toolIds.forEach { newToolIds ->
@@ -83,12 +81,11 @@ private fun insertDependencies(cocktails: List<CocktailData>) {
     }
 
     cocktails.flatMap { it.goodIds }.distinct().forEach { goodId ->
-        ItemsTable.insert {
+        GoodsTable.insert {
             it[id] = goodId
             it[name] = ""
             it[about] = ""
             it[visitCount] = 0
-            it[relation] = ItemType.GOOD.relation
         }
     }
 }

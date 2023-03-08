@@ -13,10 +13,9 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.createDataBase
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.mixdrinks.data.ItemsTable
+import org.mixdrinks.data.Good
 import org.mixdrinks.view.v2.controllers.score.item.ItemScoreChangeResponse
 import org.mixdrinks.view.v2.controllers.score.item.itemScore
 import org.mixdrinks.view.v2.data.ItemId
@@ -71,12 +70,10 @@ private fun prepareDatabase(items: List<MockItem>) {
         createDataBase()
 
         items.forEach { item ->
-            ItemsTable.insert {
-                it[id] = item.id
-                it[visitCount] = item.visitCount
-                it[name] = ""
-                it[about] = ""
-                it[relation] = 0
+            Good.new(id = item.id) {
+                visitCount = item.visitCount
+                name = ""
+                about = ""
             }
         }
     }

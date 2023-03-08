@@ -19,12 +19,11 @@ import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsTable
-import org.mixdrinks.data.CocktailsToItemsTable
+import org.mixdrinks.data.CocktailsToGoodsTable
 import org.mixdrinks.data.CocktailsToToolsTable
-import org.mixdrinks.data.ItemsTable
+import org.mixdrinks.data.GoodsTable
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.data.ToolsTable
-import org.mixdrinks.view.cocktail.ItemType
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
 import org.mixdrinks.view.v2.controllers.filter.FilterSource
 import org.mixdrinks.view.v2.controllers.filter.filterMetaInfo
@@ -162,11 +161,10 @@ private fun prepareData(
                 }
 
                 FilterModels.Filters.GOODS -> {
-                    ItemsTable.insert {
+                    GoodsTable.insert {
                         it[id] = tag.id
                         it[name] = tag.name
                         it[about] = ""
-                        it[relation] = ItemType.GOOD.relation
                         it[visitCount] = 0
                     }
 
@@ -178,12 +176,11 @@ private fun prepareData(
                             it[ratingCount] = 10
                             it[ratingValue] = 34
                         }
-                        CocktailsToItemsTable.insert {
-                            it[itemId] = tag.id
+                        CocktailsToGoodsTable.insert {
+                            it[goodId] = tag.id
                             it[cocktailId] = createdId
                             it[unit] = ""
                             it[amount] = 0
-                            it[relation] = ItemType.GOOD.relation
                         }
                     }
                 }
