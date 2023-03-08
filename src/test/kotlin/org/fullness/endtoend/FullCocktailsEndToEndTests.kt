@@ -22,14 +22,13 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailsTable
-import org.mixdrinks.data.CocktailsToItemsTable
+import org.mixdrinks.data.CocktailsToGoodsTable
 import org.mixdrinks.data.CocktailsToTastesTable
 import org.mixdrinks.data.CocktailsToToolsTable
-import org.mixdrinks.data.Item
+import org.mixdrinks.data.Good
 import org.mixdrinks.data.Taste
 import org.mixdrinks.data.Tool
 import org.mixdrinks.view.cocktail.FullCocktailVM
-import org.mixdrinks.view.cocktail.ItemType
 import org.mixdrinks.view.cocktail.TagVM
 import org.mixdrinks.view.cocktail.cocktails
 
@@ -136,18 +135,16 @@ private fun prepareData(tastes: List<String>) {
             )
         }
 
-        Item.new(id = 1) {
+        Good.new(id = 1) {
             name = "Test item 1"
             about = "Test item 1"
-            relation = ItemType.GOOD.relation
         }
 
-        CocktailsToItemsTable.insert {
+        CocktailsToGoodsTable.insert {
             it[cocktailId] = 1
-            it[itemId] = 1
+            it[goodId] = 1
             it[unit] = "ml"
             it[amount] = 100
-            it[relation] = ItemType.GOOD.relation
         }
 
     }

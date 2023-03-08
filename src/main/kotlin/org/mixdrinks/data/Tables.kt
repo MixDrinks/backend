@@ -50,32 +50,29 @@ class FullCocktail(id: EntityID<Int>) : IntEntity(id) {
             }
         }
 
-    val goods by Item via CocktailsToItemsTable
+    val goods by Good via CocktailsToGoodsTable
 
 }
 
-object ItemsTable : IntIdTable(name = "goods", columnName = "id") {
+object GoodsTable : IntIdTable(name = "goods", columnName = "id") {
     val name = text("name")
     val about = text("about")
-    val relation = integer("relation")
     val visitCount = integer("visit_count").default(0)
 }
 
-class Item(id: EntityID<Int>) : IntEntity(id) {
-    companion object : IntEntityClass<Item>(ItemsTable)
+class Good(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<Good>(GoodsTable)
 
-    var name by ItemsTable.name
-    var about by ItemsTable.about
-    var relation by ItemsTable.relation
-    var visitCount by ItemsTable.visitCount
+    var name by GoodsTable.name
+    var about by GoodsTable.about
+    var visitCount by GoodsTable.visitCount
 }
 
-object CocktailsToItemsTable : Table(name = "cocktails_to_items") {
+object CocktailsToGoodsTable : Table(name = "cocktails_to_items") {
     val cocktailId = reference("cocktail_id", CocktailsTable.id)
-    val itemId = reference("good_id", ItemsTable.id)
+    val goodId = reference("good_id", GoodsTable.id)
     val unit = text("unit")
     val amount = integer("amount")
-    val relation = integer("relation")
 }
 
 object TagsTable : IntIdTable(name = "tags", columnName = "id") {
