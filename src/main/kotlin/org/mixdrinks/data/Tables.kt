@@ -79,6 +79,12 @@ object TagsTable : IntIdTable(name = "tags", columnName = "id") {
     val name = text("name")
 }
 
+class Tag(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<Tag>(TagsTable)
+
+    var name by TagsTable.name
+}
+
 object TastesTable : IntIdTable(name = "tastes", columnName = "id") {
     val name = text("name")
 }
@@ -96,6 +102,12 @@ object CocktailsToTastesTable : Table(name = "cocktails_to_tastes") {
 
 object AlcoholVolumesTable : IntIdTable(name = "alcohol_volumes", columnName = "id") {
     val name = text("name")
+}
+
+class AlcoholVolumes(id: EntityID<Int>): IntEntity(id) {
+    companion object : IntEntityClass<AlcoholVolumes>(AlcoholVolumesTable)
+
+    var name by AlcoholVolumesTable.name
 }
 
 object CocktailsToAlcoholVolumesTable : Table(name = "cocktails_to_alcohol_volume") {
