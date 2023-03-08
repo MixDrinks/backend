@@ -59,8 +59,6 @@ class FullItemGoodTest : FunSpec({
             response.status shouldBe HttpStatusCode.NotFound
         }
     }
-
-
 })
 
 private fun verifyResult(id: Int, check: suspend (response: HttpResponse) -> Unit) {
