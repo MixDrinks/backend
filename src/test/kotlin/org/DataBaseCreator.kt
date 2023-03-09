@@ -2,12 +2,15 @@ package org
 
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Transaction
+import org.mixdrinks.data.AlcoholVolumesTable
 import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsToAlcoholVolumesTable
+import org.mixdrinks.data.CocktailsToGlasswareTable
 import org.mixdrinks.data.CocktailsToGoodsTable
 import org.mixdrinks.data.CocktailsToTastesTable
 import org.mixdrinks.data.CocktailsToToolsTable
+import org.mixdrinks.data.GlasswareTable
 import org.mixdrinks.data.GoodsTable
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.data.TastesTable
@@ -26,6 +29,9 @@ fun Transaction.createDataBase() {
         CocktailToTagTable,
         ToolsTable,
         CocktailsToToolsTable,
+        AlcoholVolumesTable,
+        GlasswareTable,
+        CocktailsToGlasswareTable,
     )
     SchemaUtils.create(
         CocktailsTable,
@@ -39,5 +45,8 @@ fun Transaction.createDataBase() {
         CocktailToTagTable,
         ToolsTable,
         CocktailsToToolsTable,
+        AlcoholVolumesTable,
+        GlasswareTable,
+        CocktailsToGlasswareTable,
     )
 }

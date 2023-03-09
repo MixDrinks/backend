@@ -51,6 +51,8 @@ class FullCocktail(id: EntityID<Int>) : IntEntity(id) {
         }
 
     val goods by Good via CocktailsToGoodsTable
+    val tools by Tool via CocktailsToToolsTable
+    val glassware by Glassware via CocktailsToGlasswareTable
 
 }
 
@@ -79,6 +81,12 @@ object TagsTable : IntIdTable(name = "tags", columnName = "id") {
     val name = text("name")
 }
 
+class Tag(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<Tag>(TagsTable)
+
+    var name by TagsTable.name
+}
+
 object TastesTable : IntIdTable(name = "tastes", columnName = "id") {
     val name = text("name")
 }
@@ -96,6 +104,13 @@ object CocktailsToTastesTable : Table(name = "cocktails_to_tastes") {
 
 object AlcoholVolumesTable : IntIdTable(name = "alcohol_volumes", columnName = "id") {
     val name = text("name")
+}
+
+class AlcoholVolumes(id: EntityID<Int>) : IntEntity(id) {
+
+    companion object : IntEntityClass<AlcoholVolumes>(AlcoholVolumesTable)
+
+    var name by AlcoholVolumesTable.name
 }
 
 object CocktailsToAlcoholVolumesTable : Table(name = "cocktails_to_alcohol_volume") {
@@ -125,4 +140,21 @@ class Tool(id: EntityID<Int>) : IntEntity(id) {
 object CocktailsToToolsTable : Table(name = "cocktails_to_tools") {
     val cocktailId = reference("cocktail_id", CocktailsTable.id)
     val toolId = reference("tool_id", ToolsTable.id)
+}
+
+object GlasswareTable : IntIdTable(name = "glassware", columnName = "id") {
+    val name = text("name")
+    val about = text("about")
+}
+
+object CocktailsToGlasswareTable : Table(name = "cocktails_to_glassware") {
+    val cocktailId = reference("cocktail_id", CocktailsTable.id)
+    val glasswareId = reference("glassware_id", GlasswareTable.id)
+}
+
+class Glassware(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<Glassware>(GlasswareTable)
+
+    var name by GlasswareTable.name
+    var about by GlasswareTable.about
 }

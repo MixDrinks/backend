@@ -12,8 +12,6 @@ data class ItemVm(
     val name: String,
     @SerialName("about")
     val about: String,
-    @SerialName("visitCount")
-    val visitCount: Int,
     @SerialName("images")
     val images: List<Image>,
 )
