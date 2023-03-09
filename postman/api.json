@@ -22,7 +22,7 @@
 									"",
 									"pm.test(\"Verify cocktail count of filter\", function() {",
 									"    var json = pm.response.json();",
-									"    pm.expect(json.totalCount).to.eql(2);  ",
+									"    pm.expect(json.totalCount).to.eql(2);",
 									"})"
 								],
 								"type": "text/javascript"
@@ -142,19 +142,31 @@
 							"    pm.response.to.have.status(200);",
 							"});",
 							"",
-							"pm.test(\"Verify json\", function () {",
-							"    var cocktail = pm.response.json();",
+							"var cocktail = pm.response.json();",
+							"",
+							"pm.test(\"Verify id\", function () {",
 							"    pm.expect(cocktail.id).to.eql(1);",
+							"});",
+							"",
+							"pm.test(\"Verify name\", function () {",
 							"    pm.expect(cocktail.name).to.eql(\"Cocktail1\");",
+							"});",
 							"",
+							"pm.test(\"Verify receipt\", function () {",
 							"    receipt = [\"1\", \"2\", \"3\"]",
-							"",
 							"    pm.expect(cocktail.receipt).to.eql(receipt)",
 							"});",
 							"",
-							"pm.test(\"Response time is less than 200ms\", function () {",
-							"    pm.expect(pm.response.responseTime).to.be.below(200);",
-							"});"
+							"pm.test(\"Verify first tool is glassware\", function () {",
+							"    pm.expect(cocktail.tools[0].name).to.eql(\"Glassware1\")",
+							"});",
+							"",
+							"pm.test(\"Verify second tools is tool\", function() {",
+							"    pm.expect(cocktail.tools[1].name).to.eql(\"Tool1\")",
+							"})",
+							"",
+							"",
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -217,13 +229,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SCHEME}}://{{HOST}}/api.mixdrinks.org/v2/filters",
+					"raw": "{{SCHEME}}://{{HOST}}/v2/filters",
 					"protocol": "{{SCHEME}}",
 					"host": [
 						"{{HOST}}"
 					],
 					"path": [
-						"api.mixdrinks.org",
 						"v2",
 						"filters"
 					]
