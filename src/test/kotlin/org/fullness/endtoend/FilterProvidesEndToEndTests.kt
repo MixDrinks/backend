@@ -81,7 +81,7 @@ class FilterProvidesEndToEndTests : FunSpec({
             response.status shouldBe HttpStatusCode.OK
             val result = Json.decodeFromString<List<FilterModels.FilterGroup>>(response.bodyAsText())
 
-            result[2].let { filterGroup: FilterModels.FilterGroup ->
+            result[3].let { filterGroup: FilterModels.FilterGroup ->
                 verifyFilterGroup(filterGroup, FilterModels.Filters.GOODS)
 
                 verifyItems(
@@ -92,7 +92,7 @@ class FilterProvidesEndToEndTests : FunSpec({
                 )
             }
 
-            result[3].let { filterGroup: FilterModels.FilterGroup ->
+            result[4].let { filterGroup: FilterModels.FilterGroup ->
                 verifyFilterGroup(filterGroup, FilterModels.Filters.TAGS)
 
                 verifyItems(
@@ -103,7 +103,7 @@ class FilterProvidesEndToEndTests : FunSpec({
                 )
             }
 
-            result[4].let { filterGroup: FilterModels.FilterGroup ->
+            result[5].let { filterGroup: FilterModels.FilterGroup ->
                 verifyFilterGroup(filterGroup, FilterModels.Filters.TOOLS)
 
                 verifyItems(
