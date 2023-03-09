@@ -6,9 +6,11 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.AlcoholVolumesTable
 import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsToAlcoholVolumesTable
+import org.mixdrinks.data.CocktailsToGlasswareTable
 import org.mixdrinks.data.CocktailsToGoodsTable
 import org.mixdrinks.data.CocktailsToTastesTable
 import org.mixdrinks.data.CocktailsToToolsTable
+import org.mixdrinks.data.Glassware
 import org.mixdrinks.data.Good
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.data.TastesTable
@@ -35,6 +37,9 @@ class FilterSource {
                     FilterModels.Filters.TASTE, tastes.sortedBy { it.cocktailCount }.reversed()
                 ),
                 FilterModels.FilterGroup(
+                    FilterModels.Filters.GLASSWARE, getGlassware().sortedBy { it.cocktailCount }.reversed()
+                ),
+                FilterModels.FilterGroup(
                     FilterModels.Filters.GOODS, goods.sortedBy { it.cocktailCount }.reversed()
                 ),
                 FilterModels.FilterGroup(
@@ -45,6 +50,15 @@ class FilterSource {
                 )
             )
         }
+    }
+
+    private fun getGlassware() = Glassware.all().map {
+        FilterModels.FilterItem(
+            id = FilterModels.FilterId(it.id.value),
+            name = it.name,
+            cocktailCount = CocktailsToGlasswareTable.select { CocktailsToGlasswareTable.glasswareId eq it.id.value }
+                .count()
+        )
     }
 
     private fun getGoods() = Good.all().map {

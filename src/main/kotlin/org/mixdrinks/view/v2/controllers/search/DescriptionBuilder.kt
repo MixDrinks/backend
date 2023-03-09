@@ -3,6 +3,7 @@ package org.mixdrinks.view.v2.controllers.search
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.AlcoholVolumes
+import org.mixdrinks.data.Glassware
 import org.mixdrinks.data.GoodsTable
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.data.Taste
@@ -16,59 +17,91 @@ class DescriptionBuilder {
 
         return transaction {
             buildString {
-                filters[FilterModels.Filters.ALCOHOL_VOLUME.id]
-                    ?.map { it.value }
-                    ?.takeIf { it.isNotEmpty() }
-                    ?.get(0)
-                    ?.let { alcoholVolumeIds ->
-                        AlcoholVolumes.findById(alcoholVolumeIds)?.let {
-                            append(it.name)
-                            append(" ")
-                        }
-                    }
+                addAlcoholDescriptionIfExist(filters[FilterModels.Filters.ALCOHOL_VOLUME.id])
+                addTasteDescriptionIfExist(filters[FilterModels.Filters.TASTE.id])
 
-                filters[FilterModels.Filters.TASTE.id]
-                    ?.map { it.value }
-                    ?.let { tasteIds ->
-                        Taste.find { TastesTable.id inList tasteIds }
-                            .joinToString(separator = " ") { it.name }
-                            .let {
-                                append(it)
-                                append(" ")
-                            }
-                    }
+                append(COCKTAIL_NAME)
 
-                append("коктейлі")
-
-                filters[FilterModels.Filters.TAGS.id]
-                    ?.map { it.value }
-                    ?.takeIf { it.isNotEmpty() }
-                    ?.let { tagIds ->
-                        TagsTable
-                            .select {
-                                TagsTable.id inList tagIds
-                            }
-                            .orderBy(TagsTable.id)
-                            .joinToString(separator = " ") { it[TagsTable.name] }
-                            .let {
-                                append(" ")
-                                append(it)
-                            }
-                    }
-
-                filters[FilterModels.Filters.GOODS.id]
-                    ?.map { it.value }
-                    ?.takeIf { it.isNotEmpty() }
-                    ?.let { goodIds ->
-                        append(" з ")
-                        GoodsTable
-                            .select {
-                                GoodsTable.id inList goodIds
-                            }
-                            .joinToString(separator = " ") { it[GoodsTable.name] }
-                            .let { append(it) }
-                    }
-            }.takeIf { it.isNotEmpty() && it != "коктейлі" }
+                addTagsDescriptionIfExist(filters[FilterModels.Filters.TAGS.id])
+                addGoodsDescriptionIfExist(filters[FilterModels.Filters.GOODS.id])
+                addGlasswareDescriptionIfExist(filters[FilterModels.Filters.GLASSWARE.id])
+            }.takeIf { it.isNotEmpty() && it != COCKTAIL_NAME }
         }
+    }
+
+    private fun StringBuilder.addGlasswareDescriptionIfExist(glasswareIds: List<FilterModels.FilterId>?) {
+        glasswareIds
+            ?.map { it.value }
+            ?.takeIf { it.isNotEmpty() }
+            ?.get(0)
+            ?.let { glasswareId ->
+                Glassware.findById(glasswareId)?.let {
+                    append(" в ")
+                    append(it.name)
+                }
+            }
+    }
+
+    private fun StringBuilder.addGoodsDescriptionIfExist(goodIds: List<FilterModels.FilterId>?) {
+        goodIds
+            ?.map { it.value }
+            ?.takeIf { it.isNotEmpty() }
+            ?.let { safeGoodIds ->
+                append(" з ")
+                GoodsTable
+                    .select {
+                        GoodsTable.id inList safeGoodIds
+                    }
+                    .joinToString(separator = " ") { it[GoodsTable.name] }
+                    .let { append(it) }
+            }
+    }
+
+    private fun StringBuilder.addTagsDescriptionIfExist(tagsId: List<FilterModels.FilterId>?) {
+        tagsId
+            ?.map { it.value }
+            ?.takeIf { it.isNotEmpty() }
+            ?.let { safeTagIds ->
+                TagsTable
+                    .select {
+                        TagsTable.id inList safeTagIds
+                    }
+                    .orderBy(TagsTable.id)
+                    .joinToString(separator = " ") { it[TagsTable.name] }
+                    .let {
+                        append(" ")
+                        append(it)
+                    }
+            }
+    }
+
+    private fun StringBuilder.addTasteDescriptionIfExist(tasteId: List<FilterModels.FilterId>?) {
+        tasteId
+            ?.map { it.value }
+            ?.let { tasteIds ->
+                Taste.find { TastesTable.id inList tasteIds }
+                    .joinToString(separator = " ") { it.name }
+                    .let {
+                        append(it)
+                        append(" ")
+                    }
+            }
+    }
+
+    private fun StringBuilder.addAlcoholDescriptionIfExist(alcoholFilters: List<FilterModels.FilterId>?) {
+        alcoholFilters
+            ?.map { it.value }
+            ?.takeIf { it.isNotEmpty() }
+            ?.get(0)
+            ?.let { safeAlcoholVolumeIds ->
+                AlcoholVolumes.findById(safeAlcoholVolumeIds)?.let {
+                    append(it.name)
+                    append(" ")
+                }
+            }
+    }
+
+    companion object {
+        private const val COCKTAIL_NAME = "коктейлі"
     }
 }

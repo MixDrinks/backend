@@ -7,9 +7,11 @@ import org.mixdrinks.data.AlcoholVolumesTable
 import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsToAlcoholVolumesTable
+import org.mixdrinks.data.CocktailsToGlasswareTable
 import org.mixdrinks.data.CocktailsToGoodsTable
 import org.mixdrinks.data.CocktailsToTastesTable
 import org.mixdrinks.data.CocktailsToToolsTable
+import org.mixdrinks.data.GlasswareTable
 import org.mixdrinks.data.GoodsTable
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.data.TastesTable
@@ -33,8 +35,9 @@ class CocktailsSourceV2 {
                 .map { FilterModels.FilterId(it[TastesTable.id].value) },
             FilterModels.Filters.ALCOHOL_VOLUME to AlcoholVolumesTable.selectAll()
                 .map { FilterModels.FilterId(it[AlcoholVolumesTable.id].value) },
+            FilterModels.Filters.GLASSWARE to GlasswareTable.selectAll()
+                .map { FilterModels.FilterId(it[GlasswareTable.id].value) },
         )
-
     }
 
     init {
@@ -62,12 +65,17 @@ class CocktailsSourceV2 {
                     .select { CocktailsToTastesTable.cocktailId eq cocktailId.value }
                     .map { FilterModels.FilterId(it[CocktailsToTastesTable.tasteId].value) }
 
+                val glassware = CocktailsToGlasswareTable
+                    .select { CocktailsToGlasswareTable.cocktailId eq cocktailId.value }
+                    .map { FilterModels.FilterId(it[CocktailsToGlasswareTable.glasswareId].value) }
+
                 return@associateWith mapOf(
                     FilterModels.Filters.TAGS.id to tagIds,
                     FilterModels.Filters.GOODS.id to goodIds,
                     FilterModels.Filters.TOOLS.id to toolIds,
                     FilterModels.Filters.TASTE.id to tasteIds,
                     FilterModels.Filters.ALCOHOL_VOLUME.id to alcoholVolume,
+                    FilterModels.Filters.GLASSWARE.id to glassware,
                 )
             }
         }

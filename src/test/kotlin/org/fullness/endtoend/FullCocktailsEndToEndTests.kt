@@ -22,9 +22,11 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailsTable
+import org.mixdrinks.data.CocktailsToGlasswareTable
 import org.mixdrinks.data.CocktailsToGoodsTable
 import org.mixdrinks.data.CocktailsToTastesTable
 import org.mixdrinks.data.CocktailsToToolsTable
+import org.mixdrinks.data.Glassware
 import org.mixdrinks.data.Good
 import org.mixdrinks.data.Taste
 import org.mixdrinks.data.Tool
@@ -84,7 +86,7 @@ internal class FullCocktailsEndToEndTests : FunSpec({
             result.receipt shouldBe arrayOf("Test step 1", "Test step 2")
             result.tastes.map(TagVM::name) shouldContainExactly tastes
 
-            result.tools.map { it.name } shouldBe listOf("Test tool 1")
+            result.tools.map { it.name } shouldBe listOf("Test glassware 1", "Test tool 1")
             result.goods.first().let { good ->
                 good.name shouldBe "Test item 1"
                 good.amount shouldBe 100
@@ -105,6 +107,7 @@ class TestCocktail(id: EntityID<Int>) : IntEntity(id) {
 
     var tools by Tool via CocktailsToToolsTable
     var taste by Taste via CocktailsToTastesTable
+    var glassware by Glassware via CocktailsToGlasswareTable
 }
 
 private fun prepareData(tastes: List<String>) {
@@ -133,6 +136,14 @@ private fun prepareData(tastes: List<String>) {
                     }
                 }
             )
+
+            glassware = SizedCollection(listOf(
+                Glassware.new {
+                    name = "Test glassware 1"
+                    about = "Test glassware 1"
+                    visitCount = 0
+                }
+            ))
         }
 
         Good.new(id = 1) {
