@@ -3,6 +3,7 @@ package org.mixdrinks.view.v2.controllers.search
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.AlcoholVolumes
+import org.mixdrinks.data.Glassware
 import org.mixdrinks.data.GoodsTable
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.data.Taste
@@ -67,6 +68,17 @@ class DescriptionBuilder {
                             }
                             .joinToString(separator = " ") { it[GoodsTable.name] }
                             .let { append(it) }
+                    }
+
+                filters[FilterModels.Filters.GLASSWARE.id]
+                    ?.map { it.value }
+                    ?.takeIf { it.isNotEmpty() }
+                    ?.get(0)
+                    ?.let { glasswareId ->
+                        Glassware.findById(glasswareId)?.let {
+                            append(" в ")
+                            append(it.name)
+                        }
                     }
             }.takeIf { it.isNotEmpty() && it != "коктейлі" }
         }

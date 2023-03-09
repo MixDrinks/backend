@@ -8,6 +8,7 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.mixdrinks.data.Glassware
 import org.mixdrinks.data.Good
 import org.mixdrinks.data.Tool
 import org.mixdrinks.view.images.ImageType
@@ -36,7 +37,6 @@ private fun getFullItem(id: Int): ItemVm {
                 id = itemId,
                 name = item.name,
                 about = item.about,
-                visitCount = item.visitCount,
                 images = buildImages(itemId, ImageType.ITEM),
             )
         } ?: let {
@@ -47,10 +47,20 @@ private fun getFullItem(id: Int): ItemVm {
                     id = toolId,
                     name = tool.name,
                     about = tool.about,
-                    visitCount = tool.visitCount,
                     images = buildImages(toolId, ImageType.ITEM),
                 )
-            } ?: throw NotFoundException("Item with id $id not found")
+            } ?: let {
+                Glassware.findById(id)?.let { glassware ->
+                    val glasswareId = glassware.id.value
+
+                    return@transaction ItemVm(
+                        id = glasswareId,
+                        name = glassware.name,
+                        about = glassware.about,
+                        images = buildImages(glasswareId, ImageType.ITEM),
+                    )
+                } ?: throw NotFoundException("Item with id $id not found")
+            }
         }
     }
 }

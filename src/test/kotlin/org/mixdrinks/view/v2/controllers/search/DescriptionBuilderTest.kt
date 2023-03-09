@@ -4,13 +4,12 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import org.createDataBase
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.AlcoholVolumes
+import org.mixdrinks.data.Glassware
 import org.mixdrinks.data.Good
 import org.mixdrinks.data.Tag
-import org.mixdrinks.data.TagsTable
 import org.mixdrinks.data.Taste
 import org.mixdrinks.data.Tool
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
@@ -31,6 +30,7 @@ class DescriptionBuilderTest : FunSpec({
             goods = (1..10).toList(),
             tools = (1..10).toList(),
             tags = (1..10).toList(),
+            glassware = (1..10).toList(),
         )
     }
 
@@ -69,7 +69,7 @@ class DescriptionBuilderTest : FunSpec({
         ) shouldBe "коктейлі Tag4 Tag7 з Good4 Good5"
     }
 
-    test("Verify description with all") {
+    test("Verify description with all but witouch glassware") {
         buildDescription(
             mapOf(
                 FilterModels.Filters.ALCOHOL_VOLUME.id to listOf(FilterModels.FilterId(1)),
@@ -80,12 +80,32 @@ class DescriptionBuilderTest : FunSpec({
         ) shouldBe "AlcoholVolumes1 коктейлі Tag4 Tag7 з Good4 Good5"
     }
 
+    test("Verify description with all") {
+        buildDescription(
+            mapOf(
+                FilterModels.Filters.ALCOHOL_VOLUME.id to listOf(FilterModels.FilterId(1)),
+                FilterModels.Filters.GOODS.id to listOf(FilterModels.FilterId(4), FilterModels.FilterId(5)),
+                FilterModels.Filters.TAGS.id to listOf(FilterModels.FilterId(7), FilterModels.FilterId(4)),
+                FilterModels.Filters.TOOLS.id to listOf(FilterModels.FilterId(7), FilterModels.FilterId(4)),
+                FilterModels.Filters.GLASSWARE.id to listOf(FilterModels.FilterId(1)),
+            )
+        ) shouldBe "AlcoholVolumes1 коктейлі Tag4 Tag7 з Good4 Good5 в Glassware1"
+    }
+
     test("Verify description just tools") {
         buildDescription(
             mapOf(
                 FilterModels.Filters.TOOLS.id to listOf(FilterModels.FilterId(7), FilterModels.FilterId(4)),
             )
         ) shouldBe null
+    }
+
+    test("Verify description just glassware") {
+        buildDescription(
+            mapOf(
+                FilterModels.Filters.GLASSWARE.id to listOf(FilterModels.FilterId(7)),
+            )
+        ) shouldBe "коктейлі в Glassware7"
     }
 })
 
@@ -95,12 +115,14 @@ private fun buildDescription(filters: Map<FilterModels.FilterGroupId, List<Filte
     )
 }
 
+@Suppress("LongParameterList")
 private fun prepareData(
     alcoholVolumes: List<Int> = emptyList(),
     goods: List<Int> = emptyList(),
     tools: List<Int> = emptyList(),
     taste: List<Int> = emptyList(),
     tags: List<Int> = emptyList(),
+    glassware: List<Int> = emptyList(),
 ) {
     transaction {
         createDataBase()
@@ -136,6 +158,13 @@ private fun prepareData(
         tags.forEach {
             Tag.new(id = it) {
                 name = "Tag$it"
+            }
+        }
+
+        glassware.forEach {
+            Glassware.new(id = it) {
+                name = "Glassware$it"
+                about = "About"
             }
         }
     }

@@ -31,7 +31,7 @@ data class FullCocktailVM(
     @SerialName("receipt") val receipt: List<String>,
     @SerialName("images") val images: List<Image>,
     @SerialName("goods") val goods: List<FullIngredient>,
-    @SerialName("tools") val tools: List<FullIngredient>,
+    @SerialName("tools") val tools: List<FullTool>,
     @SerialName("tags") val tags: List<TagVM>,
     @SerialName("tastes") val tastes: List<TagVM>,
 )
@@ -43,6 +43,13 @@ data class FullIngredient(
     @SerialName("images") val images: List<Image>,
     @SerialName("amount") val amount: Int,
     @SerialName("unit") val unit: String,
+)
+
+@Serializable
+data class FullTool(
+    @SerialName("id") val id: Int,
+    @SerialName("name") val name: String,
+    @SerialName("images") val images: List<Image>,
 )
 
 @Serializable
