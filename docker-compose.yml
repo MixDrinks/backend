@@ -4,6 +4,7 @@ services:
   app:
     container_name: app_container
     build: .
+    restart: always
     ports:
       - "8080:8080"
     environment:

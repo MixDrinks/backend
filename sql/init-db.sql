@@ -133,3 +133,28 @@ create table cocktails_to_tools
 
 insert into cocktails_to_tools (cocktail_id, tool_id)
 values (1, 1);
+
+create table glassware
+(
+    id    integer not null
+        constraint glassware_pk
+            primary key,
+    name  text    not null,
+    about text    not null
+);
+
+create table cocktails_to_glassware
+(
+    cocktail_id  integer not null
+        constraint cocktails_to_glassware_cocktails_null_fk
+            references cocktails,
+    glassware_id integer not null
+        constraint cocktails_to_glassware_glassware_null_fk
+            references glassware
+);
+
+insert into glassware (id, name, about)
+values (1, 'Glassware1', 'About1');
+
+insert into cocktails_to_glassware (cocktail_id, glassware_id)
+values (1, 1);

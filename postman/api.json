@@ -150,6 +150,10 @@
 							"    receipt = [\"1\", \"2\", \"3\"]",
 							"",
 							"    pm.expect(cocktail.receipt).to.eql(receipt)",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -213,12 +217,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SCHEME}}://{{HOST}}/v2/filters",
+					"raw": "{{SCHEME}}://{{HOST}}/api.mixdrinks.org/v2/filters",
 					"protocol": "{{SCHEME}}",
 					"host": [
 						"{{HOST}}"
 					],
 					"path": [
+						"api.mixdrinks.org",
 						"v2",
 						"filters"
 					]
