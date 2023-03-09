@@ -69,7 +69,7 @@ class DescriptionBuilderTest : FunSpec({
         ) shouldBe "коктейлі Tag4 Tag7 з Good4 Good5"
     }
 
-    test("Verify description with all but witouch glassware") {
+    test("Verify description with all but without glassware") {
         buildDescription(
             mapOf(
                 FilterModels.Filters.ALCOHOL_VOLUME.id to listOf(FilterModels.FilterId(1)),

@@ -107,6 +107,7 @@ object AlcoholVolumesTable : IntIdTable(name = "alcohol_volumes", columnName = "
 }
 
 class AlcoholVolumes(id: EntityID<Int>) : IntEntity(id) {
+
     companion object : IntEntityClass<AlcoholVolumes>(AlcoholVolumesTable)
 
     var name by AlcoholVolumesTable.name

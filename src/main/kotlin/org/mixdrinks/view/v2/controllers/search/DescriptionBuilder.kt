@@ -80,6 +80,7 @@ class DescriptionBuilder {
                             append(it.name)
                         }
                     }
+
             }.takeIf { it.isNotEmpty() && it != "коктейлі" }
         }
     }
