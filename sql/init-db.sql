@@ -154,7 +154,7 @@ create table cocktails_to_glassware
 );
 
 insert into glassware (id, name, about)
-values (1, 'Glassware1', 'About1');
+values (100, 'Glassware1', 'About1');
 
 insert into cocktails_to_glassware (cocktail_id, glassware_id)
-values (1, 1);
+values (1, 100);
