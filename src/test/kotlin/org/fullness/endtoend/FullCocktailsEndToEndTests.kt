@@ -138,7 +138,7 @@ private fun prepareData(tastes: List<String>) {
             )
 
             glassware = SizedCollection(listOf(
-                Glassware.new {
+                Glassware.new(id = 10) {
                     name = "Test glassware 1"
                     about = "Test glassware 1"
                     visitCount = 0
