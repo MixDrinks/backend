@@ -128,5 +128,5 @@ private fun getFullTools(cocktail: FullCocktail): List<FullTool> {
                 )
             }
         )
-    }
+    }.distinctBy { it.id }
 }
