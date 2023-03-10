@@ -92,6 +92,8 @@ internal class FullCocktailsEndToEndTests : FunSpec({
                 good.amount shouldBe 100
                 good.unit shouldBe "ml"
             }
+
+            result.glassware.name shouldBe "Test glassware 1"
         }
     }
 })
