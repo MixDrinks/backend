@@ -20,9 +20,9 @@ import org.mixdrinks.data.FullCocktail
 import org.mixdrinks.data.GoodsTable
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.data.TastesTable
+import org.mixdrinks.dto.CocktailId
 import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
-import org.mixdrinks.view.v2.data.CocktailId
 import org.mixdrinks.view.v2.data.TagId
 
 fun Application.cocktails() {
@@ -54,7 +54,7 @@ private fun getFullCocktail(id: Int): FullCocktailVM {
         return@transaction FullCocktail.findById(id)?.load(FullCocktail::goods, FullCocktail::glassware)
             ?.let { cocktail ->
                 FullCocktailVM(
-                    id = cocktail.id.value,
+                    id = CocktailId(cocktail.id.value),
                     name = cocktail.name,
                     visitCount = cocktail.visitCount,
                     rating = cocktail.ratting,
@@ -121,5 +121,5 @@ private fun getFullTools(cocktail: FullCocktail): List<FullTool> {
                 )
             }
         )
-    }
+    }.distinctBy { it.id }
 }

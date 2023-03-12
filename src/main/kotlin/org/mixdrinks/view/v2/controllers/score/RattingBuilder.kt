@@ -3,13 +3,14 @@ package org.mixdrinks.view.v2.controllers.score
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailsTable
+import org.mixdrinks.domain.CocktailSelector
+import org.mixdrinks.dto.CocktailId
 import org.mixdrinks.view.rating.getRating
-import org.mixdrinks.view.v2.controllers.search.CocktailsSourceV2
 import org.mixdrinks.view.v2.controllers.search.Page
 import org.mixdrinks.view.v2.controllers.search.SearchParams
-import org.mixdrinks.view.v2.data.CocktailId
 
 @Serializable
 data class RattingItem(
@@ -19,13 +20,19 @@ data class RattingItem(
 )
 
 class RattingBuilder(
-    private val cocktailsSourceV2: CocktailsSourceV2
+    private val cocktailSelector: CocktailSelector,
 ) {
     fun getRattingSearchResponse(searchParams: SearchParams, page: Page?): List<RattingItem> {
-        val cocktailIds = cocktailsSourceV2.cocktailsBySearch(searchParams)
+        val cocktailIds = if (searchParams.filters.isNotEmpty()) {
+            cocktailSelector.getCocktailIds(searchParams.filters).map { it.id }
+        } else {
+            transaction {
+                CocktailsTable.slice(CocktailsTable.id).selectAll().map { it[CocktailsTable.id].value }
+            }
+        }
 
         return transaction {
-            val query = CocktailsTable.select { CocktailsTable.id inList cocktailIds.map { it.value } }
+            val query = CocktailsTable.select { CocktailsTable.id inList cocktailIds }
 
             return@transaction if (page != null) {
                 query.copy().limit(page.limit, page.offset.toLong())

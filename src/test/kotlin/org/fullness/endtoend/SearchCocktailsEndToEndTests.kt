@@ -22,8 +22,9 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailsTable
-import org.mixdrinks.view.v2.controllers.search.CocktailsSourceV2
+import org.mixdrinks.domain.CocktailSelector
 import org.mixdrinks.view.v2.controllers.search.DescriptionBuilder
+import org.mixdrinks.view.v2.controllers.search.FilterCache
 import org.mixdrinks.view.v2.controllers.search.SearchResponseBuilder
 import org.mixdrinks.view.v2.controllers.search.searchView
 import org.mixdrinks.view.v2.controllers.settings.AppSettings
@@ -68,7 +69,7 @@ internal class SearchCocktailsEndToEndTests : FunSpec({
             result.totalCount shouldBe 11
             result.cocktails.size shouldBe 11
 
-            result.cocktails.first { it.id == mockId }.run {
+            result.cocktails.first { it.id.id == mockId }.run {
                 name shouldBe mockCocktails.name
                 rating shouldBe mockCocktails.rating
                 visitCount shouldBe mockCocktails.visitCount
@@ -147,7 +148,7 @@ internal class SearchCocktailsEndToEndTests : FunSpec({
                 response.status shouldBe HttpStatusCode.OK
                 val result = Json.decodeFromString<SearchResponseBuilder.SearchResponse>(response.bodyAsText())
 
-                result.cocktails.map { it.id } shouldBe listOf(2, 1)
+                result.cocktails.map { it.id.id } shouldBe listOf(2, 1)
             }
         }
 
@@ -189,9 +190,9 @@ internal class SearchCocktailsEndToEndTests : FunSpec({
 
                 val resultId = result.cocktails.map { it.id }
 
-                resultId[0] shouldBe 3
+                resultId[0].id shouldBe 3
 
-                resultId shouldContainAll listOf(1, 2)
+                resultId.map { it.id } shouldContainAll listOf(1, 2)
             }
         }
 
@@ -232,7 +233,7 @@ internal class SearchCocktailsEndToEndTests : FunSpec({
                 response.status shouldBe HttpStatusCode.OK
                 val result = Json.decodeFromString<SearchResponseBuilder.SearchResponse>(response.bodyAsText())
 
-                result.cocktails.map { it.id } shouldBe listOf(1, 3, 2)
+                result.cocktails.map { it.id.id } shouldBe listOf(1, 3, 2)
             }
         }
 
@@ -245,7 +246,11 @@ private fun ApplicationTestBuilder.initApp(pageSize: Int = 100) {
         install(ContentNegotiation) {
             json()
         }
-        searchView(SearchResponseBuilder(CocktailsSourceV2(), DescriptionBuilder()), createAppSetting(pageSize))
+        val filterCache = FilterCache()
+        searchView(
+            SearchResponseBuilder(filterCache, CocktailSelector(filterCache.filterGroups), DescriptionBuilder()),
+            createAppSetting(pageSize)
+        )
     }
 }
 

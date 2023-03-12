@@ -15,10 +15,10 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.mixdrinks.data.Cocktail
 import org.mixdrinks.data.CocktailsTable
+import org.mixdrinks.dto.CocktailId
 import org.mixdrinks.view.error.QueryRequireException
 import org.mixdrinks.view.error.VoteError
 import org.mixdrinks.view.v2.controllers.settings.AppSettings
-import org.mixdrinks.view.v2.data.CocktailId
 import org.mixdrinks.view.v2.getCocktailId
 import org.mixdrinks.view.v2.roundScore
 
@@ -29,7 +29,7 @@ fun Application.score(appSettings: AppSettings) {
             val vote = call.getRatting(appSettings)
 
             call.respond(transaction {
-                CocktailsTable.update({ CocktailsTable.id eq id.value }) {
+                CocktailsTable.update({ CocktailsTable.id eq id.id }) {
                     it[ratingValue] = ratingValue + vote
                     it[ratingCount] = ratingCount + 1
                 }
@@ -41,7 +41,7 @@ fun Application.score(appSettings: AppSettings) {
             val id = call.getCocktailId()
 
             call.respond(transaction {
-                CocktailsTable.update({ CocktailsTable.id eq id.value }) {
+                CocktailsTable.update({ CocktailsTable.id eq id.id }) {
                     it[visitCount] = visitCount + 1
                 }
 
@@ -63,7 +63,7 @@ data class CocktailScoreChangeResponse(
 )
 
 fun scoreCocktailsChangeResponse(id: CocktailId): CocktailScoreChangeResponse {
-    val cocktail = Cocktail.findById(id.value) ?: throw QueryRequireException("Cocktail not found")
+    val cocktail = Cocktail.findById(id.id) ?: throw QueryRequireException("Cocktail not found")
 
     return CocktailScoreChangeResponse(
         cocktailId = id,
@@ -86,4 +86,3 @@ private suspend fun ApplicationCall.getRatting(appSettings: AppSettings): Int {
 data class ScoreRequest(
     @SerialName("value") val value: Int,
 )
-
