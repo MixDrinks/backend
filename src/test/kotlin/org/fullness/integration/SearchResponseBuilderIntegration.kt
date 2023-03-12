@@ -212,11 +212,17 @@ private fun createSearchParam(
     toolIds: List<Int> = emptyList(),
 ): SearchParams {
     return SearchParams(
-        mapOf(
-            FilterModels.Filters.TAGS.id to tagIds.map { FilterId(it) },
-            FilterModels.Filters.GOODS.id to goodIds.map { FilterId(it) },
-            FilterModels.Filters.TOOLS.id to toolIds.map { FilterId(it) },
-        )
+        buildMap {
+            if (tagIds.isNotEmpty()) {
+                put(FilterModels.Filters.TAGS.id, tagIds.map { FilterId(it) })
+            }
+            if (goodIds.isNotEmpty()) {
+                put(FilterModels.Filters.GOODS.id, goodIds.map { FilterId(it) })
+            }
+            if (toolIds.isNotEmpty()) {
+                put(FilterModels.Filters.TOOLS.id, toolIds.map { FilterId(it) })
+            }
+        }
     )
 }
 

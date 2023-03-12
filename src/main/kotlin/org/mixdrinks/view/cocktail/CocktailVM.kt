@@ -14,7 +14,7 @@ data class SimpleCocktailVM(
 
 @Serializable
 data class CompactCocktailVM(
-    @SerialName("id") val id: Int,
+    @SerialName("id") val id: CocktailId,
     @SerialName("name") val name: String,
     @SerialName("rating") val rating: Float?,
     @SerialName("visitCount") val visitCount: Int,
@@ -23,7 +23,7 @@ data class CompactCocktailVM(
 
 @Serializable
 data class FullCocktailVM(
-    @SerialName("id") val id: Int,
+    @SerialName("id") val id: CocktailId,
     @SerialName("name") val name: String,
     @SerialName("visitCount") val visitCount: Int,
     @SerialName("rating") val rating: Float?,
