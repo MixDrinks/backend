@@ -59,12 +59,13 @@ private fun getFullCocktail(id: Int): FullCocktailVM {
                 receipt = CocktailsTable.select { CocktailsTable.id eq id }.first()[CocktailsTable.steps].toList(),
                 goods = getCocktailGoods(cocktail),
                 tools = getFullTools(cocktail),
-                tags = getCocktailTags(cocktail) + getTastes(cocktail),
+                tags = getCocktailTags(cocktail),// + getTastes(cocktail),
             )
         } ?: throw NotFoundException("Cocktail with id $id not found")
     }
 }
 
+@Suppress("UnusedPrivateMember")
 private fun getTastes(cocktail: FullCocktail): List<TagVM> {
     return cocktail.taste.map {
         return@map buildTagVM(it.id, it.name, FilterModels.Filters.TASTE)
