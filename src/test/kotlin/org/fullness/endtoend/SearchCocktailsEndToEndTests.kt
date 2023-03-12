@@ -192,7 +192,7 @@ internal class SearchCocktailsEndToEndTests : FunSpec({
 
                 resultId[0].id shouldBe 3
 
-                resultId shouldContainAll listOf(1, 2)
+                resultId.map { it.id } shouldContainAll listOf(1, 2)
             }
         }
 

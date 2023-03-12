@@ -55,7 +55,7 @@ class SearchResponseBuilderIntegration : FunSpec({
             searchParams = SearchParams(), page = null, sortType = SortType.MOST_POPULAR
         )
 
-        result.cocktails.map { it.id } shouldContainExactlyInAnyOrder listOf(0, 1, 2)
+        result.cocktails.map { it.id.id } shouldContainExactlyInAnyOrder listOf(0, 1, 2)
 
         verifyFutureCountResponse(
             result, FilterModels.Filters.TAGS, mapOf(
@@ -115,7 +115,7 @@ class SearchResponseBuilderIntegration : FunSpec({
             sortType = SortType.MOST_POPULAR
         )
 
-        result.cocktails.map { it.id } shouldContainExactlyInAnyOrder listOf(0, 1)
+        result.cocktails.map { it.id.id } shouldContainExactlyInAnyOrder listOf(0, 1)
 
         verifyFutureCountResponse(
             result, FilterModels.Filters.TAGS, mapOf(
@@ -178,7 +178,7 @@ class SearchResponseBuilderIntegration : FunSpec({
             sortType = SortType.MOST_POPULAR
         )
 
-        result.cocktails.map { it.id } shouldContainExactlyInAnyOrder listOf(0)
+        result.cocktails.map { it.id.id } shouldContainExactlyInAnyOrder listOf(0)
 
         verifyFutureCountResponse(
             result, FilterModels.Filters.TAGS, mapOf(
