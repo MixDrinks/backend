@@ -1,7 +1,6 @@
 package org.fullness.endtoend
 
 import io.kotest.core.spec.style.FunSpec
-import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
@@ -32,7 +31,6 @@ import org.mixdrinks.data.Taste
 import org.mixdrinks.data.Tool
 import org.mixdrinks.dto.CocktailId
 import org.mixdrinks.view.cocktail.FullCocktailVM
-import org.mixdrinks.view.cocktail.TagVM
 import org.mixdrinks.view.cocktail.cocktails
 
 internal class FullCocktailsEndToEndTests : FunSpec({
