@@ -94,6 +94,131 @@
 			]
 		},
 		{
+			"name": "Items",
+			"item": [
+				{
+					"name": "Get tool",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var tool = pm.response.json();",
+									"",
+									"pm.test(\"Verify id\", function () {",
+									"    pm.expect(tool.id).to.eql(1);",
+									"    pm.expect(tool.name).to.eql(\"Tool1\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SCHEME}}://{{HOST}}/v2/tool/1",
+							"protocol": "{{SCHEME}}",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"v2",
+								"tool",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var good = pm.response.json();",
+									"",
+									"pm.test(\"Verify good\", function () {",
+									"    pm.expect(good.id).to.eql(1);",
+									"    pm.expect(good.name).to.eql(\"Good1\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SCHEME}}://{{HOST}}/v2/good/1",
+							"protocol": "{{SCHEME}}",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"v2",
+								"good",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get glassware",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var glassware = pm.response.json();",
+									"",
+									"pm.test(\"Verify good\", function () {",
+									"    pm.expect(glassware.id).to.eql(100);",
+									"    pm.expect(glassware.name).to.eql(\"Glassware1\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SCHEME}}://{{HOST}}/v2/glassware/100",
+							"protocol": "{{SCHEME}}",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"v2",
+								"glassware",
+								"100"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Get all cocktails",
 			"event": [
 				{
