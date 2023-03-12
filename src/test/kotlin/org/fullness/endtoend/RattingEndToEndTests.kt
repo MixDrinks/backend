@@ -20,14 +20,15 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailsTable
+import org.mixdrinks.domain.CocktailSelector
+import org.mixdrinks.dto.CocktailId
 import org.mixdrinks.view.v2.controllers.score.CocktailScoreChangeResponse
 import org.mixdrinks.view.v2.controllers.score.RattingBuilder
 import org.mixdrinks.view.v2.controllers.score.RattingItem
 import org.mixdrinks.view.v2.controllers.score.rattingSearchView
 import org.mixdrinks.view.v2.controllers.score.score
-import org.mixdrinks.view.v2.controllers.search.CocktailsSourceV2
+import org.mixdrinks.view.v2.controllers.search.FilterCache
 import org.mixdrinks.view.v2.controllers.settings.AppSettings
-import org.mixdrinks.view.v2.data.CocktailId
 
 class RattingEndToEndTests : FunSpec({
 
@@ -56,7 +57,8 @@ class RattingEndToEndTests : FunSpec({
                     json()
                 }
                 val appSetting = AppSettings(1, 5, 10)
-                rattingSearchView(RattingBuilder(CocktailsSourceV2()), appSetting)
+                val filterCache = FilterCache()
+                rattingSearchView(RattingBuilder(CocktailSelector(filterCache.filterGroups)), appSetting)
                 score(appSetting)
             }
 
@@ -114,7 +116,8 @@ class RattingEndToEndTests : FunSpec({
                     json()
                 }
                 val appSetting = AppSettings(1, 5, 10)
-                rattingSearchView(RattingBuilder(CocktailsSourceV2()), appSetting)
+                val filterCache = FilterCache()
+                rattingSearchView(RattingBuilder(CocktailSelector(filterCache.filterGroups)), appSetting)
                 score(appSetting)
             }
 

@@ -5,9 +5,14 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.exposedLogger
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailsTable
+import org.mixdrinks.domain.CocktailSelector
+import org.mixdrinks.dto.FilterGroupId
+import org.mixdrinks.dto.FilterId
 import org.mixdrinks.view.cocktail.CompactCocktailVM
 import org.mixdrinks.view.cocktail.domain.SortType
 import org.mixdrinks.view.images.ImageType
@@ -15,7 +20,8 @@ import org.mixdrinks.view.images.buildImages
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
 
 class SearchResponseBuilder(
-    private val cocktailsSourceV2: CocktailsSourceV2,
+    private val filterCache: FilterCache,
+    private val cocktailSelector: CocktailSelector,
     private val descriptionBuilder: DescriptionBuilder,
 ) {
 
@@ -23,18 +29,25 @@ class SearchResponseBuilder(
     data class SearchResponse(
         @SerialName("totalCount") val totalCount: Int,
         @SerialName("cocktails") val cocktails: List<CompactCocktailVM>,
-        @SerialName("futureCounts") val futureCounts: Map<FilterModels.FilterGroupId, List<FilterCount>>,
+        @SerialName("futureCounts") val futureCounts: Map<FilterGroupId, List<FilterCount>>,
         @SerialName("descriptions") val description: String?,
     )
 
     @Serializable
     data class FilterCount(
-        @SerialName("id") val id: FilterModels.FilterId,
+        @SerialName("id") val id: FilterId,
         @SerialName("count") val count: Int,
     )
 
     fun getCocktailsBySearch(searchParams: SearchParams, page: Page?, sortType: SortType): SearchResponse {
-        val cocktailsIds: List<Int> = cocktailsSourceV2.cocktailsBySearch(searchParams).map { it.value }
+        exposedLogger.info("searchParams: ${searchParams.filters}")
+        val cocktailsIds = if (searchParams.filters.isNotEmpty()) {
+            cocktailSelector.getCocktailIds(searchParams.filters).map { it.id }
+        } else {
+            transaction {
+                CocktailsTable.slice(CocktailsTable.id).selectAll().map { it[CocktailsTable.id].value }
+            }
+        }
 
         val sortColumn: Expression<*> = when (sortType) {
             SortType.MOST_POPULAR -> CocktailsTable.visitCount
@@ -56,16 +69,16 @@ class SearchResponseBuilder(
 
             val futureCounts: Map<FilterModels.Filters, List<FilterCount>> =
                 FilterModels.Filters.values().associateWith { filter ->
-                    val filterIds: List<FilterModels.FilterId> = cocktailsSourceV2.filterIds[filter]!!
+                    val filterIds: List<FilterId> = filterCache.filterIds[filter]!!
 
                     filterIds.map { filterId ->
-                        val futureSearchParam: MutableMap<FilterModels.FilterGroupId, List<FilterModels.FilterId>> =
+                        val futureSearchParam: MutableMap<FilterGroupId, List<FilterId>> =
                             searchParams.filters.toMutableMap()
                         futureSearchParam[filter.id] = futureSearchParam[filter.id].orEmpty().plus(filterId)
 
                         FilterCount(
                             id = filterId,
-                            count = cocktailsSourceV2.cocktailsBySearch(SearchParams(futureSearchParam)).count()
+                            count = cocktailSelector.getCocktailIds(futureSearchParam).count(),
                         )
                     }
                 }

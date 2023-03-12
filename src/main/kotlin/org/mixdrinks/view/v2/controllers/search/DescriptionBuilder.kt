@@ -8,6 +8,7 @@ import org.mixdrinks.data.GoodsTable
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.data.Taste
 import org.mixdrinks.data.TastesTable
+import org.mixdrinks.dto.FilterId
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
 
 class DescriptionBuilder {
@@ -29,7 +30,7 @@ class DescriptionBuilder {
         }
     }
 
-    private fun StringBuilder.addGlasswareDescriptionIfExist(glasswareIds: List<FilterModels.FilterId>?) {
+    private fun StringBuilder.addGlasswareDescriptionIfExist(glasswareIds: List<FilterId>?) {
         glasswareIds
             ?.map { it.value }
             ?.takeIf { it.isNotEmpty() }
@@ -42,7 +43,7 @@ class DescriptionBuilder {
             }
     }
 
-    private fun StringBuilder.addGoodsDescriptionIfExist(goodIds: List<FilterModels.FilterId>?) {
+    private fun StringBuilder.addGoodsDescriptionIfExist(goodIds: List<FilterId>?) {
         goodIds
             ?.map { it.value }
             ?.takeIf { it.isNotEmpty() }
@@ -57,7 +58,7 @@ class DescriptionBuilder {
             }
     }
 
-    private fun StringBuilder.addTagsDescriptionIfExist(tagsId: List<FilterModels.FilterId>?) {
+    private fun StringBuilder.addTagsDescriptionIfExist(tagsId: List<FilterId>?) {
         tagsId
             ?.map { it.value }
             ?.takeIf { it.isNotEmpty() }
@@ -75,7 +76,7 @@ class DescriptionBuilder {
             }
     }
 
-    private fun StringBuilder.addTasteDescriptionIfExist(tasteId: List<FilterModels.FilterId>?) {
+    private fun StringBuilder.addTasteDescriptionIfExist(tasteId: List<FilterId>?) {
         tasteId
             ?.map { it.value }
             ?.let { tasteIds ->
@@ -88,7 +89,7 @@ class DescriptionBuilder {
             }
     }
 
-    private fun StringBuilder.addAlcoholDescriptionIfExist(alcoholFilters: List<FilterModels.FilterId>?) {
+    private fun StringBuilder.addAlcoholDescriptionIfExist(alcoholFilters: List<FilterId>?) {
         alcoholFilters
             ?.map { it.value }
             ?.takeIf { it.isNotEmpty() }

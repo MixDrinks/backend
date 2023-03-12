@@ -24,6 +24,7 @@ import org.mixdrinks.data.CocktailsToToolsTable
 import org.mixdrinks.data.GoodsTable
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.data.ToolsTable
+import org.mixdrinks.dto.FilterId
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
 import org.mixdrinks.view.v2.controllers.filter.FilterSource
 import org.mixdrinks.view.v2.controllers.filter.filterMetaInfo
@@ -126,7 +127,7 @@ private fun verifyFilterGroup(filterGroup: FilterModels.FilterGroup, filterModel
 private fun verifyItems(items: List<FilterModels.FilterItem>, idToCount: List<Pair<Int, Int>>) {
     items shouldBe idToCount.map { (id, count) ->
         FilterModels.FilterItem(
-            FilterModels.FilterId(id),
+            FilterId(id),
             "Name$id",
             count.toLong()
         )
@@ -145,6 +146,14 @@ private fun prepareData(
         createDataBase()
 
         tags.forEachIndexed { index, tag ->
+            CocktailsTable.insert {
+                it[id] = index
+                it[name] = "Cocktail$index"
+                it[steps] = arrayOf()
+                it[visitCount] = 10
+                it[ratingCount] = 10
+                it[ratingValue] = 10
+            }
             when (tag.type) {
                 FilterModels.Filters.TAGS -> {
                     TagsTable.insert {
@@ -169,16 +178,9 @@ private fun prepareData(
                     }
 
                     repeat(tag.cocktailsCount) {
-                        val createdId = CocktailsTable.insertAndGetId {
-                            it[name] = "Cocktail$index"
-                            it[steps] = arrayOf()
-                            it[visitCount] = 0
-                            it[ratingCount] = 10
-                            it[ratingValue] = 34
-                        }
                         CocktailsToGoodsTable.insert {
                             it[goodId] = tag.id
-                            it[cocktailId] = createdId
+                            it[cocktailId] = index
                             it[unit] = ""
                             it[amount] = 0
                         }

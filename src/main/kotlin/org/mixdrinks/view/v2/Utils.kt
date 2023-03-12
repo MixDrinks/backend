@@ -1,8 +1,8 @@
 package org.mixdrinks.view.v2
 
 import io.ktor.server.application.ApplicationCall
+import org.mixdrinks.dto.CocktailId
 import org.mixdrinks.view.error.QueryRequireException
-import org.mixdrinks.view.v2.data.CocktailId
 import java.math.BigDecimal
 import java.math.RoundingMode
 

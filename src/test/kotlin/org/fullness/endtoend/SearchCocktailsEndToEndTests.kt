@@ -22,8 +22,9 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailsTable
-import org.mixdrinks.view.v2.controllers.search.CocktailsSourceV2
+import org.mixdrinks.domain.CocktailSelector
 import org.mixdrinks.view.v2.controllers.search.DescriptionBuilder
+import org.mixdrinks.view.v2.controllers.search.FilterCache
 import org.mixdrinks.view.v2.controllers.search.SearchResponseBuilder
 import org.mixdrinks.view.v2.controllers.search.searchView
 import org.mixdrinks.view.v2.controllers.settings.AppSettings
@@ -245,7 +246,11 @@ private fun ApplicationTestBuilder.initApp(pageSize: Int = 100) {
         install(ContentNegotiation) {
             json()
         }
-        searchView(SearchResponseBuilder(CocktailsSourceV2(), DescriptionBuilder()), createAppSetting(pageSize))
+        val filterCache = FilterCache()
+        searchView(
+            SearchResponseBuilder(filterCache, CocktailSelector(filterCache.filterGroups), DescriptionBuilder()),
+            createAppSetting(pageSize)
+        )
     }
 }
 

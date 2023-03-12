@@ -2,8 +2,8 @@ package org.mixdrinks.view.cocktail
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.mixdrinks.dto.CocktailId
 import org.mixdrinks.view.images.Image
-import org.mixdrinks.view.v2.data.CocktailId
 import org.mixdrinks.view.v2.data.TagId
 
 @Serializable

@@ -20,9 +20,9 @@ import org.mixdrinks.data.FullCocktail
 import org.mixdrinks.data.GoodsTable
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.data.TastesTable
+import org.mixdrinks.dto.CocktailId
 import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
-import org.mixdrinks.view.v2.data.CocktailId
 import org.mixdrinks.view.v2.data.TagId
 
 fun Application.cocktails() {
