@@ -27,7 +27,7 @@ import org.mixdrinks.view.v2.controllers.score.RattingBuilder
 import org.mixdrinks.view.v2.controllers.score.RattingItem
 import org.mixdrinks.view.v2.controllers.score.rattingSearchView
 import org.mixdrinks.view.v2.controllers.score.score
-import org.mixdrinks.view.v2.controllers.search.FilterCache
+import org.mixdrinks.view.v2.controllers.filter.FilterCache
 import org.mixdrinks.view.v2.controllers.settings.AppSettings
 
 class RattingEndToEndTests : FunSpec({

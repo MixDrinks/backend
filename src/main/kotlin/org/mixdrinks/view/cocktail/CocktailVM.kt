@@ -3,8 +3,8 @@ package org.mixdrinks.view.cocktail
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.mixdrinks.dto.CocktailId
+import org.mixdrinks.dto.TagId
 import org.mixdrinks.view.images.Image
-import org.mixdrinks.view.v2.data.TagId
 
 @Serializable
 data class SimpleCocktailVM(
@@ -30,32 +30,32 @@ data class FullCocktailVM(
     @SerialName("ratingCount") val ratingCount: Int,
     @SerialName("receipt") val receipt: List<String>,
     @SerialName("images") val images: List<Image>,
-    @SerialName("goods") val goods: List<FullIngredient>,
-    @SerialName("tools") val tools: List<FullTool>,
-    @SerialName("tags") val tags: List<TagVM>,
-    @SerialName("tastes") val tastes: List<TagVM>,
+    @SerialName("goods") val goods: List<FullGood>,
+    @SerialName("tools") val tools: List<ToolVM>,
+    @SerialName("tags") val tags: List<TagVM>
 )
 
 @Serializable
-data class FullIngredient(
+data class FullGood(
     @SerialName("id") val id: Int,
     @SerialName("name") val name: String,
     @SerialName("images") val images: List<Image>,
     @SerialName("amount") val amount: Int,
     @SerialName("unit") val unit: String,
+    @SerialName("url") val path: String,
 )
 
 @Serializable
-data class FullTool(
+data class ToolVM(
     @SerialName("id") val id: Int,
     @SerialName("name") val name: String,
     @SerialName("images") val images: List<Image>,
+    @SerialName("url") val path: String,
 )
 
 @Serializable
 data class TagVM(
-    @SerialName("id")
-    val id: TagId,
-    @SerialName("name")
-    val name: String,
+    @SerialName("id") val id: TagId,
+    @SerialName("name") val name: String,
+    @SerialName("url") val path: String,
 )

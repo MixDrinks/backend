@@ -14,7 +14,6 @@ import kotlinx.serialization.json.Json
 import org.createDataBase
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailToTagTable
@@ -25,6 +24,7 @@ import org.mixdrinks.data.GoodsTable
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.data.ToolsTable
 import org.mixdrinks.dto.FilterId
+import org.mixdrinks.view.v2.controllers.filter.FilterCache
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
 import org.mixdrinks.view.v2.controllers.filter.FilterSource
 import org.mixdrinks.view.v2.controllers.filter.filterMetaInfo
@@ -74,7 +74,7 @@ class FilterProvidesEndToEndTests : FunSpec({
                 install(ContentNegotiation) {
                     json()
                 }
-                filterMetaInfo(FilterSource())
+                filterMetaInfo(FilterSource(FilterCache()))
             }
 
             val response = client.get("v2/filters")
@@ -129,7 +129,7 @@ private fun verifyItems(items: List<FilterModels.FilterItem>, idToCount: List<Pa
         FilterModels.FilterItem(
             FilterId(id),
             "Name$id",
-            count.toLong()
+            count
         )
     }
 }
@@ -145,15 +145,18 @@ private fun prepareData(
     transaction {
         createDataBase()
 
-        tags.forEachIndexed { index, tag ->
+        (0..1000).forEach { newId ->
             CocktailsTable.insert {
-                it[id] = index
-                it[name] = "Cocktail$index"
+                it[id] = newId
+                it[name] = "Cocktail$it"
                 it[steps] = arrayOf()
                 it[visitCount] = 10
                 it[ratingCount] = 10
                 it[ratingValue] = 10
             }
+        }
+
+        tags.forEachIndexed { index, tag ->
             when (tag.type) {
                 FilterModels.Filters.TAGS -> {
                     TagsTable.insert {
@@ -161,10 +164,10 @@ private fun prepareData(
                         it[name] = tag.name
                     }
 
-                    repeat(tag.cocktailsCount) {
+                    repeat(tag.cocktailsCount) {cocktailTmpId ->
                         CocktailToTagTable.insert {
                             it[tagId] = tag.id
-                            it[cocktailId] = index
+                            it[cocktailId] = cocktailTmpId
                         }
                     }
                 }
@@ -174,13 +177,12 @@ private fun prepareData(
                         it[id] = tag.id
                         it[name] = tag.name
                         it[about] = ""
-                        it[visitCount] = 0
                     }
 
-                    repeat(tag.cocktailsCount) {
+                    repeat(tag.cocktailsCount) { cocktailTmpId ->
                         CocktailsToGoodsTable.insert {
                             it[goodId] = tag.id
-                            it[cocktailId] = index
+                            it[cocktailId] = cocktailTmpId
                             it[unit] = ""
                             it[amount] = 0
                         }
@@ -192,13 +194,12 @@ private fun prepareData(
                         it[id] = tag.id
                         it[name] = tag.name
                         it[about] = ""
-                        it[visitCount] = 0
                     }
 
-                    repeat(tag.cocktailsCount) {
+                    repeat(tag.cocktailsCount) {cocktailTmpId ->
                         CocktailsToToolsTable.insert {
                             it[toolId] = tag.id
-                            it[cocktailId] = index
+                            it[cocktailId] = cocktailTmpId
                         }
                     }
                 }

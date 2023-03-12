@@ -2,13 +2,12 @@ package org.mixdrinks.view.v2.controllers.score
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.mixdrinks.data.Cocktail
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.domain.CocktailSelector
 import org.mixdrinks.dto.CocktailId
-import org.mixdrinks.view.rating.getRating
 import org.mixdrinks.view.v2.controllers.search.Page
 import org.mixdrinks.view.v2.controllers.search.SearchParams
 
@@ -32,7 +31,7 @@ class RattingBuilder(
         }
 
         return transaction {
-            val query = CocktailsTable.select { CocktailsTable.id inList cocktailIds }
+            val query = Cocktail.find { CocktailsTable.id inList cocktailIds }
 
             return@transaction if (page != null) {
                 query.copy().limit(page.limit, page.offset.toLong())
@@ -40,9 +39,9 @@ class RattingBuilder(
                 query
             }.map {
                 RattingItem(
-                    cocktailId = CocktailId(it[CocktailsTable.id].value),
-                    rating = it.getRating(),
-                    visitCount = it[CocktailsTable.visitCount],
+                    cocktailId = CocktailId(it.id.value),
+                    rating = it.getRatting(),
+                    visitCount = it.visitCount,
                 )
             }
         }
