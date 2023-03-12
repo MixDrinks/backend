@@ -68,6 +68,8 @@ class Good(id: EntityID<Int>) : IntEntity(id) {
     var name by GoodsTable.name
     var about by GoodsTable.about
     var visitCount by GoodsTable.visitCount
+
+    val cocktails by Cocktail via CocktailsToGoodsTable
 }
 
 object CocktailsToGoodsTable : Table(name = "cocktails_to_items") {
@@ -85,6 +87,8 @@ class Tag(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<Tag>(TagsTable)
 
     var name by TagsTable.name
+
+    var cocktails by Cocktail via CocktailToTagTable
 }
 
 object TastesTable : IntIdTable(name = "tastes", columnName = "id") {
@@ -95,6 +99,8 @@ class Taste(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<Taste>(TastesTable)
 
     var name by TastesTable.name
+
+    var cocktails by Cocktail via CocktailsToTastesTable
 }
 
 object CocktailsToTastesTable : Table(name = "cocktails_to_tastes") {
@@ -111,16 +117,18 @@ class AlcoholVolumes(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<AlcoholVolumes>(AlcoholVolumesTable)
 
     var name by AlcoholVolumesTable.name
+
+    var cocktails by Cocktail via CocktailsToAlcoholVolumesTable
 }
 
 object CocktailsToAlcoholVolumesTable : Table(name = "cocktails_to_alcohol_volume") {
-    val cocktailId = integer("cocktail_id").references(CocktailsTable.id)
-    val alcoholVolumeId = integer("alcohol_volume_id").references(AlcoholVolumesTable.id)
+    val cocktailId = reference("cocktail_id", CocktailsTable.id)
+    val alcoholVolumeId = reference("alcohol_volume_id", AlcoholVolumesTable.id)
 }
 
 object CocktailToTagTable : Table(name = "cocktails_to_tags") {
-    val cocktailId = integer("cocktail_id")
-    val tagId = integer("tag_id")
+    val cocktailId = reference("cocktail_id", CocktailsTable.id)
+    val tagId = reference("tag_id", TagsTable.id)
 }
 
 object ToolsTable : IntIdTable(name = "tools", columnName = "id") {
@@ -135,6 +143,8 @@ class Tool(id: EntityID<Int>) : IntEntity(id) {
     var name by ToolsTable.name
     var about by ToolsTable.about
     var visitCount by ToolsTable.visitCount
+
+    val cocktails by Cocktail via CocktailsToToolsTable
 }
 
 object CocktailsToToolsTable : Table(name = "cocktails_to_tools") {
@@ -157,4 +167,6 @@ class Glassware(id: EntityID<Int>) : IntEntity(id) {
 
     var name by GlasswareTable.name
     var about by GlasswareTable.about
+
+    var cocktail by Cocktail via CocktailsToGlasswareTable
 }

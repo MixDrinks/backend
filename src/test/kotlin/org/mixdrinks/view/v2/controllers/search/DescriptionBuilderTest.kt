@@ -12,6 +12,8 @@ import org.mixdrinks.data.Good
 import org.mixdrinks.data.Tag
 import org.mixdrinks.data.Taste
 import org.mixdrinks.data.Tool
+import org.mixdrinks.dto.FilterGroupId
+import org.mixdrinks.dto.FilterId
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
 
 class DescriptionBuilderTest : FunSpec({
@@ -37,7 +39,7 @@ class DescriptionBuilderTest : FunSpec({
     test("Verify that the alcohol volume description") {
         buildDescription(
             mapOf(
-                FilterModels.Filters.ALCOHOL_VOLUME.id to listOf(FilterModels.FilterId(1)),
+                FilterModels.Filters.ALCOHOL_VOLUME.id to listOf(FilterId(1)),
             )
         ) shouldBe "AlcoholVolumes1 коктейлі"
     }
@@ -45,8 +47,8 @@ class DescriptionBuilderTest : FunSpec({
     test("Verify that the alcohol volume with taste") {
         buildDescription(
             mapOf(
-                FilterModels.Filters.ALCOHOL_VOLUME.id to listOf(FilterModels.FilterId(1)),
-                FilterModels.Filters.TASTE.id to listOf(FilterModels.FilterId(8), FilterModels.FilterId(9)),
+                FilterModels.Filters.ALCOHOL_VOLUME.id to listOf(FilterId(1)),
+                FilterModels.Filters.TASTE.id to listOf(FilterId(8), FilterId(9)),
             )
         ) shouldBe "AlcoholVolumes1 Taste8 Taste9 коктейлі"
     }
@@ -54,8 +56,8 @@ class DescriptionBuilderTest : FunSpec({
     test("Verify that the alcohol volume and goods") {
         buildDescription(
             mapOf(
-                FilterModels.Filters.ALCOHOL_VOLUME.id to listOf(FilterModels.FilterId(1)),
-                FilterModels.Filters.GOODS.id to listOf(FilterModels.FilterId(4), FilterModels.FilterId(5)),
+                FilterModels.Filters.ALCOHOL_VOLUME.id to listOf(FilterId(1)),
+                FilterModels.Filters.GOODS.id to listOf(FilterId(4), FilterId(5)),
             )
         ) shouldBe "AlcoholVolumes1 коктейлі з Good4 Good5"
     }
@@ -63,8 +65,8 @@ class DescriptionBuilderTest : FunSpec({
     test("Verify description with goods and tags") {
         buildDescription(
             mapOf(
-                FilterModels.Filters.GOODS.id to listOf(FilterModels.FilterId(4), FilterModels.FilterId(5)),
-                FilterModels.Filters.TAGS.id to listOf(FilterModels.FilterId(7), FilterModels.FilterId(4)),
+                FilterModels.Filters.GOODS.id to listOf(FilterId(4), FilterId(5)),
+                FilterModels.Filters.TAGS.id to listOf(FilterId(7), FilterId(4)),
             )
         ) shouldBe "коктейлі Tag4 Tag7 з Good4 Good5"
     }
@@ -72,10 +74,10 @@ class DescriptionBuilderTest : FunSpec({
     test("Verify description with all but without glassware") {
         buildDescription(
             mapOf(
-                FilterModels.Filters.ALCOHOL_VOLUME.id to listOf(FilterModels.FilterId(1)),
-                FilterModels.Filters.GOODS.id to listOf(FilterModels.FilterId(4), FilterModels.FilterId(5)),
-                FilterModels.Filters.TAGS.id to listOf(FilterModels.FilterId(7), FilterModels.FilterId(4)),
-                FilterModels.Filters.TOOLS.id to listOf(FilterModels.FilterId(7), FilterModels.FilterId(4)),
+                FilterModels.Filters.ALCOHOL_VOLUME.id to listOf(FilterId(1)),
+                FilterModels.Filters.GOODS.id to listOf(FilterId(4), FilterId(5)),
+                FilterModels.Filters.TAGS.id to listOf(FilterId(7), FilterId(4)),
+                FilterModels.Filters.TOOLS.id to listOf(FilterId(7), FilterId(4)),
             )
         ) shouldBe "AlcoholVolumes1 коктейлі Tag4 Tag7 з Good4 Good5"
     }
@@ -83,11 +85,11 @@ class DescriptionBuilderTest : FunSpec({
     test("Verify description with all") {
         buildDescription(
             mapOf(
-                FilterModels.Filters.ALCOHOL_VOLUME.id to listOf(FilterModels.FilterId(1)),
-                FilterModels.Filters.GOODS.id to listOf(FilterModels.FilterId(4), FilterModels.FilterId(5)),
-                FilterModels.Filters.TAGS.id to listOf(FilterModels.FilterId(7), FilterModels.FilterId(4)),
-                FilterModels.Filters.TOOLS.id to listOf(FilterModels.FilterId(7), FilterModels.FilterId(4)),
-                FilterModels.Filters.GLASSWARE.id to listOf(FilterModels.FilterId(1)),
+                FilterModels.Filters.ALCOHOL_VOLUME.id to listOf(FilterId(1)),
+                FilterModels.Filters.GOODS.id to listOf(FilterId(4), FilterId(5)),
+                FilterModels.Filters.TAGS.id to listOf(FilterId(7), FilterId(4)),
+                FilterModels.Filters.TOOLS.id to listOf(FilterId(7), FilterId(4)),
+                FilterModels.Filters.GLASSWARE.id to listOf(FilterId(1)),
             )
         ) shouldBe "AlcoholVolumes1 коктейлі Tag4 Tag7 з Good4 Good5 в Glassware1"
     }
@@ -95,7 +97,7 @@ class DescriptionBuilderTest : FunSpec({
     test("Verify description just tools") {
         buildDescription(
             mapOf(
-                FilterModels.Filters.TOOLS.id to listOf(FilterModels.FilterId(7), FilterModels.FilterId(4)),
+                FilterModels.Filters.TOOLS.id to listOf(FilterId(7), FilterId(4)),
             )
         ) shouldBe null
     }
@@ -103,13 +105,13 @@ class DescriptionBuilderTest : FunSpec({
     test("Verify description just glassware") {
         buildDescription(
             mapOf(
-                FilterModels.Filters.GLASSWARE.id to listOf(FilterModels.FilterId(7)),
+                FilterModels.Filters.GLASSWARE.id to listOf(FilterId(7)),
             )
         ) shouldBe "коктейлі в Glassware7"
     }
 })
 
-private fun buildDescription(filters: Map<FilterModels.FilterGroupId, List<FilterModels.FilterId>>): String? {
+private fun buildDescription(filters: Map<FilterGroupId, List<FilterId>>): String? {
     return DescriptionBuilder().buildDescription(
         SearchParams(filters)
     )

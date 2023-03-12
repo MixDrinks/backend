@@ -2,16 +2,10 @@ package org.mixdrinks.view.v2.controllers.filter
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.mixdrinks.dto.FilterGroupId
+import org.mixdrinks.dto.FilterId
 
 class FilterModels {
-
-    @JvmInline
-    @Serializable
-    value class FilterGroupId(val value: Int)
-
-    @JvmInline
-    @Serializable
-    value class FilterId(val value: Int)
 
     @JvmInline
     @Serializable

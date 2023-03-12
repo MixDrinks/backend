@@ -6,10 +6,12 @@ import org.fullness.CocktailData
 import org.fullness.prepareData
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.TransactionManager
+import org.mixdrinks.domain.CocktailSelector
+import org.mixdrinks.dto.FilterId
 import org.mixdrinks.view.cocktail.domain.SortType
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
-import org.mixdrinks.view.v2.controllers.search.CocktailsSourceV2
 import org.mixdrinks.view.v2.controllers.search.DescriptionBuilder
+import org.mixdrinks.view.v2.controllers.search.FilterCache
 import org.mixdrinks.view.v2.controllers.search.SearchParams
 import org.mixdrinks.view.v2.controllers.search.SearchResponseBuilder
 
@@ -44,35 +46,38 @@ class SearchResponseBuilderIntegration : FunSpec({
             )
         )
 
-        val searchResponseBuilder = SearchResponseBuilder(CocktailsSourceV2(), DescriptionBuilder())
+        val filterCache = FilterCache()
+        val searchResponseBuilder = SearchResponseBuilder(
+            filterCache, CocktailSelector(filterCache.filterGroups), DescriptionBuilder()
+        )
 
         val result = searchResponseBuilder.getCocktailsBySearch(
             searchParams = SearchParams(), page = null, sortType = SortType.MOST_POPULAR
         )
 
-        result.cocktails.map { it.id } shouldContainExactlyInAnyOrder listOf(0, 1, 2)
+        result.cocktails.map { it.id.id } shouldContainExactlyInAnyOrder listOf(0, 1, 2)
 
         verifyFutureCountResponse(
             result, FilterModels.Filters.TAGS, mapOf(
-                FilterModels.FilterId(1) to 2,
-                FilterModels.FilterId(2) to 3,
-                FilterModels.FilterId(3) to 2,
+                FilterId(1) to 2,
+                FilterId(2) to 3,
+                FilterId(3) to 2,
             )
         )
 
         verifyFutureCountResponse(
             result, FilterModels.Filters.GOODS, mapOf(
-                FilterModels.FilterId(10) to 2,
-                FilterModels.FilterId(20) to 3,
-                FilterModels.FilterId(30) to 2,
+                FilterId(10) to 2,
+                FilterId(20) to 3,
+                FilterId(30) to 2,
             )
         )
 
         verifyFutureCountResponse(
             result, FilterModels.Filters.TOOLS, mapOf(
-                FilterModels.FilterId(100) to 2,
-                FilterModels.FilterId(200) to 3,
-                FilterModels.FilterId(300) to 2,
+                FilterId(100) to 2,
+                FilterId(200) to 3,
+                FilterId(300) to 2,
             )
         )
     }
@@ -99,7 +104,10 @@ class SearchResponseBuilderIntegration : FunSpec({
             )
         )
 
-        val searchResponseBuilder = SearchResponseBuilder(CocktailsSourceV2(), DescriptionBuilder())
+        val filterCache = FilterCache()
+        val searchResponseBuilder = SearchResponseBuilder(
+            filterCache, CocktailSelector(filterCache.filterGroups), DescriptionBuilder()
+        )
 
         val result = searchResponseBuilder.getCocktailsBySearch(
             searchParams = createSearchParam(tagIds = listOf(1)),
@@ -107,29 +115,29 @@ class SearchResponseBuilderIntegration : FunSpec({
             sortType = SortType.MOST_POPULAR
         )
 
-        result.cocktails.map { it.id } shouldContainExactlyInAnyOrder listOf(0, 1)
+        result.cocktails.map { it.id.id } shouldContainExactlyInAnyOrder listOf(0, 1)
 
         verifyFutureCountResponse(
             result, FilterModels.Filters.TAGS, mapOf(
-                FilterModels.FilterId(1) to 2,
-                FilterModels.FilterId(2) to 2,
-                FilterModels.FilterId(3) to 1,
+                FilterId(1) to 2,
+                FilterId(2) to 2,
+                FilterId(3) to 1,
             )
         )
 
         verifyFutureCountResponse(
             result, FilterModels.Filters.GOODS, mapOf(
-                FilterModels.FilterId(10) to 2,
-                FilterModels.FilterId(20) to 2,
-                FilterModels.FilterId(30) to 1,
+                FilterId(10) to 2,
+                FilterId(20) to 2,
+                FilterId(30) to 1,
             )
         )
 
         verifyFutureCountResponse(
             result, FilterModels.Filters.TOOLS, mapOf(
-                FilterModels.FilterId(100) to 2,
-                FilterModels.FilterId(200) to 2,
-                FilterModels.FilterId(300) to 1,
+                FilterId(100) to 2,
+                FilterId(200) to 2,
+                FilterId(300) to 1,
             )
         )
     }
@@ -156,7 +164,10 @@ class SearchResponseBuilderIntegration : FunSpec({
             )
         )
 
-        val searchResponseBuilder = SearchResponseBuilder(CocktailsSourceV2(), DescriptionBuilder())
+        val filterCache = FilterCache()
+        val searchResponseBuilder = SearchResponseBuilder(
+            filterCache, CocktailSelector(filterCache.filterGroups), DescriptionBuilder()
+        )
 
         val result = searchResponseBuilder.getCocktailsBySearch(
             searchParams = createSearchParam(
@@ -167,29 +178,29 @@ class SearchResponseBuilderIntegration : FunSpec({
             sortType = SortType.MOST_POPULAR
         )
 
-        result.cocktails.map { it.id } shouldContainExactlyInAnyOrder listOf(0)
+        result.cocktails.map { it.id.id } shouldContainExactlyInAnyOrder listOf(0)
 
         verifyFutureCountResponse(
             result, FilterModels.Filters.TAGS, mapOf(
-                FilterModels.FilterId(1) to 1,
-                FilterModels.FilterId(2) to 1,
-                FilterModels.FilterId(3) to 1,
+                FilterId(1) to 1,
+                FilterId(2) to 1,
+                FilterId(3) to 1,
             )
         )
 
         verifyFutureCountResponse(
             result, FilterModels.Filters.GOODS, mapOf(
-                FilterModels.FilterId(10) to 1,
-                FilterModels.FilterId(20) to 1,
-                FilterModels.FilterId(30) to 1,
+                FilterId(10) to 1,
+                FilterId(20) to 1,
+                FilterId(30) to 1,
             )
         )
 
         verifyFutureCountResponse(
             result, FilterModels.Filters.TOOLS, mapOf(
-                FilterModels.FilterId(100) to 1,
-                FilterModels.FilterId(200) to 1,
-                FilterModels.FilterId(300) to 0,
+                FilterId(100) to 1,
+                FilterId(200) to 1,
+                FilterId(300) to 0,
             )
         )
     }
@@ -201,18 +212,24 @@ private fun createSearchParam(
     toolIds: List<Int> = emptyList(),
 ): SearchParams {
     return SearchParams(
-        mapOf(
-            FilterModels.Filters.TAGS.id to tagIds.map { FilterModels.FilterId(it) },
-            FilterModels.Filters.GOODS.id to goodIds.map { FilterModels.FilterId(it) },
-            FilterModels.Filters.TOOLS.id to toolIds.map { FilterModels.FilterId(it) },
-        )
+        buildMap {
+            if (tagIds.isNotEmpty()) {
+                put(FilterModels.Filters.TAGS.id, tagIds.map { FilterId(it) })
+            }
+            if (goodIds.isNotEmpty()) {
+                put(FilterModels.Filters.GOODS.id, goodIds.map { FilterId(it) })
+            }
+            if (toolIds.isNotEmpty()) {
+                put(FilterModels.Filters.TOOLS.id, toolIds.map { FilterId(it) })
+            }
+        }
     )
 }
 
 private fun verifyFutureCountResponse(
     result: SearchResponseBuilder.SearchResponse,
     filter: FilterModels.Filters,
-    expectedCount: Map<FilterModels.FilterId, Int>,
+    expectedCount: Map<FilterId, Int>,
 ) {
     result.futureCounts[filter.id] shouldContainExactlyInAnyOrder expectedCount.map { (filterId, count) ->
         SearchResponseBuilder.FilterCount(

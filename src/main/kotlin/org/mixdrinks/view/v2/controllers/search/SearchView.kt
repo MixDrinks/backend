@@ -6,10 +6,12 @@ import io.ktor.server.application.call
 import io.ktor.server.response.respond
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
-import org.mixdrinks.view.v2.controllers.settings.AppSettings
+import org.mixdrinks.dto.FilterGroupId
+import org.mixdrinks.dto.FilterId
 import org.mixdrinks.view.cocktail.domain.SortType
 import org.mixdrinks.view.error.SortTypeNotFound
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
+import org.mixdrinks.view.v2.controllers.settings.AppSettings
 
 fun Application.searchView(searchResponseBuilder: SearchResponseBuilder, appSettings: AppSettings) {
     routing {
@@ -29,7 +31,7 @@ data class Page(
 )
 
 data class SearchParams(
-    val filters: Map<FilterModels.FilterGroupId, List<FilterModels.FilterId>> = mapOf(),
+    val filters: Map<FilterGroupId, List<FilterId>> = mapOf(),
 )
 
 fun ApplicationCall.getSortType(): SortType {
@@ -45,14 +47,14 @@ fun ApplicationCall.getSortType(): SortType {
 fun ApplicationCall.getSearchParam(): SearchParams {
     return SearchParams(buildMap {
         FilterModels.Filters.values().forEach { filterGroup ->
-            this@getSearchParam.getSearchParam(filterGroup)?.let { this[filterGroup.id] = it }
+            this@getSearchParam.getSearchParam(filterGroup.queryName)?.let { this[filterGroup.id] = it }
         }
     })
 }
 
-fun ApplicationCall.getSearchParam(filter: FilterModels.Filters): List<FilterModels.FilterId>? {
-    return this.request.queryParameters[filter.queryName.value]?.split(",")?.mapNotNull {
-        it.toIntOrNull()?.let { it1 -> FilterModels.FilterId(it1) }
+fun ApplicationCall.getSearchParam(queryName: FilterModels.FilterQueryName): List<FilterId>? {
+    return this.request.queryParameters[queryName.value]?.split(",")?.mapNotNull {
+        it.toIntOrNull()?.let { it1 -> FilterId(it1) }
     }
 }
 
