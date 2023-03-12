@@ -54,7 +54,7 @@ private fun getFullCocktail(id: Int): FullCocktailVM {
         return@transaction FullCocktail.findById(id)?.load(FullCocktail::goods, FullCocktail::glassware)
             ?.let { cocktail ->
                 FullCocktailVM(
-                    id = cocktail.id.value,
+                    id = CocktailId(cocktail.id.value),
                     name = cocktail.name,
                     visitCount = cocktail.visitCount,
                     rating = cocktail.ratting,
@@ -65,13 +65,6 @@ private fun getFullCocktail(id: Int): FullCocktailVM {
                     tools = getFullTools(cocktail),
                     tags = getCocktailTags(cocktail.id.value),
                     tastes = getTastes(cocktail.id.value),
-                    glassware = cocktail.glassware.first().let {
-                        FullTool(
-                            id = it.id.value,
-                            name = it.name,
-                            images = buildImages(it.id.value, ImageType.ITEM),
-                        )
-                    }
                 )
             } ?: throw NotFoundException("Cocktail with id $id not found")
     }

@@ -11,6 +11,7 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.domain.CocktailSelector
+import org.mixdrinks.dto.CocktailId
 import org.mixdrinks.dto.FilterGroupId
 import org.mixdrinks.dto.FilterId
 import org.mixdrinks.view.cocktail.CompactCocktailVM
@@ -101,7 +102,7 @@ class SearchResponseBuilder(
         }
 
         return CompactCocktailVM(
-            id = id,
+            id = CocktailId(id),
             name = row[CocktailsTable.name],
             rating = rating,
             visitCount = row[CocktailsTable.visitCount],
