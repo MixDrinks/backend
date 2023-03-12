@@ -148,7 +148,7 @@ internal class SearchCocktailsEndToEndTests : FunSpec({
                 response.status shouldBe HttpStatusCode.OK
                 val result = Json.decodeFromString<SearchResponseBuilder.SearchResponse>(response.bodyAsText())
 
-                result.cocktails.map { it.id } shouldBe listOf(2, 1)
+                result.cocktails.map { it.id.id } shouldBe listOf(2, 1)
             }
         }
 
@@ -190,7 +190,7 @@ internal class SearchCocktailsEndToEndTests : FunSpec({
 
                 val resultId = result.cocktails.map { it.id }
 
-                resultId[0] shouldBe 3
+                resultId[0].id shouldBe 3
 
                 resultId shouldContainAll listOf(1, 2)
             }
@@ -233,7 +233,7 @@ internal class SearchCocktailsEndToEndTests : FunSpec({
                 response.status shouldBe HttpStatusCode.OK
                 val result = Json.decodeFromString<SearchResponseBuilder.SearchResponse>(response.bodyAsText())
 
-                result.cocktails.map { it.id } shouldBe listOf(1, 3, 2)
+                result.cocktails.map { it.id.id } shouldBe listOf(1, 3, 2)
             }
         }
 

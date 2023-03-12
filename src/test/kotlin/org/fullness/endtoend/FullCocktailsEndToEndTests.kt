@@ -30,6 +30,7 @@ import org.mixdrinks.data.Glassware
 import org.mixdrinks.data.Good
 import org.mixdrinks.data.Taste
 import org.mixdrinks.data.Tool
+import org.mixdrinks.dto.CocktailId
 import org.mixdrinks.view.cocktail.FullCocktailVM
 import org.mixdrinks.view.cocktail.TagVM
 import org.mixdrinks.view.cocktail.cocktails
@@ -82,7 +83,7 @@ internal class FullCocktailsEndToEndTests : FunSpec({
             response.status shouldBe HttpStatusCode.OK
             val result = Json.decodeFromString<FullCocktailVM>(response.bodyAsText())
 
-            result.id shouldBe 1
+            result.id shouldBe CocktailId(1)
             result.receipt shouldBe arrayOf("Test step 1", "Test step 2")
             result.tastes.map(TagVM::name) shouldContainExactly tastes
 
