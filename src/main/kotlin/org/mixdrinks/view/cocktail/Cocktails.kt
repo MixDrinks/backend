@@ -65,6 +65,7 @@ private fun getFullCocktail(id: Int): FullCocktailVM {
     }
 }
 
+@Suppress("UnusedPrivateMember")
 private fun getTastes(cocktail: FullCocktail): List<TagVM> {
     return cocktail.taste.map {
         return@map buildTagVM(it.id, it.name, FilterModels.Filters.TASTE)
