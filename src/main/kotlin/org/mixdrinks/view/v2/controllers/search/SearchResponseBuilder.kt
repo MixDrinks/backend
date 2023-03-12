@@ -18,6 +18,7 @@ import org.mixdrinks.view.cocktail.CompactCocktailVM
 import org.mixdrinks.view.cocktail.domain.SortType
 import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
+import org.mixdrinks.view.v2.controllers.filter.FilterCache
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
 
 class SearchResponseBuilder(

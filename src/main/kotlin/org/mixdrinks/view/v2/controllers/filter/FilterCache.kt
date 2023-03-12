@@ -1,4 +1,4 @@
-package org.mixdrinks.view.v2.controllers.search
+package org.mixdrinks.view.v2.controllers.filter
 
 import org.jetbrains.exposed.dao.with
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -12,7 +12,6 @@ import org.mixdrinks.domain.Filter
 import org.mixdrinks.domain.FilterGroup
 import org.mixdrinks.dto.CocktailId
 import org.mixdrinks.dto.FilterId
-import org.mixdrinks.view.v2.controllers.filter.FilterModels
 
 class FilterCache {
 
@@ -22,28 +21,28 @@ class FilterCache {
         val cocktailIds: Set<CocktailId>,
     )
 
-    private val fullFilters: Map<FilterModels.Filters, List<FullFilter>> = transaction {
+    val fullFilters: Map<FilterModels.Filters, List<FullFilter>> = transaction {
         return@transaction mapOf(
-            FilterModels.Filters.TAGS to Tag.all().with(Tag::cocktails)
-                .map(::toFullFilter),
-            FilterModels.Filters.GOODS to Good.all().with(Good::cocktails)
-                .map(::toFullFilter),
-            FilterModels.Filters.TOOLS to Tool.all().with(Tool::cocktails)
+            FilterModels.Filters.ALCOHOL_VOLUME to AlcoholVolumes.all().with(AlcoholVolumes::cocktails)
                 .map(::toFullFilter),
             FilterModels.Filters.TASTE to Taste.all().with(Taste::cocktails)
                 .map(::toFullFilter),
-            FilterModels.Filters.ALCOHOL_VOLUME to AlcoholVolumes.all().with(AlcoholVolumes::cocktails)
-                .map(::toFullFilter),
             FilterModels.Filters.GLASSWARE to Glassware.all().with(Glassware::cocktail)
+                .map(::toFullFilter),
+            FilterModels.Filters.GOODS to Good.all().with(Good::cocktails)
+                .map(::toFullFilter),
+            FilterModels.Filters.TAGS to Tag.all().with(Tag::cocktails)
+                .map(::toFullFilter),
+            FilterModels.Filters.TOOLS to Tool.all().with(Tool::cocktails)
                 .map(::toFullFilter),
         )
     }
 
-    val filterIds = fullFilters.mapValues { (_, filters) ->
+    val filterIds: Map<FilterModels.Filters, List<FilterId>> = fullFilters.mapValues { (_, filters) ->
         filters.map { it.id }
     }
 
-    val filterGroups = fullFilters.map { (filter, filters) ->
+    val filterGroups: List<FilterGroup> = fullFilters.map { (filter, filters) ->
         FilterGroup(
             id = filter.id,
             name = filter.name,
