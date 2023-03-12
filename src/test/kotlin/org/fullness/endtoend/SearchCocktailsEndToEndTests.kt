@@ -69,7 +69,7 @@ internal class SearchCocktailsEndToEndTests : FunSpec({
             result.totalCount shouldBe 11
             result.cocktails.size shouldBe 11
 
-            result.cocktails.first { it.id == mockId }.run {
+            result.cocktails.first { it.id.id == mockId }.run {
                 name shouldBe mockCocktails.name
                 rating shouldBe mockCocktails.rating
                 visitCount shouldBe mockCocktails.visitCount
