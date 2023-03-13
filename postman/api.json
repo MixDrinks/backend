@@ -94,6 +94,131 @@
 			]
 		},
 		{
+			"name": "Items",
+			"item": [
+				{
+					"name": "Get tool",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var tool = pm.response.json();",
+									"",
+									"pm.test(\"Verify id\", function () {",
+									"    pm.expect(tool.id).to.eql(1);",
+									"    pm.expect(tool.name).to.eql(\"Tool1\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SCHEME}}://{{HOST}}/v2/tool/1",
+							"protocol": "{{SCHEME}}",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"v2",
+								"tool",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var good = pm.response.json();",
+									"",
+									"pm.test(\"Verify good\", function () {",
+									"    pm.expect(good.id).to.eql(1);",
+									"    pm.expect(good.name).to.eql(\"Good1\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SCHEME}}://{{HOST}}/v2/good/1",
+							"protocol": "{{SCHEME}}",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"v2",
+								"good",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get glassware",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var glassware = pm.response.json();",
+									"",
+									"pm.test(\"Verify good\", function () {",
+									"    pm.expect(glassware.id).to.eql(100);",
+									"    pm.expect(glassware.name).to.eql(\"Glassware1\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SCHEME}}://{{HOST}}/v2/glassware/100",
+							"protocol": "{{SCHEME}}",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"v2",
+								"glassware",
+								"100"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Get all cocktails",
 			"event": [
 				{
@@ -159,10 +284,12 @@
 							"",
 							"pm.test(\"Verify first tool is glassware\", function () {",
 							"    pm.expect(cocktail.tools[0].name).to.eql(\"Glassware1\")",
+							"    pm.expect(cocktail.tools[0].url).to.eql(\"glassware/100\")",
 							"});",
 							"",
 							"pm.test(\"Verify second tools is tool\", function() {",
 							"    pm.expect(cocktail.tools[1].name).to.eql(\"Tool1\")",
+							"    pm.expect(cocktail.tools[1].url).to.eql(\"tools/1\")",
 							"})",
 							"",
 							"",
@@ -241,6 +368,65 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Snapshot",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SCHEME}}://{{HOST}}/snapshot",
+					"protocol": "{{SCHEME}}",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"snapshot"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SCHEME}}://{{HOST}}/snapshot",
+							"protocol": "{{SCHEME}}",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"snapshot"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1268"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"cocktails\": [\n        {\n            \"id\": 1,\n            \"name\": \"Cocktail1\",\n            \"receipt\": [\n                \"1\",\n                \"2\",\n                \"3\"\n            ],\n            \"goods\": [\n                {\n                    \"goodId\": 1,\n                    \"amount\": 1,\n                    \"unit\": \"ml\"\n                }\n            ],\n            \"tools\": [\n                1\n            ],\n            \"tags\": [\n                1\n            ],\n            \"tastes\": [\n                1\n            ],\n            \"glassware\": 100\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Cocktail2\",\n            \"receipt\": [\n                \"1_1\",\n                \"2_2\",\n                \"3_3\"\n            ],\n            \"goods\": [],\n            \"tools\": [],\n            \"tags\": [],\n            \"tastes\": [],\n            \"glassware\": 100\n        }\n    ],\n    \"tools\": [\n        {\n            \"id\": 1,\n            \"name\": \"Tool1\",\n            \"about\": \"About1\"\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Tool2\",\n            \"about\": \"About2\"\n        }\n    ],\n    \"goods\": [\n        {\n            \"id\": 1,\n            \"name\": \"Good1\",\n            \"about\": \"About1\"\n        }\n    ],\n    \"tags\": [\n        {\n            \"id\": 1,\n            \"name\": \"Tag1\"\n        }\n    ],\n    \"tastes\": [\n        {\n            \"id\": 1,\n            \"name\": \"Taste1\"\n        }\n    ],\n    \"filterGroups\": [\n        {\n            \"id\": 4,\n            \"name\": \"ALCOHOL_VOLUME\",\n            \"filters\": [\n                {\n                    \"id\": 1,\n                    \"name\": \"AlcoholVolume1\",\n                    \"cocktailIds\": [\n                        1\n                    ]\n                }\n            ],\n            \"selectionType\": \"SINGLE\"\n        },\n        {\n            \"id\": 3,\n            \"name\": \"TASTE\",\n            \"filters\": [\n                {\n                    \"id\": 1,\n                    \"name\": \"Taste1\",\n                    \"cocktailIds\": [\n                        1\n                    ]\n                }\n            ],\n            \"selectionType\": \"MULTIPLE\"\n        },\n        {\n            \"id\": 5,\n            \"name\": \"GLASSWARE\",\n            \"filters\": [\n                {\n                    \"id\": 100,\n                    \"name\": \"Glassware1\",\n                    \"cocktailIds\": [\n                        1\n                    ]\n                }\n            ],\n            \"selectionType\": \"SINGLE\"\n        },\n        {\n            \"id\": 1,\n            \"name\": \"GOODS\",\n            \"filters\": [\n                {\n                    \"id\": 1,\n                    \"name\": \"Good1\",\n                    \"cocktailIds\": [\n                        1\n                    ]\n                }\n            ],\n            \"selectionType\": \"MULTIPLE\"\n        },\n        {\n            \"id\": 0,\n            \"name\": \"TAGS\",\n            \"filters\": [\n                {\n                    \"id\": 1,\n                    \"name\": \"Tag1\",\n                    \"cocktailIds\": [\n                        1\n                    ]\n                }\n            ],\n            \"selectionType\": \"MULTIPLE\"\n        },\n        {\n            \"id\": 2,\n            \"name\": \"TOOLS\",\n            \"filters\": [\n                {\n                    \"id\": 1,\n                    \"name\": \"Tool1\",\n                    \"cocktailIds\": [\n                        1\n                    ]\n                },\n                {\n                    \"id\": 2,\n                    \"name\": \"Tool2\",\n                    \"cocktailIds\": []\n                }\n            ],\n            \"selectionType\": \"MULTIPLE\"\n        }\n    ],\n    \"glassware\": [\n        {\n            \"id\": 100,\n            \"name\": \"Glassware1\",\n            \"about\": \"About1\"\n        }\n    ]\n}"
+				}
+			]
 		}
 	]
 }

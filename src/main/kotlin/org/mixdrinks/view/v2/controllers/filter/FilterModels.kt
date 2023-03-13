@@ -45,7 +45,7 @@ class FilterModels {
         ),
         ALCOHOL_VOLUME(
             id = FilterGroupId(4),
-            queryName = FilterQueryName("alcoholVolume"),
+            queryName = FilterQueryName("alcohol_volume"),
             translation = "Алкоголь",
             selectionType = SelectionType.SINGLE,
         ),
@@ -74,6 +74,6 @@ class FilterModels {
     data class FilterItem(
         @SerialName("id") val id: FilterId,
         @SerialName("name") val name: String,
-        @SerialName("cocktailCount") val cocktailCount: Long,
+        @SerialName("cocktailCount") val cocktailCount: Int,
     )
 }

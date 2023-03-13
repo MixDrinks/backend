@@ -25,5 +25,9 @@ fun Application.configureRouting() {
             this@configureRouting.log.error(cause.stackTraceToString())
             call.respond(HttpStatusCode.ServiceUnavailable, cause.toString())
         }
+        exception<java.lang.Exception> { call, cause ->
+            this@configureRouting.log.error(cause.stackTraceToString())
+            call.respond(HttpStatusCode.ServiceUnavailable, cause.toString())
+        }
     }
 }

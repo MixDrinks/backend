@@ -1,4 +1,4 @@
-package org.mixdrinks.view.v2.controllers.search
+package org.mixdrinks.view.v2.controllers.filter
 
 import org.jetbrains.exposed.dao.with
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -12,7 +12,6 @@ import org.mixdrinks.domain.Filter
 import org.mixdrinks.domain.FilterGroup
 import org.mixdrinks.dto.CocktailId
 import org.mixdrinks.dto.FilterId
-import org.mixdrinks.view.v2.controllers.filter.FilterModels
 
 class FilterCache {
 
@@ -24,17 +23,17 @@ class FilterCache {
 
     val fullFilters: Map<FilterModels.Filters, List<FullFilter>> = transaction {
         return@transaction mapOf(
-            FilterModels.Filters.TAGS to Tag.all().with(Tag::cocktails)
-                .map(::toFullFilter),
-            FilterModels.Filters.GOODS to Good.all().with(Good::cocktails)
-                .map(::toFullFilter),
-            FilterModels.Filters.TOOLS to Tool.all().with(Tool::cocktails)
+            FilterModels.Filters.ALCOHOL_VOLUME to AlcoholVolumes.all().with(AlcoholVolumes::cocktails)
                 .map(::toFullFilter),
             FilterModels.Filters.TASTE to Taste.all().with(Taste::cocktails)
                 .map(::toFullFilter),
-            FilterModels.Filters.ALCOHOL_VOLUME to AlcoholVolumes.all().with(AlcoholVolumes::cocktails)
-                .map(::toFullFilter),
             FilterModels.Filters.GLASSWARE to Glassware.all().with(Glassware::cocktail)
+                .map(::toFullFilter),
+            FilterModels.Filters.GOODS to Good.all().with(Good::cocktails)
+                .map(::toFullFilter),
+            FilterModels.Filters.TAGS to Tag.all().with(Tag::cocktails)
+                .map(::toFullFilter),
+            FilterModels.Filters.TOOLS to Tool.all().with(Tool::cocktails)
                 .map(::toFullFilter),
         )
     }

@@ -11,7 +11,7 @@ import org.mixdrinks.dto.FilterId
 import org.mixdrinks.view.cocktail.domain.SortType
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
 import org.mixdrinks.view.v2.controllers.search.DescriptionBuilder
-import org.mixdrinks.view.v2.controllers.search.FilterCache
+import org.mixdrinks.view.v2.controllers.filter.FilterCache
 import org.mixdrinks.view.v2.controllers.search.SearchParams
 import org.mixdrinks.view.v2.controllers.search.SearchResponseBuilder
 

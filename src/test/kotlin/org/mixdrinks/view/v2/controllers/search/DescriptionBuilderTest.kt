@@ -139,7 +139,6 @@ private fun prepareData(
             Good.new(id = it) {
                 name = "Good$it"
                 about = "$it"
-                visitCount = 0
             }
         }
 
@@ -147,7 +146,6 @@ private fun prepareData(
             Tool.new(id = it) {
                 name = "Tool$it"
                 about = "$it"
-                visitCount = 0
             }
         }
 

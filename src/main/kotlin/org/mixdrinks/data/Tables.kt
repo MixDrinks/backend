@@ -55,13 +55,11 @@ class FullCocktail(id: EntityID<Int>) : IntEntity(id) {
     val glassware by Glassware via CocktailsToGlasswareTable
     val tags by Tag via CocktailToTagTable
     val tastes by Taste via CocktailsToTastesTable
-
 }
 
 object GoodsTable : IntIdTable(name = "goods", columnName = "id") {
     val name = text("name")
     val about = text("about")
-    val visitCount = integer("visit_count").default(0)
 }
 
 class Good(id: EntityID<Int>) : IntEntity(id) {
@@ -69,7 +67,6 @@ class Good(id: EntityID<Int>) : IntEntity(id) {
 
     var name by GoodsTable.name
     var about by GoodsTable.about
-    var visitCount by GoodsTable.visitCount
 
     val cocktails by Cocktail via CocktailsToGoodsTable
 }
@@ -136,7 +133,6 @@ object CocktailToTagTable : Table(name = "cocktails_to_tags") {
 object ToolsTable : IntIdTable(name = "tools", columnName = "id") {
     val name = text("name")
     val about = text("about")
-    val visitCount = integer("visit_count").default(0)
 }
 
 class Tool(id: EntityID<Int>) : IntEntity(id) {
@@ -144,7 +140,6 @@ class Tool(id: EntityID<Int>) : IntEntity(id) {
 
     var name by ToolsTable.name
     var about by ToolsTable.about
-    var visitCount by ToolsTable.visitCount
 
     val cocktails by Cocktail via CocktailsToToolsTable
 }

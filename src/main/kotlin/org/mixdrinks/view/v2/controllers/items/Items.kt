@@ -25,6 +25,9 @@ fun Application.items() {
                 call.respond(HttpStatusCode.BadRequest, "Query id is require, and must be integer")
             }
         }
+        tool()
+        good()
+        glassware()
     }
 }
 

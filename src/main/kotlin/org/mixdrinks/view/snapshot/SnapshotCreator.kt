@@ -1,6 +1,7 @@
 package org.mixdrinks.view.snapshot
 
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailsToGoodsTable
 import org.mixdrinks.data.FullCocktail
 import org.mixdrinks.data.Glassware
@@ -24,22 +25,24 @@ import org.mixdrinks.dto.TasteDto
 import org.mixdrinks.dto.TasteId
 import org.mixdrinks.dto.ToolDto
 import org.mixdrinks.dto.ToolId
-import org.mixdrinks.view.v2.controllers.search.FilterCache
+import org.mixdrinks.view.v2.controllers.filter.FilterCache
 
 class SnapshotCreator(
     private val filterCache: FilterCache,
 ) {
 
-    fun getSnapshot() {
-        SnapshotDto(
-            cocktails = getCocktails(),
-            goods = getGoods(),
-            tags = getTags(),
-            tastes = getTastes(),
-            tools = getTools(),
-            glassware = getGlassware(),
-            filterGroups = getFilterGroups(),
-        )
+    fun getSnapshot(): SnapshotDto {
+        return transaction {
+            return@transaction SnapshotDto(
+                cocktails = getCocktails(),
+                goods = getGoods(),
+                tags = getTags(),
+                tastes = getTastes(),
+                tools = getTools(),
+                glassware = getGlassware(),
+                filterGroups = getFilterGroups(),
+            )
+        }
     }
 
     private fun getFilterGroups(): List<FilterGroupDto> {

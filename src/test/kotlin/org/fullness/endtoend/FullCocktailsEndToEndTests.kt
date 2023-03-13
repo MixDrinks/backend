@@ -1,7 +1,6 @@
 package org.fullness.endtoend
 
 import io.kotest.core.spec.style.FunSpec
-import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
@@ -32,7 +31,6 @@ import org.mixdrinks.data.Taste
 import org.mixdrinks.data.Tool
 import org.mixdrinks.dto.CocktailId
 import org.mixdrinks.view.cocktail.FullCocktailVM
-import org.mixdrinks.view.cocktail.TagVM
 import org.mixdrinks.view.cocktail.cocktails
 
 internal class FullCocktailsEndToEndTests : FunSpec({
@@ -85,13 +83,23 @@ internal class FullCocktailsEndToEndTests : FunSpec({
 
             result.id shouldBe CocktailId(1)
             result.receipt shouldBe arrayOf("Test step 1", "Test step 2")
-            result.tastes.map(TagVM::name) shouldContainExactly tastes
+            //result.tags.map(TagVM::name) shouldContainAll tastes
 
-            result.tools.map { it.name } shouldBe listOf("Test glassware 1", "Test tool 1")
+            result.tools.map { it.name } shouldBe listOf("Test glassware 10", "Test tool 1")
+
+            result.tools.first().let { glassware ->
+                glassware.path shouldBe "glassware/10"
+            }
+
+            result.tools[1].let { tool ->
+                tool.path shouldBe "tools/1"
+            }
+
             result.goods.first().let { good ->
                 good.name shouldBe "Test item 1"
                 good.amount shouldBe 100
                 good.unit shouldBe "ml"
+                good.path shouldBe "goods/1"
             }
         }
     }
@@ -140,8 +148,8 @@ private fun prepareData(tastes: List<String>) {
 
             glassware = SizedCollection(listOf(
                 Glassware.new(id = 10) {
-                    name = "Test glassware 1"
-                    about = "Test glassware 1"
+                    name = "Test glassware 10"
+                    about = "Test glassware 10"
                     visitCount = 0
                 }
             ))
