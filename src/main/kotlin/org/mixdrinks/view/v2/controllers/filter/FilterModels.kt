@@ -4,16 +4,13 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.mixdrinks.dto.FilterGroupId
 import org.mixdrinks.dto.FilterId
+import org.mixdrinks.dto.SelectionType
 
 class FilterModels {
 
     @JvmInline
     @Serializable
     value class FilterQueryName(val value: String)
-
-    enum class SelectionType {
-        SINGLE, MULTIPLE
-    }
 
     @Suppress("MagicNumber")
     enum class Filters(

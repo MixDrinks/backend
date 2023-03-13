@@ -53,9 +53,8 @@ class FullCocktail(id: EntityID<Int>) : IntEntity(id) {
     val goods by Good via CocktailsToGoodsTable
     val tools by Tool via CocktailsToToolsTable
     val glassware by Glassware via CocktailsToGlasswareTable
-    val taste by Taste via CocktailsToTastesTable
     val tags by Tag via CocktailToTagTable
-
+    val tastes by Taste via CocktailsToTastesTable
 }
 
 object GoodsTable : IntIdTable(name = "goods", columnName = "id") {

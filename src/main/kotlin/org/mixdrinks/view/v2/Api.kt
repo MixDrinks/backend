@@ -3,6 +3,8 @@ package org.mixdrinks.view.v2
 import io.ktor.server.application.Application
 import org.mixdrinks.domain.CocktailSelector
 import org.mixdrinks.view.cocktail.cocktails
+import org.mixdrinks.view.snapshot.SnapshotCreator
+import org.mixdrinks.view.snapshot.snapshot
 import org.mixdrinks.view.v2.controllers.filter.FilterCache
 import org.mixdrinks.view.v2.controllers.filter.FilterSource
 import org.mixdrinks.view.v2.controllers.filter.filterMetaInfo
@@ -16,9 +18,10 @@ import org.mixdrinks.view.v2.controllers.search.searchView
 import org.mixdrinks.view.v2.controllers.settings.AppSettings
 import org.mixdrinks.view.v2.controllers.settings.appSetting
 
-fun Application.v2(appSettings: AppSettings) {
+fun Application.api(appSettings: AppSettings) {
     val filterCache = FilterCache()
     val cocktailSelector = CocktailSelector(filterCache.filterGroups)
+    val snapshotCreator = SnapshotCreator(filterCache)
     this.filterMetaInfo(FilterSource(filterCache))
     this.searchView(SearchResponseBuilder(filterCache, cocktailSelector, DescriptionBuilder()), appSettings)
     this.rattingSearchView(RattingBuilder(cocktailSelector), appSettings)
@@ -26,4 +29,5 @@ fun Application.v2(appSettings: AppSettings) {
     this.cocktails()
     this.items()
     this.appSetting(appSettings)
+    this.snapshot(snapshotCreator)
 }

@@ -158,3 +158,6 @@ values (100, 'Glassware1', 'About1');
 
 insert into cocktails_to_glassware (cocktail_id, glassware_id)
 values (1, 100);
+
+insert into cocktails_to_glassware (cocktail_id, glassware_id)
+values (2, 100);
