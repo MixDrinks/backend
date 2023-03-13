@@ -18,7 +18,7 @@ import org.mixdrinks.view.v2.controllers.settings.AppSettings
 import org.mixdrinks.view.v2.controllers.settings.appSetting
 import org.mixdrinks.view.v2.controllers.tools.itemsList
 
-fun Application.v2(appSettings: AppSettings) {
+fun Application.api(appSettings: AppSettings) {
     val filterCache = FilterCache()
     val cocktailSelector = CocktailSelector(filterCache.filterGroups)
     this.filterMetaInfo(FilterSource())

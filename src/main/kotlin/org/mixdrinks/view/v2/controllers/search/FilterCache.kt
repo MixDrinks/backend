@@ -22,7 +22,7 @@ class FilterCache {
         val cocktailIds: Set<CocktailId>,
     )
 
-    private val fullFilters: Map<FilterModels.Filters, List<FullFilter>> = transaction {
+    val fullFilters: Map<FilterModels.Filters, List<FullFilter>> = transaction {
         return@transaction mapOf(
             FilterModels.Filters.TAGS to Tag.all().with(Tag::cocktails)
                 .map(::toFullFilter),
@@ -39,11 +39,11 @@ class FilterCache {
         )
     }
 
-    val filterIds = fullFilters.mapValues { (_, filters) ->
+    val filterIds: Map<FilterModels.Filters, List<FilterId>> = fullFilters.mapValues { (_, filters) ->
         filters.map { it.id }
     }
 
-    val filterGroups = fullFilters.map { (filter, filters) ->
+    val filterGroups: List<FilterGroup> = fullFilters.map { (filter, filters) ->
         FilterGroup(
             id = filter.id,
             name = filter.name,

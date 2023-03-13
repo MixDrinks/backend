@@ -17,7 +17,7 @@ import org.mixdrinks.plugins.configureRouting
 import org.mixdrinks.plugins.static
 import org.mixdrinks.view.service
 import org.mixdrinks.view.v2.controllers.settings.AppSettings
-import org.mixdrinks.view.v2.v2
+import org.mixdrinks.view.v2.api
 
 fun main() {
     embeddedServer(Netty, environment = applicationEngineEnvironment {
@@ -57,7 +57,7 @@ fun main() {
                 pageSize = config.property("ktor.settings.pageSize").getString().toInt()
             )
 
-            v2(appSettings)
+            api(appSettings)
             service()
         }
 
