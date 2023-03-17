@@ -50,7 +50,7 @@ class SnapshotCreator(
             .map { (filterModel, filters) ->
                 FilterGroupDto(
                     id = filterModel.id,
-                    name = filterModel.name,
+                    name = filterModel.translation,
                     filters = filters.map { filter ->
                         FilterWithCocktailIdsDto(
                             id = filter.id,
