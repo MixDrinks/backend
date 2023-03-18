@@ -48,7 +48,7 @@ dependencies {
     implementation("io.ktor:ktor-server-cors:$ktorVersion")
     implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
-    implementation("org.mixdrinks:core-jvm:0.4.1")
+    implementation("org.mixdrinks:core-jvm:0.7.0")
 
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktorVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
@@ -59,7 +59,7 @@ dependencies {
     implementation("com.h2database", "h2", "2.1.214")
 
     implementation("com.zaxxer:HikariCP:5.0.1")
-    implementation("org.postgresql:postgresql:42.5.4")
+    implementation("org.postgresql:postgresql:42.6.0")
 
     testImplementation("io.mockk:mockk:1.13.4")
     testImplementation("io.kotest:kotest-runner-junit5:5.5.5")
