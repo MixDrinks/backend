@@ -110,7 +110,7 @@ private fun getFullTools(cocktail: FullCocktail): List<ToolVM> {
         addAll(cocktail.tools
             .map { buildToolVM(it.id, it.name, FilterModels.Filters.TOOLS) }
         )
-    }.distinctBy { it.id }
+    }
 }
 
 private fun buildToolVM(id: EntityID<Int>, name: String, filter: FilterModels.Filters): ToolVM {
