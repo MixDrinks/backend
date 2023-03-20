@@ -48,7 +48,7 @@ dependencies {
     implementation("io.ktor:ktor-server-cors:$ktorVersion")
     implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
-    implementation("org.mixdrinks:core-jvm:0.7.0")
+    implementation("org.mixdrinks:core-jvm:0.8.1-777512bd")
 
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktorVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
