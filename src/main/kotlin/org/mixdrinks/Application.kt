@@ -16,8 +16,8 @@ import org.mixdrinks.plugins.configureCache
 import org.mixdrinks.plugins.configureRouting
 import org.mixdrinks.plugins.static
 import org.mixdrinks.view.service
-import org.mixdrinks.view.v2.controllers.settings.AppSettings
 import org.mixdrinks.view.v2.api
+import org.mixdrinks.view.v2.controllers.settings.AppSettings
 
 fun main() {
     embeddedServer(Netty, environment = applicationEngineEnvironment {
@@ -58,7 +58,10 @@ fun main() {
             )
 
             api(appSettings)
-            service()
+
+            val appVersion = config.property("ktor.app.version").getString()
+
+            service(appVersion)
         }
 
         val port = config.property("ktor.connector.port").getString().toInt()
