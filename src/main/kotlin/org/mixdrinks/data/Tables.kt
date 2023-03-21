@@ -109,6 +109,7 @@ object CocktailsToTastesTable : Table(name = "cocktails_to_tastes") {
 
 object AlcoholVolumesTable : IntIdTable(name = "alcohol_volumes", columnName = "id") {
     val name = text("name")
+    val slug = text("slug")
 }
 
 class AlcoholVolumes(id: EntityID<Int>) : IntEntity(id) {
