@@ -33,7 +33,8 @@ jobs:
           push: true
           build-args: |
             MIX_DRINKS_APP_VERSION=${{env.mix_drinks_backend_version}}
-          tags: ${{env.mix_drinks_backend_version}}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/mixdrinks:${{env.mix_drinks_backend_version}}
 
   end2end:
     runs-on: ubuntu-latest
