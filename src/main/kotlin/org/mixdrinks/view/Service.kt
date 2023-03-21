@@ -12,6 +12,5 @@ fun Application.service(appVersion: String) {
         get("/version") {
             call.respond("version" to appVersion)
         }
-        openAPI(path = "openapi", swaggerFile = "openapi/documentation.yaml")
     }
 }
