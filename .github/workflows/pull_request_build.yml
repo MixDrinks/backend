@@ -15,8 +15,7 @@ jobs:
           current_version: ${{ steps.get-latest-tag.outputs.tag }}
           level: minor
       - name: "Set output"
-        id: set-output
-        run: echo "mix_drinks_backend_version=${{ steps.bump-semver.outputs.new_version }}-`echo "${GITHUB_SHA}" | cut -c1-8`" >> $GITHUB_OUTPUT
+        run: echo "mix_drinks_backend_version=${{ steps.bump-semver.outputs.new_version }}-`echo "${GITHUB_SHA}" | cut -c1-8`" >> $GITHUB_ENV
       - name: "Print output mix drinks backend version"
         run: echo ${{ env.mix_drinks_backend_version }}
       - name: Set up QEMU
