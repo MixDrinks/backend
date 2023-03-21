@@ -81,16 +81,19 @@ create table cocktails_to_tastes
 insert into cocktails_to_tastes (cocktail_id, taste_id)
 values (1, 1);
 
-create table alcohol_volumes
+create table public.alcohol_volumes
 (
     id   integer not null
         constraint alcohol_volumes_pk
             primary key,
-    name text
+    name text,
+    slug text    not null
+        constraint alcohol_volumes_pk_slug
+            unique
 );
 
-insert into alcohol_volumes (id, name)
-values (1, 'AlcoholVolume1');
+insert into alcohol_volumes (id, name, slug)
+values (1, 'AlcoholVolume1', 'slug_1');
 
 create table cocktails_to_alcohol_volume
 (
