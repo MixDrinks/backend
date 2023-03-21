@@ -6,10 +6,10 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
 
-fun Application.service() {
+fun Application.service(appVersion: String) {
     routing {
         get("/") {
-            call.respond("Version 1.4.1")
+            call.respond("Version $appVersion")
         }
     }
 }

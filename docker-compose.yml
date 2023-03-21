@@ -11,6 +11,7 @@ services:
       - DB_URL=postgres:5432/postgres
       - DB_USER=postgres
       - DB_PASSWORD=postgres
+      - MIX_DRINKS_APP_VERSION=version_to_be_replaced
     depends_on:
       postgres:
         condition: service_healthy
