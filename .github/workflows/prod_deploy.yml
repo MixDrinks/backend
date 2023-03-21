@@ -9,6 +9,23 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+      - uses: actions-ecosystem/action-get-latest-tag@v1
+        id: get-latest-tag
+      - uses: actions-ecosystem/action-bump-semver@v1
+        id: bump-semver
+        with:
+          current_version: ${{ steps.get-latest-tag.outputs.tag }}
+          level: minor
+      - uses: actions-ecosystem/action-push-tag@v1
+        with:
+          tag: ${{ steps.bump-semver.outputs.new_version }}
+          message: 'Release ${{ steps.bump-semver.outputs.new_version }}'
+      - name: "Set output"
+        id: set-output
+        run: echo "mix_drinks_backend_version=${{ steps.bump-semver.outputs.new_version }}" >> $GITHUB_ENV
+      - name: "Print output mix drinks backend version"
+        run: echo ${{ env.mix_drinks_backend_version }}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
@@ -18,22 +35,17 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Add SHORT_SHA env property with commit short sha
-        id: github-sha
-        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/mixdrinks:sha-${{env.SHORT_SHA}}
+            ${{ secrets.DOCKERHUB_USERNAME }}/mixdrinks:${{env.mix_drinks_backend_version}}
             ${{ secrets.DOCKERHUB_USERNAME }}/mixdrinks:latest
-      - name: Checkout
-        uses: actions/checkout@v3
       - name: Setup docker compose prod
         shell: bash
         run: |
-          sed -e 's,build: .,image: 'vovochkastelmashchuk/mixdrinks:sha-${{env.SHORT_SHA}}',g' < docker-compose.yml >> docker-compose-prod.yml 
+          sed -e 's,build: .,image: 'vovochkastelmashchuk/mixdrinks:${{env.mix_drinks_backend_version}}',g' < docker-compose.yml >> docker-compose-prod.yml 
           cat docker-compose-prod.yml
       - name: Setup docker compose prod
         uses: yu-ichiro/spin-up-docker-compose-action@v1
@@ -45,7 +57,7 @@ jobs:
       - name: Verify app is up
         run: curl -v --fail http://localhost:8080/ || exit 1
       - uses: matt-ball/newman-action@master
-        name: Run Postman tests on docker compose based on docker image with commit sha for production deployment
+        name: Run Postman tests on docker compose based on docker image with tag for production deployment
         with:
           collection: postman/api.json
           environment: postman/env.json
@@ -61,7 +73,7 @@ jobs:
                             \"registry_type\": \"DOCKER_HUB\",
                             \"registry\": \"vovochkastelmashchuk\",
                             \"repository\": \"mixdrinks\",
-                            \"tag\": \"sha-${{env.SHORT_SHA}}\"
+                            \"tag\": \"${{env.mix_drinks_backend_version}}\"
                           }
                         }
                       ]"
