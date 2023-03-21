@@ -13,5 +13,8 @@ fun Application.snapshot(
         get("snapshot") {
             call.respond(snapshotCreator.getSnapshot())
         }
+        get("v2/snapshot") {
+            call.respond(snapshotCreator.getSnapshot())
+        }
     }
 }
