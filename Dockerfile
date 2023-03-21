@@ -1,5 +1,7 @@
 FROM gradle:8.0.2-jdk11 AS build
 
+ARG MIX_DRINKS_APP_VERSION=version_to_be_replaced
+
 COPY . /appbuild
 WORKDIR /appbuild
 
