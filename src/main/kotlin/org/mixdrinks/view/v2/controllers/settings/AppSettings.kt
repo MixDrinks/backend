@@ -11,6 +11,9 @@ import org.mixdrinks.view.v2.controllers.settings.AppSettings
 
 fun Application.appSetting(appSettings: AppSettings) {
     routing {
+        /**
+         * Return the app settings
+         */
         get("v2/settings") {
             call.respond(appSettings)
         }

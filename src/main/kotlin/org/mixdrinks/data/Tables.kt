@@ -109,6 +109,7 @@ object CocktailsToTastesTable : Table(name = "cocktails_to_tastes") {
 
 object AlcoholVolumesTable : IntIdTable(name = "alcohol_volumes", columnName = "id") {
     val name = text("name")
+    val slug = text("slug")
 }
 
 class AlcoholVolumes(id: EntityID<Int>) : IntEntity(id) {
@@ -116,6 +117,7 @@ class AlcoholVolumes(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<AlcoholVolumes>(AlcoholVolumesTable)
 
     var name by AlcoholVolumesTable.name
+    var slug by AlcoholVolumesTable.slug
 
     var cocktails by Cocktail via CocktailsToAlcoholVolumesTable
 }

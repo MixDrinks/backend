@@ -12,6 +12,9 @@ import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
 
 fun Routing.tool() {
+    /**
+     * Return the tool info based on id
+     */
     get("v2/tool/{id}") {
         val id = call.parameters["id"]?.toIntOrNull() ?: throw BadRequestException("Tool id is required")
         call.respond(

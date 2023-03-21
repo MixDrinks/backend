@@ -8,8 +8,8 @@ import io.ktor.server.routing.routing
 
 fun Application.service(appVersion: String) {
     routing {
-        get("/") {
-            call.respond("Version $appVersion")
+        get("/version") {
+            call.respond("version" to appVersion)
         }
     }
 }

@@ -24,6 +24,9 @@ import org.mixdrinks.view.v2.controllers.filter.FilterModels
 
 fun Application.cocktails() {
     routing {
+        /**
+         * Return the list of all cocktails
+         */
         get("cocktails/all") {
             call.respond(transaction {
                 Cocktail.all().map {
@@ -34,6 +37,9 @@ fun Application.cocktails() {
                 }
             })
         }
+        /**
+         * Return the full cocktail info based on id
+         */
         get("v2/cocktails/full") {
             val id = call.request.queryParameters["id"]?.toIntOrNull()
 

@@ -8,6 +8,9 @@ import io.ktor.server.routing.routing
 
 fun Application.filterMetaInfo(filterSource: FilterSource) {
     routing {
+        /**
+         * Return the meta info about the filters.
+         */
         get("v2/filters") {
             call.respond(filterSource.getMetaInfo())
         }
