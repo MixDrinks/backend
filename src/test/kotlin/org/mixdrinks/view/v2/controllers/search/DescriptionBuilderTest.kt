@@ -132,6 +132,7 @@ private fun prepareData(
         alcoholVolumes.forEach {
             AlcoholVolumes.new(id = it) {
                 name = "AlcoholVolumes$it"
+                slug = "slug_$it"
             }
         }
 

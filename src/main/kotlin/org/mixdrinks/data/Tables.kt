@@ -117,6 +117,7 @@ class AlcoholVolumes(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<AlcoholVolumes>(AlcoholVolumesTable)
 
     var name by AlcoholVolumesTable.name
+    var slug by AlcoholVolumesTable.slug
 
     var cocktails by Cocktail via CocktailsToAlcoholVolumesTable
 }
