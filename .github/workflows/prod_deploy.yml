@@ -6,7 +6,7 @@ on:
       - 'main'
 
 jobs:
-  docker:
+  prod_deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
