@@ -10,9 +10,17 @@ fun Application.snapshot(
     snapshotCreator: SnapshotCreator,
 ) {
     routing {
+        /**
+         * Return the snapshot of the current state of the database as a JSON object.
+         * Includes all the ingredients, recipes, goods, cocktails, ect.
+         */
         get("snapshot") {
             call.respond(snapshotCreator.getSnapshot())
         }
+        /**
+         * Return the snapshot of the current state of the database as a JSON object.
+         * Includes all the ingredients, recipes, goods, cocktails, ect.
+         */
         get("v2/snapshot") {
             call.respond(snapshotCreator.getSnapshot())
         }

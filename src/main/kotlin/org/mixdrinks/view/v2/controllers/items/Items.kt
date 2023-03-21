@@ -16,6 +16,9 @@ import org.mixdrinks.view.images.buildImages
 
 fun Application.items() {
     routing {
+        /**
+         * Return the item info based on id
+         */
         get("v2/items/full") {
             val id = call.request.queryParameters["id"]?.toIntOrNull()
 

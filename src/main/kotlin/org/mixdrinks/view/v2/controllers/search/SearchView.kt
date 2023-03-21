@@ -15,6 +15,17 @@ import org.mixdrinks.view.v2.controllers.settings.AppSettings
 
 fun Application.searchView(searchResponseBuilder: SearchResponseBuilder, appSettings: AppSettings) {
     routing {
+        /**
+         * Return the cocktails that match the search request.
+         * The search request is a map of filter group id to a list of filter id.
+         * The search request is optional, if not provided, all cocktails are returned.
+         * The page is optional, if not provided, all cocktails are returned.
+         * The sort key is optional, if not provided, the cocktails are sorted by most popular.
+         * The sort key is a string that can be one of the following:
+         * - "most-popular"
+         * - "biggest-rate"
+         * Filter from the same group are combined with an AND operator.
+         */
         get("v2/search/cocktails") {
             val searchRequest = call.getSearchParam()
             val page: Page? = call.getPage(appSettings.pageSize)
