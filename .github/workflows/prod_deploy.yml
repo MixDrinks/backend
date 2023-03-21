@@ -39,14 +39,15 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
+          build-args: |
+            MIX_DRINKS_APP_VERSION=${{env.mix_drinks_backend_version}}
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/mixdrinks:${{env.mix_drinks_backend_version}}
             ${{ secrets.DOCKERHUB_USERNAME }}/mixdrinks:latest
       - name: Setup docker compose prod
         shell: bash
         run: |
-          sed -e 's,build: .,image: 'vovochkastelmashchuk/mixdrinks:${{env.mix_drinks_backend_version}}',g' < docker-compose.yml >> docker-compose-temp.yml
-          sed -e 's,version_to_be_replaced,${{env.mix_drinks_backend_version}},g' < docker-compose-temp.yml >> docker-compose-prod.yml
+          sed -e 's,build: .,image: 'vovochkastelmashchuk/mixdrinks:${{env.mix_drinks_backend_version}}',g' < docker-compose.yml >> docker-compose-prod.yml
           cat docker-compose-prod.yml
       - name: Setup docker compose prod
         uses: yu-ichiro/spin-up-docker-compose-action@v1

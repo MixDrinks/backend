@@ -11,6 +11,8 @@ FROM openjdk:11.0.16
 ENV APPLICATION_USER 1033
 RUN useradd -ms /bin/bash $APPLICATION_USER
 
+ENV MIX_DRINKS_APP_VERSION=version_to_be_replaced
+
 COPY --from=build /appbuild/build/libs/MixDrinks.jar /app/MixDrinks.jar
 COPY --from=build /appbuild/src/main/resources/ /app/resources/
 
