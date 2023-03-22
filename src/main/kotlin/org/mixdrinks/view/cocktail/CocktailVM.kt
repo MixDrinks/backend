@@ -32,7 +32,8 @@ data class FullCocktailVM(
     @SerialName("images") val images: List<Image>,
     @SerialName("goods") val goods: List<FullGood>,
     @SerialName("tools") val tools: List<ToolVM>,
-    @SerialName("tags") val tags: List<TagVM>
+    @SerialName("tags") val tags: List<TagVM>,
+    @SerialName("slug") val slug: String,
 )
 
 @Serializable

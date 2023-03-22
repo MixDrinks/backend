@@ -66,6 +66,7 @@ private fun getFullCocktail(id: Int): FullCocktailVM {
                 goods = getCocktailGoods(cocktail),
                 tools = getFullTools(cocktail),
                 tags = getCocktailTags(cocktail),// + getTastes(cocktail),
+                slug = cocktail.slug,
             )
         } ?: throw NotFoundException("Cocktail with id $id not found")
     }

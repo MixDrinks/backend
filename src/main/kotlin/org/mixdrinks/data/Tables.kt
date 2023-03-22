@@ -12,6 +12,7 @@ object CocktailsTable : IntIdTable(name = "cocktails", columnName = "id") {
     val visitCount = integer("visit_count")
     val ratingCount = integer("rating_count")
     val ratingValue = integer("rating_value").nullable()
+    val slug = text("slug")
 }
 
 class Cocktail(id: EntityID<Int>) : IntEntity(id) {
@@ -21,6 +22,7 @@ class Cocktail(id: EntityID<Int>) : IntEntity(id) {
     var visitCount by CocktailsTable.visitCount
     var ratingCount by CocktailsTable.ratingCount
     var ratingValue by CocktailsTable.ratingValue
+    var slug by CocktailsTable.slug
 
     fun getRatting(): Float? {
         return ratingValue?.let { ratingValue ->
@@ -37,6 +39,7 @@ class FullCocktail(id: EntityID<Int>) : IntEntity(id) {
 
     val name by CocktailsTable.name
     val steps: Array<String> by CocktailsTable.steps
+    val slug by CocktailsTable.slug
     val visitCount by CocktailsTable.visitCount
     val ratingCount by CocktailsTable.ratingCount
     val ratingValue by CocktailsTable.ratingValue

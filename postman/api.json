@@ -292,6 +292,10 @@
 							"    pm.expect(cocktail.tools[1].url).to.eql(\"tools/1\")",
 							"})",
 							"",
+							"pm.test(\"Verify cocktail slug\", function(){",
+							"    pm.expect(cocktail.slug).to.eql(\"cocktail_1\")",
+							"})",
+							"",
 							"",
 							""
 						],

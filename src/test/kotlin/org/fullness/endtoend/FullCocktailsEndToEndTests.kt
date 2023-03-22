@@ -83,6 +83,7 @@ internal class FullCocktailsEndToEndTests : FunSpec({
 
             result.id shouldBe CocktailId(1)
             result.receipt shouldBe arrayOf("Test step 1", "Test step 2")
+            result.slug shouldBe "test-cocktail-1"
             //result.tags.map(TagVM::name) shouldContainAll tastes
 
             result.tools.map { it.name } shouldBe listOf("Test glassware 10", "Test tool 1")
@@ -113,6 +114,7 @@ class TestCocktail(id: EntityID<Int>) : IntEntity(id) {
     var steps by CocktailsTable.steps
     var ratingCount by CocktailsTable.ratingCount
     var ratingValue by CocktailsTable.ratingValue
+    var slug by CocktailsTable.slug
 
     var tools by Tool via CocktailsToToolsTable
     var taste by Taste via CocktailsToTastesTable
@@ -129,6 +131,7 @@ private fun prepareData(tastes: List<String>) {
             visitCount = 1
             ratingCount = 1
             ratingValue = 3
+            slug = "test-cocktail-1"
 
             tools = SizedCollection(listOf(
                 Tool.new {

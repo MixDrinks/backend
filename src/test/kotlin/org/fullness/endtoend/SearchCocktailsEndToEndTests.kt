@@ -298,6 +298,7 @@ private fun prepareData(cocktails: List<MockCocktail>) {
                 it[visitCount] = cocktail.visitCount
                 it[ratingCount] = cocktail.ratingCount
                 it[ratingValue] = cocktail.ratingValue
+                it[slug] = "cocktail-${cocktail.id}"
             }
         }
     }
