@@ -44,6 +44,7 @@ private fun getFullItem(id: Int): ItemVm {
                 name = item.name,
                 about = item.about,
                 images = buildImages(itemId, ImageType.ITEM),
+                slug = item.slug,
             )
         } ?: let {
             Tool.findById(id)?.let { tool ->
@@ -54,6 +55,7 @@ private fun getFullItem(id: Int): ItemVm {
                     name = tool.name,
                     about = tool.about,
                     images = buildImages(toolId, ImageType.ITEM),
+                    slug = tool.slug,
                 )
             } ?: let {
                 Glassware.findById(id)?.let { glassware ->
@@ -64,6 +66,7 @@ private fun getFullItem(id: Int): ItemVm {
                         name = glassware.name,
                         about = glassware.about,
                         images = buildImages(glasswareId, ImageType.ITEM),
+                        slug = glassware.slug,
                     )
                 } ?: throw NotFoundException("Item with id $id not found")
             }

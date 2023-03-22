@@ -90,10 +90,12 @@ internal class FullCocktailsEndToEndTests : FunSpec({
 
             result.tools.first().let { glassware ->
                 glassware.path shouldBe "glassware/10"
+                glassware.slug shouldBe "test-glassware-10"
             }
 
             result.tools[1].let { tool ->
                 tool.path shouldBe "tools/1"
+                tool.slug shouldBe "test-tool-1"
             }
 
             result.goods.first().let { good ->
@@ -138,6 +140,7 @@ private fun prepareData(tastes: List<String>) {
                     name = "Test tool 1"
                     about = "Test tool 1"
                     visitCount = 0
+                    slug = "test-tool-1"
                 }
             ))
 
@@ -145,6 +148,7 @@ private fun prepareData(tastes: List<String>) {
                 .map {
                     Taste.new {
                         name = it
+                        slug = it
                     }
                 }
             )
@@ -154,6 +158,7 @@ private fun prepareData(tastes: List<String>) {
                     name = "Test glassware 10"
                     about = "Test glassware 10"
                     visitCount = 0
+                    slug = "test-glassware-10"
                 }
             ))
         }
@@ -161,6 +166,7 @@ private fun prepareData(tastes: List<String>) {
         Good.new(id = 1) {
             name = "Test item 1"
             about = "Test item 1"
+            slug = "test-item-1"
         }
 
         CocktailsToGoodsTable.insert {

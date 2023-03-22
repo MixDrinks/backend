@@ -75,21 +75,22 @@ private fun getFullCocktail(id: Int): FullCocktailVM {
 @Suppress("UnusedPrivateMember")
 private fun getTastes(cocktail: FullCocktail): List<TagVM> {
     return cocktail.tastes.map {
-        return@map buildTagVM(it.id, it.name, FilterModels.Filters.TASTE)
+        return@map buildTagVM(it.id, it.name, it.slug, FilterModels.Filters.TASTE)
     }
 }
 
 private fun getCocktailTags(cocktail: FullCocktail): List<TagVM> {
     return cocktail.tags.map {
-        return@map buildTagVM(it.id, it.name, FilterModels.Filters.TAGS)
+        return@map buildTagVM(it.id, it.name, it.slug, FilterModels.Filters.TAGS)
     }
 }
 
-private fun buildTagVM(id: EntityID<Int>, name: String, filter: FilterModels.Filters): TagVM {
+private fun buildTagVM(id: EntityID<Int>, name: String, slug: String, filter: FilterModels.Filters): TagVM {
     return TagVM(
         id = TagId(id.value),
         name = name,
         path = "${filter.queryName.value}/${id.value}",
+        slug = slug,
     )
 }
 
@@ -105,6 +106,7 @@ private fun getCocktailGoods(cocktail: FullCocktail): List<FullGood> {
                 amount = itemRow[CocktailsToGoodsTable.amount],
                 unit = itemRow[CocktailsToGoodsTable.unit],
                 path = "${FilterModels.Filters.GOODS.queryName.value}/${itemRow[GoodsTable.id].value}",
+                slug = itemRow[GoodsTable.slug],
             )
         }
 }
@@ -112,19 +114,20 @@ private fun getCocktailGoods(cocktail: FullCocktail): List<FullGood> {
 private fun getFullTools(cocktail: FullCocktail): List<ToolVM> {
     return buildList {
         cocktail.glassware.first().let {
-            add(buildToolVM(it.id, it.name, FilterModels.Filters.GLASSWARE))
+            add(buildToolVM(it.id, it.name, it.slug, FilterModels.Filters.GLASSWARE))
         }
         addAll(cocktail.tools
-            .map { buildToolVM(it.id, it.name, FilterModels.Filters.TOOLS) }
+            .map { buildToolVM(it.id, it.name, it.slug, FilterModels.Filters.TOOLS) }
         )
     }
 }
 
-private fun buildToolVM(id: EntityID<Int>, name: String, filter: FilterModels.Filters): ToolVM {
+private fun buildToolVM(id: EntityID<Int>, name: String, slug: String, filter: FilterModels.Filters): ToolVM {
     return ToolVM(
         id = id.value,
         name = name,
         path = "${filter.queryName.value}/${id.value}",
         images = buildImages(id.value, ImageType.ITEM),
+        slug = slug,
     )
 }

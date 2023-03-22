@@ -63,6 +63,7 @@ class FullCocktail(id: EntityID<Int>) : IntEntity(id) {
 object GoodsTable : IntIdTable(name = "goods", columnName = "id") {
     val name = text("name")
     val about = text("about")
+    val slug = text("slug")
 }
 
 class Good(id: EntityID<Int>) : IntEntity(id) {
@@ -70,6 +71,7 @@ class Good(id: EntityID<Int>) : IntEntity(id) {
 
     var name by GoodsTable.name
     var about by GoodsTable.about
+    var slug by GoodsTable.slug
 
     val cocktails by Cocktail via CocktailsToGoodsTable
 }
@@ -83,24 +85,28 @@ object CocktailsToGoodsTable : Table(name = "cocktails_to_items") {
 
 object TagsTable : IntIdTable(name = "tags", columnName = "id") {
     val name = text("name")
+    val slug = text("slug")
 }
 
 class Tag(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<Tag>(TagsTable)
 
     var name by TagsTable.name
+    var slug by TagsTable.slug
 
     var cocktails by Cocktail via CocktailToTagTable
 }
 
 object TastesTable : IntIdTable(name = "tastes", columnName = "id") {
     val name = text("name")
+    val slug = text("slug")
 }
 
 class Taste(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<Taste>(TastesTable)
 
     var name by TastesTable.name
+    var slug by TastesTable.slug
 
     var cocktails by Cocktail via CocktailsToTastesTable
 }
@@ -138,6 +144,7 @@ object CocktailToTagTable : Table(name = "cocktails_to_tags") {
 object ToolsTable : IntIdTable(name = "tools", columnName = "id") {
     val name = text("name")
     val about = text("about")
+    val slug = text("slug")
 }
 
 class Tool(id: EntityID<Int>) : IntEntity(id) {
@@ -145,6 +152,7 @@ class Tool(id: EntityID<Int>) : IntEntity(id) {
 
     var name by ToolsTable.name
     var about by ToolsTable.about
+    var slug by ToolsTable.slug
 
     val cocktails by Cocktail via CocktailsToToolsTable
 }
@@ -157,6 +165,7 @@ object CocktailsToToolsTable : Table(name = "cocktails_to_tools") {
 object GlasswareTable : IntIdTable(name = "glassware", columnName = "id") {
     val name = text("name")
     val about = text("about")
+    val slug = text("slug")
 }
 
 object CocktailsToGlasswareTable : Table(name = "cocktails_to_glassware") {
@@ -169,6 +178,7 @@ class Glassware(id: EntityID<Int>) : IntEntity(id) {
 
     var name by GlasswareTable.name
     var about by GlasswareTable.about
+    var slug by GlasswareTable.slug
 
     var cocktail by Cocktail via CocktailsToGlasswareTable
 }
