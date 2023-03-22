@@ -3,7 +3,7 @@ name: Build
 on: pull_request
 
 jobs:
-  docker:
+  end2end:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -35,16 +35,15 @@ jobs:
             MIX_DRINKS_APP_VERSION=${{env.mix_drinks_backend_version}}
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/mixdrinks:${{env.mix_drinks_backend_version}}
-
-  end2end:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup docker compose
+      - name: Setup docker compose prod
+        shell: bash
+        run: |
+          sed -e 's,build: .,image: 'vovochkastelmashchuk/mixdrinks:${{env.mix_drinks_backend_version}}',g' < docker-compose.yml >> docker-compose-prod.yml
+          cat docker-compose-prod.yml
+      - name: Setup docker compose prod
         uses: yu-ichiro/spin-up-docker-compose-action@v1
         with:
-          file: docker-compose.yml
+          file: docker-compose-prod.yml
       - name: Sleep for 60 seconds
         run: sleep 60s
         shell: bash
