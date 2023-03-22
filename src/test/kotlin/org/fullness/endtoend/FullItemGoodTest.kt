@@ -38,6 +38,7 @@ class FullItemGoodTest : FunSpec({
             val result = Json.decodeFromString<ItemVm>(response.bodyAsText())
 
             result.name shouldBe "Good"
+            result.slug shouldBe "good"
         }
     }
 
@@ -49,6 +50,7 @@ class FullItemGoodTest : FunSpec({
             val result = Json.decodeFromString<ItemVm>(response.bodyAsText())
 
             result.name shouldBe "Tool"
+            result.slug shouldBe "tool"
         }
     }
 
@@ -82,11 +84,13 @@ fun prepareDatabase() {
         Good.new(id = 1) {
             name = "Good"
             about = "About Good"
+            slug = "good"
         }
 
         Tool.new(id = 2) {
             name = "Tool"
             about = "About Tool"
+            slug = "tool"
         }
     }
 }

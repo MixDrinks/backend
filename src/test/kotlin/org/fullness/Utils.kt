@@ -69,6 +69,7 @@ private fun insertDependencies(cocktails: List<CocktailData>) {
         TagsTable.insert {
             it[id] = tagId
             it[name] = ""
+            it[slug] = "tag-$tagId"
         }
     }
 
@@ -77,6 +78,7 @@ private fun insertDependencies(cocktails: List<CocktailData>) {
             it[id] = toolId
             it[name] = ""
             it[about] = ""
+            it[slug] = "tool-$toolId"
         }
     }
 
@@ -85,6 +87,7 @@ private fun insertDependencies(cocktails: List<CocktailData>) {
             it[id] = goodId
             it[name] = ""
             it[about] = ""
+            it[slug] = "good-$goodId"
         }
     }
 }

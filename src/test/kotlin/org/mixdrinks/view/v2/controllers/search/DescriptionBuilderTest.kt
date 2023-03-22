@@ -140,6 +140,7 @@ private fun prepareData(
             Good.new(id = it) {
                 name = "Good$it"
                 about = "$it"
+                slug = "good_$it"
             }
         }
 
@@ -147,18 +148,21 @@ private fun prepareData(
             Tool.new(id = it) {
                 name = "Tool$it"
                 about = "$it"
+                slug = "tool_$it"
             }
         }
 
         taste.forEach {
             Taste.new(id = it) {
                 name = "Taste$it"
+                slug = "taste_$it"
             }
         }
 
         tags.forEach {
             Tag.new(id = it) {
                 name = "Tag$it"
+                slug = "tag_$it"
             }
         }
 
@@ -166,6 +170,7 @@ private fun prepareData(
             Glassware.new(id = it) {
                 name = "Glassware$it"
                 about = "About"
+                slug = "glassware_$it"
             }
         }
     }

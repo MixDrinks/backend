@@ -1,16 +1,24 @@
 create table tags
 (
-    id   integer,
-    name text not null,
-    type integer
+    id   integer not null
+        constraint tags_pk
+            primary key,
+    name text    not null,
+    type integer,
+    slug text    not null
+        constraint tags_pk_slug
+            unique
 );
 
-insert into tags (id, name, type)
-values (1, 'Tag1', 1);
+create table cocktails_to_tags
+(
+    tag_id      integer not null,
+    cocktail_id integer
+);
 
 create table cocktails
 (
-    id           integer
+    id           integer           not null
         constraint cocktails_pk
             primary key,
     name         text,
@@ -23,53 +31,41 @@ create table cocktails
             unique
 );
 
-insert into cocktails (id, name, recipe, visit_count, rating_count, rating_value, slug)
-values (1, 'Cocktail1', '{"1", "2", "3"}', 1, 1, 1, 'cocktail_1');
-
-insert into cocktails (id, name, recipe, visit_count, rating_count, rating_value, slug)
-values (2, 'Cocktail2', '{"1_1", "2_2", "3_3"}', 1, 1, 1, 'cocktail_2');
-
-create table cocktails_to_tags
-(
-    tag_id      integer not null,
-    cocktail_id integer
-);
-
-insert into cocktails_to_tags (tag_id, cocktail_id)
-values (1, 1);
-
 create table goods
 (
     name        text,
     about       text,
-    id          integer,
-    visit_count integer default 0 not null
+    id          integer           not null
+        constraint goods_pk
+            primary key,
+    visit_count integer default 0 not null,
+    slug        text              not null
+        constraint goods_pk_slug
+            unique
 );
-
-insert into goods (id, name, about, visit_count)
-values (1, 'Good1', 'About1', 1);
 
 create table cocktails_to_items
 (
     cocktail_id integer not null,
     good_id     integer not null,
     amount      integer not null,
-    unit        text
+    unit        text,
+    relation    integer
 );
 
-insert into cocktails_to_items (cocktail_id, good_id, amount, unit)
-values (1, 1, 1, 'ml');
+create index cocktail_index
+    on cocktails_to_items (cocktail_id, relation);
 
 create table tastes
 (
     id   integer not null
         constraint tastes_pk
             primary key,
-    name text    not null
+    name text    not null,
+    slug text    not null
+        constraint tastes_pk_slug
+            unique
 );
-
-insert into tastes (id, name)
-values (1, 'Taste1');
 
 create table cocktails_to_tastes
 (
@@ -81,10 +77,7 @@ create table cocktails_to_tastes
             references tastes
 );
 
-insert into cocktails_to_tastes (cocktail_id, taste_id)
-values (1, 1);
-
-create table public.alcohol_volumes
+create table alcohol_volumes
 (
     id   integer not null
         constraint alcohol_volumes_pk
@@ -94,9 +87,6 @@ create table public.alcohol_volumes
         constraint alcohol_volumes_pk_slug
             unique
 );
-
-insert into alcohol_volumes (id, name, slug)
-values (1, 'AlcoholVolume1', 'slug_1');
 
 create table cocktails_to_alcohol_volume
 (
@@ -108,9 +98,6 @@ create table cocktails_to_alcohol_volume
             references cocktails
 );
 
-insert into cocktails_to_alcohol_volume (alcohol_volume_id, cocktail_id)
-values (1, 1);
-
 create table tools
 (
     id          integer           not null
@@ -118,14 +105,11 @@ create table tools
             primary key,
     name        text              not null,
     about       text              not null,
-    visit_count integer default 0 not null
+    visit_count integer default 0 not null,
+    slug        text              not null
+        constraint tools_pk2
+            unique
 );
-
-insert into tools (id, name, about, visit_count)
-values (1, 'Tool1', 'About1', 1);
-
-insert into tools (id, name, about, visit_count)
-values (2, 'Tool2', 'About2', 1);
 
 create table cocktails_to_tools
 (
@@ -137,16 +121,16 @@ create table cocktails_to_tools
             references tools
 );
 
-insert into cocktails_to_tools (cocktail_id, tool_id)
-values (1, 1);
-
 create table glassware
 (
     id    integer not null
         constraint glassware_pk
             primary key,
     name  text    not null,
-    about text    not null
+    about text    not null,
+    slug  text    not null
+        constraint glassware_pk_slug
+            unique
 );
 
 create table cocktails_to_glassware
@@ -159,8 +143,45 @@ create table cocktails_to_glassware
             references glassware
 );
 
-insert into glassware (id, name, about)
-values (100, 'Glassware1', 'About1');
+insert into tags (id, name, type, slug)
+values (1, 'Tag1', 1, 'tag_1');
+
+insert into cocktails (id, name, recipe, visit_count, rating_count, rating_value, slug)
+values (1, 'Cocktail1', '{"1", "2", "3"}', 1, 1, 1, 'cocktail_1');
+
+insert into cocktails (id, name, recipe, visit_count, rating_count, rating_value, slug)
+values (2, 'Cocktail2', '{"1_1", "2_2", "3_3"}', 1, 1, 1, 'cocktail_2');
+
+insert into goods (id, name, about, visit_count, slug)
+values (1, 'Good1', 'About1', 1, 'good_1');
+
+insert into tastes (id, name, slug)
+values (1, 'Taste1', 'taste_1');
+
+insert into alcohol_volumes (id, name, slug)
+values (1, 'AlcoholVolume1', 'slug_1');
+
+insert into tools (id, name, about, visit_count, slug)
+values (1, 'Tool1', 'About1', 1, 'tool_1'),
+       (2, 'Tool2', 'About2', 1, 'tool_2');
+
+insert into cocktails_to_alcohol_volume (alcohol_volume_id, cocktail_id)
+values (1, 1);
+
+insert into cocktails_to_items (cocktail_id, good_id, amount, unit)
+values (1, 1, 1, 'ml');
+
+insert into cocktails_to_tags (tag_id, cocktail_id)
+values (1, 1);
+
+insert into cocktails_to_tools (cocktail_id, tool_id)
+values (1, 1);
+
+insert into cocktails_to_tastes (cocktail_id, taste_id)
+values (1, 1);
+
+insert into glassware (id, name, about, slug)
+values (100, 'Glassware1', 'About1', 'slug_1');
 
 insert into cocktails_to_glassware (cocktail_id, glassware_id)
 values (1, 100);

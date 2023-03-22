@@ -24,6 +24,7 @@ fun Routing.glassware() {
                         name = glassware.name,
                         about = glassware.about,
                         images = buildImages(glasswareId, ImageType.ITEM),
+                        slug = glassware.slug,
                     )
                 } ?: throw NotFoundException("Glassware with id $id not found")
             }

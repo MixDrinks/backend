@@ -27,6 +27,7 @@ fun Routing.tool() {
                         name = tool.name,
                         about = tool.about,
                         images = buildImages(toolId, ImageType.ITEM),
+                        slug = tool.slug,
                     )
                 } ?: throw NotFoundException("Tool with id $id not found")
             }

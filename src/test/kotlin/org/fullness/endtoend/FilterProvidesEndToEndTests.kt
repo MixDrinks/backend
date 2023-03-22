@@ -163,6 +163,7 @@ private fun prepareData(
                     TagsTable.insert {
                         it[id] = tag.id
                         it[name] = tag.name
+                        it[slug] = tag.name
                     }
 
                     repeat(tag.cocktailsCount) {cocktailTmpId ->
@@ -177,6 +178,7 @@ private fun prepareData(
                     GoodsTable.insert {
                         it[id] = tag.id
                         it[name] = tag.name
+                        it[slug] = tag.name
                         it[about] = ""
                     }
 
@@ -194,6 +196,7 @@ private fun prepareData(
                     ToolsTable.insert {
                         it[id] = tag.id
                         it[name] = tag.name
+                        it[slug] = tag.name
                         it[about] = ""
                     }
 

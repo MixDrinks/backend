@@ -44,6 +44,7 @@ data class FullGood(
     @SerialName("amount") val amount: Int,
     @SerialName("unit") val unit: String,
     @SerialName("url") val path: String,
+    @SerialName("slug") val slug: String,
 )
 
 @Serializable
@@ -52,6 +53,7 @@ data class ToolVM(
     @SerialName("name") val name: String,
     @SerialName("images") val images: List<Image>,
     @SerialName("url") val path: String,
+    @SerialName("slug") val slug: String,
 )
 
 @Serializable
@@ -59,4 +61,5 @@ data class TagVM(
     @SerialName("id") val id: TagId,
     @SerialName("name") val name: String,
     @SerialName("url") val path: String,
+    @SerialName("slug") val slug: String,
 )

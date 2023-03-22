@@ -24,6 +24,7 @@ fun Routing.good() {
                         name = good.name,
                         about = good.about,
                         images = buildImages(goodId, ImageType.ITEM),
+                        slug = good.slug,
                     )
                 } ?: throw NotFoundException("Good with id $id not found")
             }
