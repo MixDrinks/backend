@@ -17,14 +17,17 @@ create table cocktails
     recipe       text[],
     visit_count  integer default 0 not null,
     rating_count integer default 0 not null,
-    rating_value integer
+    rating_value integer,
+    slug         text              not null
+        constraint cocktails_pk_slug
+            unique
 );
 
-insert into cocktails (id, name, recipe, visit_count, rating_count, rating_value)
-values (1, 'Cocktail1', '{"1", "2", "3"}', 1, 1, 1);
+insert into cocktails (id, name, recipe, visit_count, rating_count, rating_value, slug)
+values (1, 'Cocktail1', '{"1", "2", "3"}', 1, 1, 1, 'cocktail_1');
 
-insert into cocktails (id, name, recipe, visit_count, rating_count, rating_value)
-values (2, 'Cocktail2', '{"1_1", "2_2", "3_3"}', 1, 1, 1);
+insert into cocktails (id, name, recipe, visit_count, rating_count, rating_value, slug)
+values (2, 'Cocktail2', '{"1_1", "2_2", "3_3"}', 1, 1, 1, 'cocktail_2');
 
 create table cocktails_to_tags
 (

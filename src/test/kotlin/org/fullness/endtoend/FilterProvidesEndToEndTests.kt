@@ -153,6 +153,7 @@ private fun prepareData(
                 it[visitCount] = 10
                 it[ratingCount] = 10
                 it[ratingValue] = 10
+                it[slug] = "cocktail-$it"
             }
         }
 

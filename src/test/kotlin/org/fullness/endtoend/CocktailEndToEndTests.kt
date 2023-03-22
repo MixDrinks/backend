@@ -87,6 +87,7 @@ private fun prepareData(cocktails: List<MockCocktailVisit>) {
                 it[visitCount] = cocktail.visitCount
                 it[ratingCount] = 10
                 it[ratingValue] = 500
+                it[slug] = ""
             }
         }
     }

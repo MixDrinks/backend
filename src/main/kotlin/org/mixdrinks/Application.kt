@@ -14,12 +14,12 @@ import io.ktor.server.plugins.cors.routing.CORS
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
-import org.mixdrinks.data.AlcoholVolumes
-import org.mixdrinks.data.AlcoholVolumesTable
+import org.mixdrinks.data.Cocktail
+import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.plugins.configureCache
 import org.mixdrinks.plugins.configureRouting
 import org.mixdrinks.plugins.static
-import org.mixdrinks.utils.translit
+import org.mixdrinks.utils.slug
 import org.mixdrinks.view.service
 import org.mixdrinks.view.v2.api
 import org.mixdrinks.view.v2.controllers.settings.AppSettings

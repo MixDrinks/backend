@@ -38,6 +38,7 @@ private fun insertCocktails(cocktails: List<CocktailData>) {
             it[visitCount] = 0
             it[ratingCount] = 1
             it[ratingValue] = 4
+            it[slug] = "cocktail-${cocktail.id}"
         }
 
         cocktail.goodIds.forEach { newGoodId ->
