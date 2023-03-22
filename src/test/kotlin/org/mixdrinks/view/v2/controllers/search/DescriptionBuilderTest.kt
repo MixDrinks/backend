@@ -14,7 +14,6 @@ import org.mixdrinks.data.Taste
 import org.mixdrinks.data.Tool
 import org.mixdrinks.dto.FilterGroupId
 import org.mixdrinks.dto.FilterId
-import org.mixdrinks.utils.slug
 import org.mixdrinks.view.v2.controllers.filter.FilterModels
 
 class DescriptionBuilderTest : FunSpec({
@@ -133,7 +132,7 @@ private fun prepareData(
         alcoholVolumes.forEach {
             AlcoholVolumes.new(id = it) {
                 name = "AlcoholVolumes$it"
-                slug = "slug$it"
+                slug = "slug_$it"
             }
         }
 
