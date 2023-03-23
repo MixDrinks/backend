@@ -24,10 +24,10 @@ import org.mixdrinks.data.GoodsTable
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.data.ToolsTable
 import org.mixdrinks.dto.FilterId
-import org.mixdrinks.view.v2.controllers.filter.FilterCache
-import org.mixdrinks.view.v2.controllers.filter.FilterModels
-import org.mixdrinks.view.v2.controllers.filter.FilterSource
-import org.mixdrinks.view.v2.controllers.filter.filterMetaInfo
+import org.mixdrinks.view.controllers.filter.FilterCache
+import org.mixdrinks.view.controllers.filter.FilterModels
+import org.mixdrinks.view.controllers.filter.FilterSource
+import org.mixdrinks.view.controllers.filter.filterMetaInfo
 
 class FilterProvidesEndToEndTests : FunSpec({
 
@@ -42,27 +42,27 @@ class FilterProvidesEndToEndTests : FunSpec({
         prepareData(
             listOf(
                 FilterData(
-                    type = FilterModels.Filters.TAGS,
+                    type = FilterModels.FilterGroupBackend.TAGS,
                     id = 1,
                     cocktailsCount = 1,
                 ), FilterData(
-                    type = FilterModels.Filters.TAGS,
+                    type = FilterModels.FilterGroupBackend.TAGS,
                     id = 2,
                     cocktailsCount = 10,
                 ), FilterData(
-                    type = FilterModels.Filters.GOODS,
+                    type = FilterModels.FilterGroupBackend.GOODS,
                     id = 3,
                     cocktailsCount = 11,
                 ), FilterData(
-                    type = FilterModels.Filters.GOODS,
+                    type = FilterModels.FilterGroupBackend.GOODS,
                     id = 4,
                     cocktailsCount = 2,
                 ), FilterData(
-                    type = FilterModels.Filters.TOOLS,
+                    type = FilterModels.FilterGroupBackend.TOOLS,
                     id = 5,
                     cocktailsCount = 100,
                 ), FilterData(
-                    type = FilterModels.Filters.TOOLS,
+                    type = FilterModels.FilterGroupBackend.TOOLS,
                     id = 6,
                     cocktailsCount = 1000,
                 )
@@ -83,7 +83,7 @@ class FilterProvidesEndToEndTests : FunSpec({
             val result = Json.decodeFromString<List<FilterModels.FilterGroup>>(response.bodyAsText())
 
             result[3].let { filterGroup: FilterModels.FilterGroup ->
-                verifyFilterGroup(filterGroup, FilterModels.Filters.GOODS)
+                verifyFilterGroup(filterGroup, FilterModels.FilterGroupBackend.GOODS)
 
                 verifyItems(
                     filterGroup.items, listOf(
@@ -94,7 +94,7 @@ class FilterProvidesEndToEndTests : FunSpec({
             }
 
             result[4].let { filterGroup: FilterModels.FilterGroup ->
-                verifyFilterGroup(filterGroup, FilterModels.Filters.TAGS)
+                verifyFilterGroup(filterGroup, FilterModels.FilterGroupBackend.TAGS)
 
                 verifyItems(
                     filterGroup.items, listOf(
@@ -105,7 +105,7 @@ class FilterProvidesEndToEndTests : FunSpec({
             }
 
             result[5].let { filterGroup: FilterModels.FilterGroup ->
-                verifyFilterGroup(filterGroup, FilterModels.Filters.TOOLS)
+                verifyFilterGroup(filterGroup, FilterModels.FilterGroupBackend.TOOLS)
 
                 verifyItems(
                     filterGroup.items, listOf(
@@ -118,7 +118,7 @@ class FilterProvidesEndToEndTests : FunSpec({
     }
 })
 
-private fun verifyFilterGroup(filterGroup: FilterModels.FilterGroup, filterModels: FilterModels.Filters) {
+private fun verifyFilterGroup(filterGroup: FilterModels.FilterGroup, filterModels: FilterModels.FilterGroupBackend) {
     filterGroup.id shouldBe filterModels.id
     filterGroup.name shouldBe filterModels.translation
     filterGroup.queryName shouldBe filterModels.queryName
@@ -129,13 +129,14 @@ private fun verifyItems(items: List<FilterModels.FilterItem>, idToCount: List<Pa
         FilterModels.FilterItem(
             FilterId(id),
             "Name$id",
-            count
+            count,
+            "slug-Name$id",
         )
     }
 }
 
 private data class FilterData(
-    val type: FilterModels.Filters, val id: Int, val cocktailsCount: Int, val name: String = "Name$id"
+    val type: FilterModels.FilterGroupBackend, val id: Int, val cocktailsCount: Int, val name: String = "Name$id"
 )
 
 @Suppress("LongMethod")
@@ -159,14 +160,14 @@ private fun prepareData(
 
         tags.forEachIndexed { index, tag ->
             when (tag.type) {
-                FilterModels.Filters.TAGS -> {
+                FilterModels.FilterGroupBackend.TAGS -> {
                     TagsTable.insert {
                         it[id] = tag.id
                         it[name] = tag.name
-                        it[slug] = tag.name
+                        it[slug] = "slug-${tag.name}"
                     }
 
-                    repeat(tag.cocktailsCount) {cocktailTmpId ->
+                    repeat(tag.cocktailsCount) { cocktailTmpId ->
                         CocktailToTagTable.insert {
                             it[tagId] = tag.id
                             it[cocktailId] = cocktailTmpId
@@ -174,11 +175,11 @@ private fun prepareData(
                     }
                 }
 
-                FilterModels.Filters.GOODS -> {
+                FilterModels.FilterGroupBackend.GOODS -> {
                     GoodsTable.insert {
                         it[id] = tag.id
                         it[name] = tag.name
-                        it[slug] = tag.name
+                        it[slug] = "slug-${tag.name}"
                         it[about] = ""
                     }
 
@@ -192,15 +193,15 @@ private fun prepareData(
                     }
                 }
 
-                FilterModels.Filters.TOOLS -> {
+                FilterModels.FilterGroupBackend.TOOLS -> {
                     ToolsTable.insert {
                         it[id] = tag.id
                         it[name] = tag.name
-                        it[slug] = tag.name
+                        it[slug] = "slug-${tag.name}"
                         it[about] = ""
                     }
 
-                    repeat(tag.cocktailsCount) {cocktailTmpId ->
+                    repeat(tag.cocktailsCount) { cocktailTmpId ->
                         CocktailsToToolsTable.insert {
                             it[toolId] = tag.id
                             it[cocktailId] = cocktailTmpId

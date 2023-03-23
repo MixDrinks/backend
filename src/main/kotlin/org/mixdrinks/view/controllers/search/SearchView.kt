@@ -1,4 +1,4 @@
-package org.mixdrinks.view.v2.controllers.search
+package org.mixdrinks.view.controllers.search
 
 import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationCall
@@ -10,8 +10,8 @@ import org.mixdrinks.dto.FilterGroupId
 import org.mixdrinks.dto.FilterId
 import org.mixdrinks.view.cocktail.domain.SortType
 import org.mixdrinks.view.error.SortTypeNotFound
-import org.mixdrinks.view.v2.controllers.filter.FilterModels
-import org.mixdrinks.view.v2.controllers.settings.AppSettings
+import org.mixdrinks.view.controllers.filter.FilterModels
+import org.mixdrinks.view.controllers.settings.AppSettings
 
 fun Application.searchView(searchResponseBuilder: SearchResponseBuilder, appSettings: AppSettings) {
     routing {
@@ -57,7 +57,7 @@ fun ApplicationCall.getSortType(): SortType {
 
 fun ApplicationCall.getSearchParam(): SearchParams {
     return SearchParams(buildMap {
-        FilterModels.Filters.values().forEach { filterGroup ->
+        FilterModels.FilterGroupBackend.values().forEach { filterGroup ->
             this@getSearchParam.getSearchParam(filterGroup.queryName)?.let { this[filterGroup.id] = it }
         }
     })

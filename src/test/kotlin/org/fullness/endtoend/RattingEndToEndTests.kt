@@ -22,13 +22,13 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.domain.CocktailSelector
 import org.mixdrinks.dto.CocktailId
-import org.mixdrinks.view.v2.controllers.score.CocktailScoreChangeResponse
-import org.mixdrinks.view.v2.controllers.score.RattingBuilder
-import org.mixdrinks.view.v2.controllers.score.RattingItem
-import org.mixdrinks.view.v2.controllers.score.rattingSearchView
-import org.mixdrinks.view.v2.controllers.score.score
-import org.mixdrinks.view.v2.controllers.filter.FilterCache
-import org.mixdrinks.view.v2.controllers.settings.AppSettings
+import org.mixdrinks.view.controllers.score.CocktailScoreChangeResponse
+import org.mixdrinks.view.controllers.score.RattingBuilder
+import org.mixdrinks.view.controllers.score.RattingItem
+import org.mixdrinks.view.controllers.score.rattingSearchView
+import org.mixdrinks.view.controllers.score.score
+import org.mixdrinks.view.controllers.filter.FilterCache
+import org.mixdrinks.view.controllers.settings.AppSettings
 
 class RattingEndToEndTests : FunSpec({
 

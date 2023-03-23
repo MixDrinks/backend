@@ -18,9 +18,9 @@ import org.mixdrinks.data.FullCocktail
 import org.mixdrinks.data.GoodsTable
 import org.mixdrinks.dto.CocktailId
 import org.mixdrinks.dto.TagId
+import org.mixdrinks.view.controllers.filter.FilterModels
 import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
-import org.mixdrinks.view.v2.controllers.filter.FilterModels
 
 fun Application.cocktails() {
     routing {
@@ -75,17 +75,17 @@ private fun getFullCocktail(id: Int): FullCocktailVM {
 @Suppress("UnusedPrivateMember")
 private fun getTastes(cocktail: FullCocktail): List<TagVM> {
     return cocktail.tastes.map {
-        return@map buildTagVM(it.id, it.name, it.slug, FilterModels.Filters.TASTE)
+        return@map buildTagVM(it.id, it.name, it.slug, FilterModels.FilterGroupBackend.TASTE)
     }
 }
 
 private fun getCocktailTags(cocktail: FullCocktail): List<TagVM> {
     return cocktail.tags.map {
-        return@map buildTagVM(it.id, it.name, it.slug, FilterModels.Filters.TAGS)
+        return@map buildTagVM(it.id, it.name, it.slug, FilterModels.FilterGroupBackend.TAGS)
     }
 }
 
-private fun buildTagVM(id: EntityID<Int>, name: String, slug: String, filter: FilterModels.Filters): TagVM {
+private fun buildTagVM(id: EntityID<Int>, name: String, slug: String, filter: FilterModels.FilterGroupBackend): TagVM {
     return TagVM(
         id = TagId(id.value),
         name = name,
@@ -105,7 +105,7 @@ private fun getCocktailGoods(cocktail: FullCocktail): List<FullGood> {
                 images = buildImages(itemRow[GoodsTable.id].value, ImageType.ITEM),
                 amount = itemRow[CocktailsToGoodsTable.amount],
                 unit = itemRow[CocktailsToGoodsTable.unit],
-                path = "${FilterModels.Filters.GOODS.queryName.value}/${itemRow[GoodsTable.id].value}",
+                path = "${FilterModels.FilterGroupBackend.GOODS.queryName.value}/${itemRow[GoodsTable.id].value}",
                 slug = itemRow[GoodsTable.slug],
             )
         }
@@ -114,15 +114,20 @@ private fun getCocktailGoods(cocktail: FullCocktail): List<FullGood> {
 private fun getFullTools(cocktail: FullCocktail): List<ToolVM> {
     return buildList {
         cocktail.glassware.first().let {
-            add(buildToolVM(it.id, it.name, it.slug, FilterModels.Filters.GLASSWARE))
+            add(buildToolVM(it.id, it.name, it.slug, FilterModels.FilterGroupBackend.GLASSWARE))
         }
         addAll(cocktail.tools
-            .map { buildToolVM(it.id, it.name, it.slug, FilterModels.Filters.TOOLS) }
+            .map { buildToolVM(it.id, it.name, it.slug, FilterModels.FilterGroupBackend.TOOLS) }
         )
     }
 }
 
-private fun buildToolVM(id: EntityID<Int>, name: String, slug: String, filter: FilterModels.Filters): ToolVM {
+private fun buildToolVM(
+    id: EntityID<Int>,
+    name: String,
+    slug: String,
+    filter: FilterModels.FilterGroupBackend,
+): ToolVM {
     return ToolVM(
         id = id.value,
         name = name,

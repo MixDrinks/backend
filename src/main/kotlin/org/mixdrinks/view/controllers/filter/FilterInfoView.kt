@@ -1,4 +1,4 @@
-package org.mixdrinks.view.v2.controllers.filter
+package org.mixdrinks.view.controllers.filter
 
 import io.ktor.server.application.Application
 import io.ktor.server.application.call

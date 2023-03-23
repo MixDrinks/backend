@@ -1,4 +1,4 @@
-package org.mixdrinks.view.v2.controllers.items
+package org.mixdrinks.view.controllers.items
 
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application

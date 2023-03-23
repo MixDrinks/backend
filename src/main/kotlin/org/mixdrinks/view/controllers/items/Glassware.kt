@@ -1,4 +1,4 @@
-package org.mixdrinks.view.v2.controllers.items
+package org.mixdrinks.view.controllers.items
 
 import io.ktor.server.application.call
 import io.ktor.server.plugins.BadRequestException

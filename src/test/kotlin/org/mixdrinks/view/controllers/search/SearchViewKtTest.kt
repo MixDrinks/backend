@@ -1,4 +1,4 @@
-package org.mixdrinks.view.v2.controllers.search
+package org.mixdrinks.view.controllers.search
 
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
@@ -6,6 +6,8 @@ import io.ktor.http.ParametersImpl
 import io.ktor.server.application.ApplicationCall
 import io.mockk.every
 import io.mockk.mockk
+import org.mixdrinks.view.controllers.search.Page
+import org.mixdrinks.view.controllers.search.getPage
 
 internal class SearchViewKtTest : FunSpec({
 

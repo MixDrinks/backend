@@ -1,4 +1,4 @@
-package org.mixdrinks.view.v2.controllers.search
+package org.mixdrinks.view.controllers.search
 
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
@@ -14,7 +14,9 @@ import org.mixdrinks.data.Taste
 import org.mixdrinks.data.Tool
 import org.mixdrinks.dto.FilterGroupId
 import org.mixdrinks.dto.FilterId
-import org.mixdrinks.view.v2.controllers.filter.FilterModels
+import org.mixdrinks.view.controllers.filter.FilterModels
+import org.mixdrinks.view.controllers.search.DescriptionBuilder
+import org.mixdrinks.view.controllers.search.SearchParams
 
 class DescriptionBuilderTest : FunSpec({
 
@@ -39,7 +41,7 @@ class DescriptionBuilderTest : FunSpec({
     test("Verify that the alcohol volume description") {
         buildDescription(
             mapOf(
-                FilterModels.Filters.ALCOHOL_VOLUME.id to listOf(FilterId(1)),
+                FilterModels.FilterGroupBackend.ALCOHOL_VOLUME.id to listOf(FilterId(1)),
             )
         ) shouldBe "AlcoholVolumes1 коктейлі"
     }
@@ -47,8 +49,8 @@ class DescriptionBuilderTest : FunSpec({
     test("Verify that the alcohol volume with taste") {
         buildDescription(
             mapOf(
-                FilterModels.Filters.ALCOHOL_VOLUME.id to listOf(FilterId(1)),
-                FilterModels.Filters.TASTE.id to listOf(FilterId(8), FilterId(9)),
+                FilterModels.FilterGroupBackend.ALCOHOL_VOLUME.id to listOf(FilterId(1)),
+                FilterModels.FilterGroupBackend.TASTE.id to listOf(FilterId(8), FilterId(9)),
             )
         ) shouldBe "AlcoholVolumes1 Taste8 Taste9 коктейлі"
     }
@@ -56,8 +58,8 @@ class DescriptionBuilderTest : FunSpec({
     test("Verify that the alcohol volume and goods") {
         buildDescription(
             mapOf(
-                FilterModels.Filters.ALCOHOL_VOLUME.id to listOf(FilterId(1)),
-                FilterModels.Filters.GOODS.id to listOf(FilterId(4), FilterId(5)),
+                FilterModels.FilterGroupBackend.ALCOHOL_VOLUME.id to listOf(FilterId(1)),
+                FilterModels.FilterGroupBackend.GOODS.id to listOf(FilterId(4), FilterId(5)),
             )
         ) shouldBe "AlcoholVolumes1 коктейлі з Good4 Good5"
     }
@@ -65,8 +67,8 @@ class DescriptionBuilderTest : FunSpec({
     test("Verify description with goods and tags") {
         buildDescription(
             mapOf(
-                FilterModels.Filters.GOODS.id to listOf(FilterId(4), FilterId(5)),
-                FilterModels.Filters.TAGS.id to listOf(FilterId(7), FilterId(4)),
+                FilterModels.FilterGroupBackend.GOODS.id to listOf(FilterId(4), FilterId(5)),
+                FilterModels.FilterGroupBackend.TAGS.id to listOf(FilterId(7), FilterId(4)),
             )
         ) shouldBe "коктейлі Tag4 Tag7 з Good4 Good5"
     }
@@ -74,10 +76,10 @@ class DescriptionBuilderTest : FunSpec({
     test("Verify description with all but without glassware") {
         buildDescription(
             mapOf(
-                FilterModels.Filters.ALCOHOL_VOLUME.id to listOf(FilterId(1)),
-                FilterModels.Filters.GOODS.id to listOf(FilterId(4), FilterId(5)),
-                FilterModels.Filters.TAGS.id to listOf(FilterId(7), FilterId(4)),
-                FilterModels.Filters.TOOLS.id to listOf(FilterId(7), FilterId(4)),
+                FilterModels.FilterGroupBackend.ALCOHOL_VOLUME.id to listOf(FilterId(1)),
+                FilterModels.FilterGroupBackend.GOODS.id to listOf(FilterId(4), FilterId(5)),
+                FilterModels.FilterGroupBackend.TAGS.id to listOf(FilterId(7), FilterId(4)),
+                FilterModels.FilterGroupBackend.TOOLS.id to listOf(FilterId(7), FilterId(4)),
             )
         ) shouldBe "AlcoholVolumes1 коктейлі Tag4 Tag7 з Good4 Good5"
     }
@@ -85,11 +87,11 @@ class DescriptionBuilderTest : FunSpec({
     test("Verify description with all") {
         buildDescription(
             mapOf(
-                FilterModels.Filters.ALCOHOL_VOLUME.id to listOf(FilterId(1)),
-                FilterModels.Filters.GOODS.id to listOf(FilterId(4), FilterId(5)),
-                FilterModels.Filters.TAGS.id to listOf(FilterId(7), FilterId(4)),
-                FilterModels.Filters.TOOLS.id to listOf(FilterId(7), FilterId(4)),
-                FilterModels.Filters.GLASSWARE.id to listOf(FilterId(1)),
+                FilterModels.FilterGroupBackend.ALCOHOL_VOLUME.id to listOf(FilterId(1)),
+                FilterModels.FilterGroupBackend.GOODS.id to listOf(FilterId(4), FilterId(5)),
+                FilterModels.FilterGroupBackend.TAGS.id to listOf(FilterId(7), FilterId(4)),
+                FilterModels.FilterGroupBackend.TOOLS.id to listOf(FilterId(7), FilterId(4)),
+                FilterModels.FilterGroupBackend.GLASSWARE.id to listOf(FilterId(1)),
             )
         ) shouldBe "AlcoholVolumes1 коктейлі Tag4 Tag7 з Good4 Good5 в Glassware1"
     }
@@ -97,7 +99,7 @@ class DescriptionBuilderTest : FunSpec({
     test("Verify description just tools") {
         buildDescription(
             mapOf(
-                FilterModels.Filters.TOOLS.id to listOf(FilterId(7), FilterId(4)),
+                FilterModels.FilterGroupBackend.TOOLS.id to listOf(FilterId(7), FilterId(4)),
             )
         ) shouldBe null
     }
@@ -105,7 +107,7 @@ class DescriptionBuilderTest : FunSpec({
     test("Verify description just glassware") {
         buildDescription(
             mapOf(
-                FilterModels.Filters.GLASSWARE.id to listOf(FilterId(7)),
+                FilterModels.FilterGroupBackend.GLASSWARE.id to listOf(FilterId(7)),
             )
         ) shouldBe "коктейлі в Glassware7"
     }
