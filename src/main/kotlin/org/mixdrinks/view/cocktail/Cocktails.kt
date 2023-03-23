@@ -18,9 +18,9 @@ import org.mixdrinks.data.FullCocktail
 import org.mixdrinks.data.GoodsTable
 import org.mixdrinks.dto.CocktailId
 import org.mixdrinks.dto.TagId
+import org.mixdrinks.view.controllers.filter.FilterModels
 import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
-import org.mixdrinks.view.controllers.filter.FilterModels
 
 fun Application.cocktails() {
     routing {
@@ -122,7 +122,12 @@ private fun getFullTools(cocktail: FullCocktail): List<ToolVM> {
     }
 }
 
-private fun buildToolVM(id: EntityID<Int>, name: String, slug: String, filter: FilterModels.FilterGroupBackend): ToolVM {
+private fun buildToolVM(
+    id: EntityID<Int>,
+    name: String,
+    slug: String,
+    filter: FilterModels.FilterGroupBackend,
+): ToolVM {
     return ToolVM(
         id = id.value,
         name = name,
