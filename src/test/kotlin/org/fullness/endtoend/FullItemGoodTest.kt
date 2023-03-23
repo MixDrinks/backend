@@ -18,8 +18,8 @@ import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.Good
 import org.mixdrinks.data.Tool
-import org.mixdrinks.view.v2.controllers.items.ItemVm
-import org.mixdrinks.view.v2.controllers.items.items
+import org.mixdrinks.view.controllers.items.ItemVm
+import org.mixdrinks.view.controllers.items.items
 
 class FullItemGoodTest : FunSpec({
 

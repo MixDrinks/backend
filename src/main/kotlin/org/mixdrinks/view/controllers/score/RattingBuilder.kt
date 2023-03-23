@@ -1,4 +1,4 @@
-package org.mixdrinks.view.v2.controllers.score
+package org.mixdrinks.view.controllers.score
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -8,8 +8,8 @@ import org.mixdrinks.data.Cocktail
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.domain.CocktailSelector
 import org.mixdrinks.dto.CocktailId
-import org.mixdrinks.view.v2.controllers.search.Page
-import org.mixdrinks.view.v2.controllers.search.SearchParams
+import org.mixdrinks.view.controllers.search.Page
+import org.mixdrinks.view.controllers.search.SearchParams
 
 @Serializable
 data class RattingItem(

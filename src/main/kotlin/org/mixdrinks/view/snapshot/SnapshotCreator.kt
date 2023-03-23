@@ -25,7 +25,7 @@ import org.mixdrinks.dto.TasteDto
 import org.mixdrinks.dto.TasteId
 import org.mixdrinks.dto.ToolDto
 import org.mixdrinks.dto.ToolId
-import org.mixdrinks.view.v2.controllers.filter.FilterCache
+import org.mixdrinks.view.controllers.filter.FilterCache
 
 class SnapshotCreator(
     private val filterCache: FilterCache,
@@ -48,7 +48,7 @@ class SnapshotCreator(
     }
 
     private fun getFilterGroups(): List<FilterGroupDto> {
-        return filterCache.fullFilters
+        return filterCache.fullFilterGroupBackend
             .map { (filterModel, filters) ->
                 FilterGroupDto(
                     id = filterModel.id,

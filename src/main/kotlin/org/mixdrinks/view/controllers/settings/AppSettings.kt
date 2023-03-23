@@ -1,4 +1,4 @@
-package org.mixdrinks.view.v2.controllers.settings
+package org.mixdrinks.view.controllers.settings
 
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
@@ -7,7 +7,7 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.mixdrinks.view.v2.controllers.settings.AppSettings
+import org.mixdrinks.view.controllers.settings.AppSettings
 
 fun Application.appSetting(appSettings: AppSettings) {
     routing {

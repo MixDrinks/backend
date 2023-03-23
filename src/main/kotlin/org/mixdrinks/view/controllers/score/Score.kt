@@ -1,4 +1,4 @@
-package org.mixdrinks.view.v2.controllers.score
+package org.mixdrinks.view.controllers.score
 
 import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationCall
@@ -18,7 +18,7 @@ import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.dto.CocktailId
 import org.mixdrinks.view.error.QueryRequireException
 import org.mixdrinks.view.error.VoteError
-import org.mixdrinks.view.v2.controllers.settings.AppSettings
+import org.mixdrinks.view.controllers.settings.AppSettings
 import org.mixdrinks.view.v2.getCocktailId
 import org.mixdrinks.view.v2.roundScore
 

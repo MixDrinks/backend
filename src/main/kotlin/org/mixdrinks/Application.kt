@@ -25,7 +25,7 @@ import org.mixdrinks.plugins.static
 import org.mixdrinks.utils.slug
 import org.mixdrinks.view.service
 import org.mixdrinks.view.v2.api
-import org.mixdrinks.view.v2.controllers.settings.AppSettings
+import org.mixdrinks.view.controllers.settings.AppSettings
 
 fun main() {
     embeddedServer(Netty, environment = applicationEngineEnvironment {

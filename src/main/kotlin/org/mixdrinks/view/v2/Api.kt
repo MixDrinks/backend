@@ -5,18 +5,18 @@ import org.mixdrinks.domain.CocktailSelector
 import org.mixdrinks.view.cocktail.cocktails
 import org.mixdrinks.view.snapshot.SnapshotCreator
 import org.mixdrinks.view.snapshot.snapshot
-import org.mixdrinks.view.v2.controllers.filter.FilterCache
-import org.mixdrinks.view.v2.controllers.filter.FilterSource
-import org.mixdrinks.view.v2.controllers.filter.filterMetaInfo
-import org.mixdrinks.view.v2.controllers.items.items
-import org.mixdrinks.view.v2.controllers.score.RattingBuilder
-import org.mixdrinks.view.v2.controllers.score.rattingSearchView
-import org.mixdrinks.view.v2.controllers.score.score
-import org.mixdrinks.view.v2.controllers.search.DescriptionBuilder
-import org.mixdrinks.view.v2.controllers.search.SearchResponseBuilder
-import org.mixdrinks.view.v2.controllers.search.searchView
-import org.mixdrinks.view.v2.controllers.settings.AppSettings
-import org.mixdrinks.view.v2.controllers.settings.appSetting
+import org.mixdrinks.view.controllers.filter.FilterCache
+import org.mixdrinks.view.controllers.filter.FilterSource
+import org.mixdrinks.view.controllers.filter.filterMetaInfo
+import org.mixdrinks.view.controllers.items.items
+import org.mixdrinks.view.controllers.score.RattingBuilder
+import org.mixdrinks.view.controllers.score.rattingSearchView
+import org.mixdrinks.view.controllers.score.score
+import org.mixdrinks.view.controllers.search.DescriptionBuilder
+import org.mixdrinks.view.controllers.search.SearchResponseBuilder
+import org.mixdrinks.view.controllers.search.searchView
+import org.mixdrinks.view.controllers.settings.AppSettings
+import org.mixdrinks.view.controllers.settings.appSetting
 
 fun Application.api(appSettings: AppSettings) {
     val filterCache = FilterCache()

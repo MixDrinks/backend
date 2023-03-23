@@ -1,4 +1,4 @@
-package org.mixdrinks.view.v2.controllers.search
+package org.mixdrinks.view.controllers.search
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -18,8 +18,8 @@ import org.mixdrinks.view.cocktail.CompactCocktailVM
 import org.mixdrinks.view.cocktail.domain.SortType
 import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
-import org.mixdrinks.view.v2.controllers.filter.FilterCache
-import org.mixdrinks.view.v2.controllers.filter.FilterModels
+import org.mixdrinks.view.controllers.filter.FilterCache
+import org.mixdrinks.view.controllers.filter.FilterModels
 
 class SearchResponseBuilder(
     private val filterCache: FilterCache,
@@ -69,8 +69,8 @@ class SearchResponseBuilder(
                 query
             }.map(::createCocktails)
 
-            val futureCounts: Map<FilterModels.Filters, List<FilterCount>> =
-                FilterModels.Filters.values().associateWith { filter ->
+            val futureCounts: Map<FilterModels.FilterGroupBackend, List<FilterCount>> =
+                FilterModels.FilterGroupBackend.values().associateWith { filter ->
                     val filterIds: List<FilterId> = filterCache.filterIds[filter]!!
 
                     filterIds.map { filterId ->

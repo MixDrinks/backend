@@ -1,4 +1,4 @@
-package org.mixdrinks.view.v2.controllers.search
+package org.mixdrinks.view.controllers.search
 
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -9,7 +9,7 @@ import org.mixdrinks.data.TagsTable
 import org.mixdrinks.data.Taste
 import org.mixdrinks.data.TastesTable
 import org.mixdrinks.dto.FilterId
-import org.mixdrinks.view.v2.controllers.filter.FilterModels
+import org.mixdrinks.view.controllers.filter.FilterModels
 
 class DescriptionBuilder {
 
@@ -18,14 +18,14 @@ class DescriptionBuilder {
 
         return transaction {
             buildString {
-                addAlcoholDescriptionIfExist(filters[FilterModels.Filters.ALCOHOL_VOLUME.id])
-                addTasteDescriptionIfExist(filters[FilterModels.Filters.TASTE.id])
+                addAlcoholDescriptionIfExist(filters[FilterModels.FilterGroupBackend.ALCOHOL_VOLUME.id])
+                addTasteDescriptionIfExist(filters[FilterModels.FilterGroupBackend.TASTE.id])
 
                 append(COCKTAIL_NAME)
 
-                addTagsDescriptionIfExist(filters[FilterModels.Filters.TAGS.id])
-                addGoodsDescriptionIfExist(filters[FilterModels.Filters.GOODS.id])
-                addGlasswareDescriptionIfExist(filters[FilterModels.Filters.GLASSWARE.id])
+                addTagsDescriptionIfExist(filters[FilterModels.FilterGroupBackend.TAGS.id])
+                addGoodsDescriptionIfExist(filters[FilterModels.FilterGroupBackend.GOODS.id])
+                addGlasswareDescriptionIfExist(filters[FilterModels.FilterGroupBackend.GLASSWARE.id])
             }.takeIf { it.isNotEmpty() && it != COCKTAIL_NAME }
         }
     }

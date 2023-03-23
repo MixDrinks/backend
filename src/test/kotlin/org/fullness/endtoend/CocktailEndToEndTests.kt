@@ -19,9 +19,9 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailsTable
-import org.mixdrinks.view.v2.controllers.score.CocktailScoreChangeResponse
-import org.mixdrinks.view.v2.controllers.score.score
-import org.mixdrinks.view.v2.controllers.settings.AppSettings
+import org.mixdrinks.view.controllers.score.CocktailScoreChangeResponse
+import org.mixdrinks.view.controllers.score.score
+import org.mixdrinks.view.controllers.settings.AppSettings
 
 class CocktailEndToEndTests : FunSpec({
 
