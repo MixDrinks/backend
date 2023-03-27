@@ -12,7 +12,9 @@ import org.mixdrinks.view.cocktail.domain.SortType
 import org.mixdrinks.view.controllers.filter.FilterModels
 import org.mixdrinks.view.controllers.search.DescriptionBuilder
 import org.mixdrinks.view.controllers.filter.FilterCache
+import org.mixdrinks.view.controllers.search.FilterCount
 import org.mixdrinks.view.controllers.search.SearchParams
+import org.mixdrinks.view.controllers.search.SearchResponse
 import org.mixdrinks.view.controllers.search.SearchResponseBuilder
 
 class SearchResponseBuilderIntegration : FunSpec({
@@ -227,12 +229,12 @@ private fun createSearchParam(
 }
 
 private fun verifyFutureCountResponse(
-    result: SearchResponseBuilder.SearchResponse,
+    result: SearchResponse,
     filter: FilterModels.FilterGroupBackend,
     expectedCount: Map<FilterId, Int>,
 ) {
     result.futureCounts[filter.id] shouldContainExactlyInAnyOrder expectedCount.map { (filterId, count) ->
-        SearchResponseBuilder.FilterCount(
+        FilterCount(
             filterId, count
         )
     }

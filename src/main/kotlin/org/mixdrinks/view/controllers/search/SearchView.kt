@@ -9,9 +9,11 @@ import io.ktor.server.routing.routing
 import org.mixdrinks.dto.FilterGroupId
 import org.mixdrinks.dto.FilterId
 import org.mixdrinks.view.cocktail.domain.SortType
-import org.mixdrinks.view.error.SortTypeNotFound
 import org.mixdrinks.view.controllers.filter.FilterModels
+import org.mixdrinks.view.controllers.search.paggination.Page
+import org.mixdrinks.view.controllers.search.paggination.getPage
 import org.mixdrinks.view.controllers.settings.AppSettings
+import org.mixdrinks.view.error.SortTypeNotFound
 
 fun Application.searchView(searchResponseBuilder: SearchResponseBuilder, appSettings: AppSettings) {
     routing {
@@ -35,11 +37,6 @@ fun Application.searchView(searchResponseBuilder: SearchResponseBuilder, appSett
         }
     }
 }
-
-data class Page(
-    val offset: Int,
-    val limit: Int,
-)
 
 data class SearchParams(
     val filters: Map<FilterGroupId, List<FilterId>> = mapOf(),
@@ -69,9 +66,3 @@ fun ApplicationCall.getSearchParam(queryName: FilterModels.FilterQueryName): Lis
     }
 }
 
-fun ApplicationCall.getPage(pageSize: Int): Page? {
-    val pageIndex = this.request.queryParameters["page"]?.toIntOrNull() ?: return null
-    return Page(
-        offset = pageIndex * pageSize, limit = pageSize
-    )
-}

@@ -19,6 +19,7 @@ data class CompactCocktailVM(
     @SerialName("rating") val rating: Float?,
     @SerialName("visitCount") val visitCount: Int,
     @SerialName("images") val images: List<Image>,
+    @SerialName("slug") val slug: String,
 )
 
 @Serializable

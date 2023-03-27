@@ -25,6 +25,7 @@ import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.domain.CocktailSelector
 import org.mixdrinks.view.controllers.search.DescriptionBuilder
 import org.mixdrinks.view.controllers.filter.FilterCache
+import org.mixdrinks.view.controllers.search.SearchResponse
 import org.mixdrinks.view.controllers.search.SearchResponseBuilder
 import org.mixdrinks.view.controllers.search.searchView
 import org.mixdrinks.view.controllers.settings.AppSettings
@@ -64,7 +65,7 @@ internal class SearchCocktailsEndToEndTests : FunSpec({
             val response = client.get("v2/search/cocktails")
 
             response.status shouldBe HttpStatusCode.OK
-            val result = Json.decodeFromString<SearchResponseBuilder.SearchResponse>(response.bodyAsText())
+            val result = Json.decodeFromString<SearchResponse>(response.bodyAsText())
 
             result.totalCount shouldBe 11
             result.cocktails.size shouldBe 11
@@ -90,7 +91,7 @@ internal class SearchCocktailsEndToEndTests : FunSpec({
             val response = client.get("v2/search/cocktails?page=0")
 
             response.status shouldBe HttpStatusCode.OK
-            val result = Json.decodeFromString<SearchResponseBuilder.SearchResponse>(response.bodyAsText())
+            val result = Json.decodeFromString<SearchResponse>(response.bodyAsText())
 
             result.totalCount shouldBe 7
 
@@ -111,7 +112,7 @@ internal class SearchCocktailsEndToEndTests : FunSpec({
             val response = client.get("v2/search/cocktails?page=1")
 
             response.status shouldBe HttpStatusCode.OK
-            val result = Json.decodeFromString<SearchResponseBuilder.SearchResponse>(response.bodyAsText())
+            val result = Json.decodeFromString<SearchResponse>(response.bodyAsText())
 
             result.totalCount shouldBe 7
 
@@ -146,7 +147,7 @@ internal class SearchCocktailsEndToEndTests : FunSpec({
                 val response = client.get("v2/search/cocktails?sort=most-popular")
 
                 response.status shouldBe HttpStatusCode.OK
-                val result = Json.decodeFromString<SearchResponseBuilder.SearchResponse>(response.bodyAsText())
+                val result = Json.decodeFromString<SearchResponse>(response.bodyAsText())
 
                 result.cocktails.map { it.id.id } shouldBe listOf(2, 1)
             }
@@ -186,7 +187,7 @@ internal class SearchCocktailsEndToEndTests : FunSpec({
                 val response = client.get("v2/search/cocktails?sort=biggest-rate")
 
                 response.status shouldBe HttpStatusCode.OK
-                val result = Json.decodeFromString<SearchResponseBuilder.SearchResponse>(response.bodyAsText())
+                val result = Json.decodeFromString<SearchResponse>(response.bodyAsText())
 
                 val resultId = result.cocktails.map { it.id }
 
@@ -231,7 +232,7 @@ internal class SearchCocktailsEndToEndTests : FunSpec({
                 val response = client.get("v2/search/cocktails?sort=biggest-rate")
 
                 response.status shouldBe HttpStatusCode.OK
-                val result = Json.decodeFromString<SearchResponseBuilder.SearchResponse>(response.bodyAsText())
+                val result = Json.decodeFromString<SearchResponse>(response.bodyAsText())
 
                 result.cocktails.map { it.id.id } shouldBe listOf(1, 3, 2)
             }
