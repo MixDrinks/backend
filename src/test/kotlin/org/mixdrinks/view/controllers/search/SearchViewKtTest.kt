@@ -6,8 +6,8 @@ import io.ktor.http.ParametersImpl
 import io.ktor.server.application.ApplicationCall
 import io.mockk.every
 import io.mockk.mockk
-import org.mixdrinks.view.controllers.search.Page
-import org.mixdrinks.view.controllers.search.getPage
+import org.mixdrinks.view.controllers.search.paggination.Page
+import org.mixdrinks.view.controllers.search.paggination.getPage
 
 internal class SearchViewKtTest : FunSpec({
 

@@ -2,6 +2,7 @@ package org.mixdrinks.view.controllers.filter
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.mixdrinks.domain.FilterGroups
 import org.mixdrinks.dto.FilterGroupId
 import org.mixdrinks.dto.FilterId
 import org.mixdrinks.dto.SelectionType
@@ -21,42 +22,42 @@ class FilterModels {
         val sortOrder: Int,
     ) {
         TAGS(
-            id = FilterGroupId(0),
+            id = FilterGroups.TAGS.id,
             queryName = FilterQueryName("tags"),
             translation = "Інше",
             selectionType = SelectionType.MULTIPLE,
             sortOrder = 5,
         ),
         GOODS(
-            id = FilterGroupId(1),
+            id = FilterGroups.GOODS.id,
             queryName = FilterQueryName("goods"),
             translation = "Інгрідієнти",
             selectionType = SelectionType.MULTIPLE,
             sortOrder = 1,
         ),
         TOOLS(
-            id = FilterGroupId(2),
+            id = FilterGroups.TOOLS.id,
             queryName = FilterQueryName("tools"),
             translation = "Приладдя",
             selectionType = SelectionType.MULTIPLE,
             sortOrder = 4,
         ),
         TASTE(
-            id = FilterGroupId(3),
+            id = FilterGroups.TASTE.id,
             queryName = FilterQueryName("taste"),
             translation = "Смак",
             selectionType = SelectionType.MULTIPLE,
             sortOrder = 2,
         ),
         ALCOHOL_VOLUME(
-            id = FilterGroupId(4),
-            queryName = FilterQueryName("alcohol_volume"),
+            id = FilterGroups.ALCOHOL_VOLUME.id,
+            queryName = FilterQueryName("alcohol-volume"),
             translation = "Алкоголь",
             selectionType = SelectionType.SINGLE,
             sortOrder = 1,
         ),
         GLASSWARE(
-            id = FilterGroupId(5),
+            id = FilterGroups.GLASSWARE.id,
             queryName = FilterQueryName("glassware"),
             translation = "Стакан",
             selectionType = SelectionType.SINGLE,

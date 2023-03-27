@@ -8,8 +8,8 @@ import org.mixdrinks.data.Cocktail
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.domain.CocktailSelector
 import org.mixdrinks.dto.CocktailId
-import org.mixdrinks.view.controllers.search.Page
 import org.mixdrinks.view.controllers.search.SearchParams
+import org.mixdrinks.view.controllers.search.paggination.Page
 
 @Serializable
 data class RattingItem(
