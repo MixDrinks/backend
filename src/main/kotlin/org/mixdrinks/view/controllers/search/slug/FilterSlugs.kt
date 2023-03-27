@@ -6,6 +6,7 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
 import org.mixdrinks.view.cocktail.domain.SortType
+import org.mixdrinks.view.controllers.search.SearchResponse
 import org.mixdrinks.view.controllers.search.getSortType
 import org.mixdrinks.view.controllers.search.paggination.Page
 import org.mixdrinks.view.controllers.search.paggination.getPage
@@ -34,7 +35,7 @@ fun Application.filterSlugs(searchResponseBuilder: SearchSlugResponseBuilder, ap
             val page: Page? = call.getPage(appSettings.pageSize)
             val sortKey: SortType = call.getSortType()
 
-            val result = searchResponseBuilder.getCocktailsSearchBySlugs(searchRequest, page, sortKey)
+            val result: SearchResponse = searchResponseBuilder.getCocktailsSearchBySlugs(searchRequest, page, sortKey)
 
             call.respond(result)
         }

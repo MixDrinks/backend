@@ -165,7 +165,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{SCHEME}}://{{HOST}}/v2/search/cocktails?tags=3",
+							"raw": "{{SCHEME}}://{{HOST}}/v2/search/cocktails?tags=1",
 							"protocol": "{{SCHEME}}",
 							"host": [
 								"{{HOST}}"
@@ -178,7 +178,7 @@
 							"query": [
 								{
 									"key": "tags",
-									"value": "3"
+									"value": "1"
 								}
 							]
 						}

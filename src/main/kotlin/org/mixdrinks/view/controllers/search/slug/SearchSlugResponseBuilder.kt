@@ -30,6 +30,6 @@ class SearchSlugResponseBuilder(
             }.toMap(),
         )
 
-        return searchResponseBuilder.getCocktailsBySearch(searchParams, page, sortType)
+        return searchResponseBuilder.getCocktailsBySearch(searchParams, page, sortType, true)
     }
 }

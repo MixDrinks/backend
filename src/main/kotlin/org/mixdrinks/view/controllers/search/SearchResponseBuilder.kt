@@ -12,6 +12,7 @@ import org.mixdrinks.domain.CocktailSelector
 import org.mixdrinks.dto.CocktailId
 import org.mixdrinks.dto.FilterGroupId
 import org.mixdrinks.dto.FilterId
+import org.mixdrinks.dto.SelectionType
 import org.mixdrinks.view.cocktail.CompactCocktailVM
 import org.mixdrinks.view.cocktail.domain.SortType
 import org.mixdrinks.view.controllers.filter.FilterCache
@@ -26,7 +27,12 @@ class SearchResponseBuilder(
     private val descriptionBuilder: DescriptionBuilder,
 ) {
 
-    fun getCocktailsBySearch(searchParams: SearchParams, page: Page?, sortType: SortType): SearchResponse {
+    fun getCocktailsBySearch(
+        searchParams: SearchParams,
+        page: Page?,
+        sortType: SortType,
+        applyFilterType: Boolean = false
+    ): SearchResponse {
         exposedLogger.info("searchParams: ${searchParams.filters}")
         val cocktailsIds = if (searchParams.filters.isNotEmpty()) {
             cocktailSelector.getCocktailIds(searchParams.filters).map { it.id }
@@ -55,18 +61,23 @@ class SearchResponseBuilder(
             }.map(::createCocktails)
 
             val futureCounts: Map<FilterModels.FilterGroupBackend, List<FilterCount>> =
-                FilterModels.FilterGroupBackend.values().associateWith { filter ->
-                    val filterIds: List<FilterId> = filterCache.filterIds[filter]!!
+                FilterModels.FilterGroupBackend.values().associateWith { filterGroupBackend ->
+                    val filterIds: List<FilterId> = filterCache.filterIds[filterGroupBackend]!!
 
                     filterIds.map { filterId ->
                         val futureSearchParam: MutableMap<FilterGroupId, List<FilterId>> =
                             searchParams.filters.toMutableMap()
-                        futureSearchParam[filter.id] = futureSearchParam[filter.id].orEmpty().plus(filterId)
-
+                        if (applyFilterType && filterGroupBackend.selectionType == SelectionType.SINGLE) {
+                            futureSearchParam[filterGroupBackend.id] = listOf(filterId)
+                        } else {
+                            futureSearchParam[filterGroupBackend.id] = futureSearchParam[filterGroupBackend.id]
+                                .orEmpty().plus(filterId)
+                        }
                         FilterCount(
                             id = filterId,
                             count = cocktailSelector.getCocktailIds(futureSearchParam).count(),
                         )
+
                     }
                 }
 
