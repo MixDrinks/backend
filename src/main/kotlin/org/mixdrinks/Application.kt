@@ -12,20 +12,12 @@ import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.cors.routing.CORS
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
-import org.mixdrinks.data.Tag
-import org.mixdrinks.data.TagsTable
-import org.mixdrinks.data.Taste
-import org.mixdrinks.data.TastesTable
-import org.mixdrinks.data.Tool
 import org.mixdrinks.plugins.configureCache
 import org.mixdrinks.plugins.configureRouting
 import org.mixdrinks.plugins.static
-import org.mixdrinks.utils.slug
+import org.mixdrinks.view.controllers.settings.AppSettings
 import org.mixdrinks.view.service
 import org.mixdrinks.view.v2.api
-import org.mixdrinks.view.controllers.settings.AppSettings
 
 fun main() {
     embeddedServer(Netty, environment = applicationEngineEnvironment {
