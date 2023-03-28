@@ -1,0 +1,667 @@
+openapi: "3.0.3"
+info:
+  title: "mixdrinks API"
+  description: "mixdrinks API"
+  version: "1.0.0"
+servers:
+- url: "https://mixdrinks"
+paths:
+  /v2/search/cocktails:
+    get:
+      description: "Return the cocktails that match the search request. <br> The search\
+        \ request is a map of filter group id to a list of filter id. <br> The search\
+        \ request is optional, if not provided, all cocktails are returned. <br> The\
+        \ page is optional, if not provided, all cocktails are returned. <br> The\
+        \ sort key is optional, if not provided, the cocktails are sorted by most\
+        \ popular. <br> The sort key is a string that can be one of the following:\
+        \ <br> - \"most-popular\" <br> - \"biggest-rate\" <br> Filter from the same\
+        \ group are combined with an AND operator."
+      parameters:
+      - name: "page"
+        in: "query"
+        required: false
+        schema:
+          type: "integer"
+      - name: "sort"
+        in: "query"
+        required: false
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SearchResponse"
+  /v2/cocktail/ratting:
+    get:
+      description: ""
+      parameters:
+      - name: "id"
+        in: "query"
+        required: false
+        schema:
+          type: "integer"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CocktailScoreChangeResponse"
+  /v2/cocktails/score:
+    post:
+      description: ""
+      parameters:
+      - name: "id"
+        in: "query"
+        required: false
+        schema:
+          type: "integer"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CocktailScoreChangeResponse"
+  /v2/cocktails/visit:
+    post:
+      description: ""
+      parameters:
+      - name: "id"
+        in: "query"
+        required: false
+        schema:
+          type: "integer"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CocktailScoreChangeResponse"
+  /cocktails/all:
+    get:
+      description: "Return the list of all cocktails"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/SimpleCocktailVM"
+  /v2/cocktails/full:
+    get:
+      description: "Return the full cocktail info based on id"
+      parameters:
+      - name: "id"
+        in: "query"
+        required: false
+        schema:
+          type: "integer"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/FullCocktailVM"
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Query id is require, and must be integer"
+  /v2/glassware/{id}:
+    get:
+      description: ""
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ItemVm"
+  /v2/good/{id}:
+    get:
+      description: ""
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ItemVm"
+  /v2/items/full:
+    get:
+      description: "Return the item info based on id"
+      parameters:
+      - name: "id"
+        in: "query"
+        required: false
+        schema:
+          type: "integer"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ItemVm"
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Query id is require, and must be integer"
+  /v2/tool/{id}:
+    get:
+      description: "Return the tool info based on id"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ItemVm"
+  /v2/filters:
+    get:
+      description: "Return the meta info about the filters."
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/FilterGroup"
+  /v2/search/ratings:
+    get:
+      description: ""
+      parameters:
+      - name: "page"
+        in: "query"
+        required: false
+        schema:
+          type: "integer"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Map"
+  /v2/settings:
+    get:
+      description: "Return the app settings"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppSettings"
+  /version:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Pair"
+  /snapshot:
+    get:
+      description: "Return the snapshot of the current state of the database as a\
+        \ JSON object. <br> Includes all the ingredients, recipes, goods, cocktails,\
+        \ ect."
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SnapshotDto"
+  /v2/snapshot:
+    get:
+      description: "Return the snapshot of the current state of the database as a\
+        \ JSON object. <br> Includes all the ingredients, recipes, goods, cocktails,\
+        \ ect."
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SnapshotDto"
+  /v2/filter/{params}:
+    get:
+      description: "Get all cocktails by filter slugs <br> Filter format: v2/filter/{filter},\
+        \ <br> {filter} -> filter group separated by / and filter slugs separated\
+        \ by comma <br> Format of {filter} -> <br> {filter group 1}={filter slugs\
+        \ separated by comma}/{filter group 2}={filter slugs separated by comma} <br>\
+        \ Format of {filter slugs separated by comma} -> {filter slug 1},{filter slug\
+        \ 2},{filter slug 3} <br> Full format for path -> v2/filter/{filter} -> <br>\
+        \ v2/filter/{filter group id}={filter slug 1},{filter slug 2}/{filter group\
+        \ id}={filter slug 1},{filter slug 2} <br> Filter format example v2/filter/taste=miatni,solodki/goods=syrop-makadamiia,syr-salers"
+      parameters:
+      - name: "params"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - name: "page"
+        in: "query"
+        required: false
+        schema:
+          type: "integer"
+      - name: "sort"
+        in: "query"
+        required: false
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SearchResponse"
+components:
+  schemas:
+    Image:
+      type: "object"
+      properties:
+        src:
+          type: "string"
+        media:
+          type: "string"
+        type:
+          type: "string"
+    CompactCocktailVM:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        name:
+          type: "string"
+        rating:
+          type: "number"
+          format: "float"
+        visitCount:
+          type: "integer"
+          format: "int32"
+        images:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Image"
+        slug:
+          type: "string"
+    Map:
+      type: "object"
+      properties: {}
+    SearchResponse:
+      type: "object"
+      properties:
+        totalCount:
+          type: "integer"
+          format: "int32"
+        cocktails:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/CompactCocktailVM"
+        futureCounts:
+          $ref: "#/components/schemas/Map"
+        description:
+          type: "string"
+    CocktailScoreChangeResponse:
+      type: "object"
+      properties:
+        cocktailId:
+          type: "integer"
+          format: "int32"
+        rating:
+          type: "number"
+          format: "float"
+        visitCount:
+          type: "integer"
+          format: "int32"
+    SimpleCocktailVM:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        name:
+          type: "string"
+    FullGood:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        name:
+          type: "string"
+        images:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Image"
+        amount:
+          type: "integer"
+          format: "int32"
+        unit:
+          type: "string"
+        path:
+          type: "string"
+        slug:
+          type: "string"
+    ToolVM:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        name:
+          type: "string"
+        images:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Image"
+        path:
+          type: "string"
+        slug:
+          type: "string"
+    TagVM:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        name:
+          type: "string"
+        path:
+          type: "string"
+        slug:
+          type: "string"
+    FullCocktailVM:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        name:
+          type: "string"
+        visitCount:
+          type: "integer"
+          format: "int32"
+        rating:
+          type: "number"
+          format: "float"
+        ratingCount:
+          type: "integer"
+          format: "int32"
+        receipt:
+          type: "array"
+          items:
+            type: "string"
+        images:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Image"
+        goods:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/FullGood"
+        tools:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/ToolVM"
+        tags:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/TagVM"
+        slug:
+          type: "string"
+    ItemVm:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        name:
+          type: "string"
+        about:
+          type: "string"
+        images:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Image"
+        slug:
+          type: "string"
+    FilterItem:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        name:
+          type: "string"
+        cocktailCount:
+          type: "integer"
+          format: "int32"
+        slug:
+          type: "string"
+    FilterGroup:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        queryName:
+          type: "string"
+        name:
+          type: "string"
+        items:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/FilterItem"
+        selectionType:
+          type: "string"
+          enum:
+          - "Companion"
+          - "$cachedSerializer$delegate"
+          - "SINGLE"
+          - "MULTIPLE"
+        sortOrder:
+          type: "integer"
+          format: "int32"
+    AppSettings:
+      type: "object"
+      properties:
+        minVote:
+          type: "integer"
+          format: "int32"
+        maxVote:
+          type: "integer"
+          format: "int32"
+        pageSize:
+          type: "integer"
+          format: "int32"
+    Pair:
+      type: "object"
+      properties: {}
+    GoodRelationDto:
+      type: "object"
+      properties:
+        amount:
+          type: "integer"
+          format: "int32"
+        unit:
+          type: "string"
+    ToolId:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+    TagId:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+    TasteId:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+    CocktailDto:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        receipt:
+          type: "array"
+          items:
+            type: "string"
+        goods:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/GoodRelationDto"
+        tools:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/ToolId"
+        tags:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/TagId"
+        tastes:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/TasteId"
+    ToolDto:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        about:
+          type: "string"
+    GoodDto:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        about:
+          type: "string"
+    TagDto:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+    TasteDto:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+    CocktailId:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+    FilterWithCocktailIdsDto:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        cocktailIds:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/CocktailId"
+    FilterGroupDto:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        filters:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/FilterWithCocktailIdsDto"
+        selectionType:
+          type: "string"
+          enum:
+          - "Companion"
+          - "$cachedSerializer$delegate"
+          - "SINGLE"
+          - "MULTIPLE"
+    GlasswareDto:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        about:
+          type: "string"
+    SnapshotDto:
+      type: "object"
+      properties:
+        cocktails:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/CocktailDto"
+        tools:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/ToolDto"
+        goods:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/GoodDto"
+        tags:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/TagDto"
+        tastes:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/TasteDto"
+        filterGroups:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/FilterGroupDto"
+        glassware:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/GlasswareDto"
