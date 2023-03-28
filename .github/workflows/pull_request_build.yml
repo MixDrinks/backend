@@ -13,9 +13,9 @@ jobs:
         id: bump-semver
         with:
           current_version: ${{ steps.get-latest-tag.outputs.tag }}
-          level: prepatch
+          level: patch
       - name: "Set output"
-        run: echo "mix_drinks_backend_version=${{ steps.bump-semver.outputs.new_version }}" >> $GITHUB_ENV
+        run: echo "mix_drinks_backend_version=${{ steps.bump-semver.outputs.new_version }}-${{ github.event.pull_request.number }}" >> $GITHUB_ENV
       - name: "Print output mix drinks backend version"
         run: echo ${{ env.mix_drinks_backend_version }}
       - name: Set up QEMU
@@ -35,12 +35,12 @@ jobs:
             MIX_DRINKS_APP_VERSION=${{env.mix_drinks_backend_version}}
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/mixdrinks:${{env.mix_drinks_backend_version}}
-      - name: Setup docker compose prod
+      - name: Create docker compose prod file (set image)
         shell: bash
         run: |
           sed -e 's,build: .,image: 'vovochkastelmashchuk/mixdrinks:${{env.mix_drinks_backend_version}}',g' < docker-compose.yml >> docker-compose-prod.yml
           cat docker-compose-prod.yml
-      - name: Setup docker compose prod
+      - name: Up docker compose prod
         uses: yu-ichiro/spin-up-docker-compose-action@v1
         with:
           file: docker-compose-prod.yml
