@@ -4,9 +4,9 @@ val logbackVersion: String by project
 
 plugins {
     application
-    kotlin("jvm") version "1.8.10"
-    kotlin("plugin.serialization") version "1.8.10"
-    id("io.ktor.plugin") version "2.2.4"
+    kotlin("jvm") version "1.8.21"
+    kotlin("plugin.serialization") version "1.8.21"
+    id("io.ktor.plugin") version "2.3.0"
 }
 
 group = "org.mixdrinks"
@@ -65,6 +65,6 @@ dependencies {
     implementation("com.zaxxer:HikariCP:5.0.1")
     implementation("org.postgresql:postgresql:42.6.0")
 
-    testImplementation("io.mockk:mockk:1.13.4")
-    testImplementation("io.kotest:kotest-runner-junit5:5.5.5")
+    testImplementation("io.mockk:mockk:1.13.5")
+    testImplementation("io.kotest:kotest-runner-junit5:5.6.2")
 }
