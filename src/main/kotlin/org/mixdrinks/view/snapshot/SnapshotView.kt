@@ -5,9 +5,11 @@ import io.ktor.server.application.call
 import io.ktor.server.response.respond
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
+import org.mixdrinks.view.snapshot.sitemap.SiteMapCreator
 
 fun Application.snapshot(
     snapshotCreator: SnapshotCreator,
+    siteMapCreator: SiteMapCreator,
 ) {
     routing {
         /**
@@ -23,6 +25,10 @@ fun Application.snapshot(
          */
         get("v2/snapshot") {
             call.respond(snapshotCreator.getSnapshot())
+        }
+
+        get("sitemap.xml") {
+            call.respond(siteMapCreator.siteMapDto)
         }
     }
 }

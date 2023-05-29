@@ -18,6 +18,7 @@ import org.mixdrinks.view.controllers.search.slug.filterSlugs
 import org.mixdrinks.view.controllers.settings.AppSettings
 import org.mixdrinks.view.controllers.settings.appSetting
 import org.mixdrinks.view.snapshot.SnapshotCreator
+import org.mixdrinks.view.snapshot.sitemap.SiteMapCreator
 import org.mixdrinks.view.snapshot.snapshot
 
 fun Application.api(appSettings: AppSettings) {
@@ -34,7 +35,7 @@ fun Application.api(appSettings: AppSettings) {
     this.cocktails()
     this.items()
     this.appSetting(appSettings)
-    this.snapshot(snapshotCreator)
+    this.snapshot(snapshotCreator, SiteMapCreator())
 
     val searchSlugResponseBuilder = SearchSlugResponseBuilder(filterCache, searchResponseBuilder)
 
