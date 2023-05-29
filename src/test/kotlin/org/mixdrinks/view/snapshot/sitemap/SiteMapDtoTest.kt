@@ -20,18 +20,7 @@ class SiteMapDtoTest {
                 <url>
                     <loc>https://mixdrinks.org/url1</loc>
                 </url>
-                <url>    private val snapshotDto: SnapshotDto = transaction {
-        return@transaction SnapshotDto(
-            cocktails = getCocktails(),
-            goods = getGoods(),
-            tags = getTags(),
-            tastes = getTastes(),
-            tools = getTools(),
-            glassware = getGlassware(),
-            filterGroups = getFilterGroups(),
-        )
-    }
-
+                <url>
                     <loc>https://mixdrinks.org/url2</loc>
                 </url>
             </urlset>
