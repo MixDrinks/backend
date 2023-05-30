@@ -11,7 +11,7 @@ class SiteMapCreator {
 
     val siteMapDto: Urlset = transaction {
         Urlset(
-            url = (getCocktailIds().map { "https://mixdrinks.org/cocktails/$it" } +
+            url = (listOf("https://mixdrinks.org/") + getCocktailIds().map { "https://mixdrinks.org/cocktails/$it" } +
                     getGoodIds().map { "https://mixdrinks.org/goods/$it" } +
                     getToolIds().map { "https://mixdrinks.org/tools/$it" } +
                     getGlasswareIds().map { "https://mixdrinks.org/glassware/$it" }).map { Url(it) }
