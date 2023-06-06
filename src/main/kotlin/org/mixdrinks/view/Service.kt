@@ -18,5 +18,6 @@ fun Application.service(appVersion: String) {
 
 @Serializable
 data class Version(
-    @SerialName("version") val version: String
+    @SerialName("version_name") val version: String,
+    @SerialName("version_code") val code: Int = version.replace(".", "").toInt(),
 )
