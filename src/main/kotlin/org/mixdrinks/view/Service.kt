@@ -36,7 +36,7 @@ data class Version(
             it[0] * MAJOR_VERSION_MULTIPLIER + it[1] * MINOR_VERSION_MULTIPLIER + it[2]
         }
 ) {
-    private companion object {
+    companion object {
         const val VERSION_SIZE = 3
         const val MAX_MINOR_VERSION = 100
         const val MAX_PATCH_VERSION = 1000
