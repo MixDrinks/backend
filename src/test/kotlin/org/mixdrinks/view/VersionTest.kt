@@ -34,4 +34,10 @@ class VersionTest {
         val version = Version("1.2.88-10")
         assertEquals(100_000 + 2_000 + 88, version.code)
     }
+
+    @Test
+    fun `Verify code is generated from version name from pull request template 2`() {
+        val version = Version("1.10.70-171")
+        assertEquals(100_000 + 10_000 + 70, version.code)
+    }
 }
