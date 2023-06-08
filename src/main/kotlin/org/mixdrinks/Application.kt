@@ -40,7 +40,6 @@ fun main() {
 
             install(ContentNegotiation) {
                 json()
-                xml()
             }
 
             val databaseUrl = environment.config.property("ktor.database.url").getString()

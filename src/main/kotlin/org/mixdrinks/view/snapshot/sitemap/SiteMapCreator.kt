@@ -9,13 +9,11 @@ import org.mixdrinks.data.ToolsTable
 
 class SiteMapCreator {
 
-    val siteMapDto: Urlset = transaction {
-        Urlset(
-            url = (listOf("https://mixdrinks.org/") + getCocktailIds().map { "https://mixdrinks.org/cocktails/$it" } +
-                    getGoodIds().map { "https://mixdrinks.org/goods/$it" } +
-                    getToolIds().map { "https://mixdrinks.org/tools/$it" } +
-                    getGlasswareIds().map { "https://mixdrinks.org/glassware/$it" }).map { Url(it) }
-        )
+    val siteMapDto: List<String> = transaction {
+        getCocktailIds().map { "cocktails/$it" } +
+                getGoodIds().map { "goods/$it" } +
+                getToolIds().map { "tools/$it" } +
+                getGlasswareIds().map { "glassware/$it" }
     }
 
     private fun getGlasswareIds(): List<Int> {
