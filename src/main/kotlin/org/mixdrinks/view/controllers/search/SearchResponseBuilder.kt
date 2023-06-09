@@ -18,6 +18,7 @@ import org.mixdrinks.view.cocktail.domain.SortType
 import org.mixdrinks.view.controllers.filter.FilterCache
 import org.mixdrinks.view.controllers.filter.FilterModels
 import org.mixdrinks.view.controllers.search.paggination.Page
+import org.mixdrinks.view.controllers.search.slug.SearchParams
 import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
 

@@ -12,7 +12,6 @@ import org.mixdrinks.view.controllers.score.rattingSearchView
 import org.mixdrinks.view.controllers.score.score
 import org.mixdrinks.view.controllers.search.DescriptionBuilder
 import org.mixdrinks.view.controllers.search.SearchResponseBuilder
-import org.mixdrinks.view.controllers.search.searchView
 import org.mixdrinks.view.controllers.search.slug.SearchSlugResponseBuilder
 import org.mixdrinks.view.controllers.search.slug.filterSlugs
 import org.mixdrinks.view.controllers.settings.AppSettings
@@ -29,7 +28,6 @@ fun Application.api(appSettings: AppSettings) {
 
     val searchResponseBuilder = SearchResponseBuilder(filterCache, cocktailSelector, DescriptionBuilder())
 
-    this.searchView(searchResponseBuilder, appSettings)
     this.rattingSearchView(RattingBuilder(cocktailSelector), appSettings)
     this.score(appSettings)
     this.cocktails()
