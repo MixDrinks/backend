@@ -9,7 +9,6 @@ import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.install
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.testing.testApplication
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.createDataBase
 import org.jetbrains.exposed.dao.IntEntity
@@ -20,6 +19,7 @@ import org.jetbrains.exposed.sql.SizedCollection
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.mixdrinks.data.CocktailToTagTable
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsToGlasswareTable
 import org.mixdrinks.data.CocktailsToGoodsTable
@@ -27,6 +27,7 @@ import org.mixdrinks.data.CocktailsToTastesTable
 import org.mixdrinks.data.CocktailsToToolsTable
 import org.mixdrinks.data.Glassware
 import org.mixdrinks.data.Good
+import org.mixdrinks.data.Tag
 import org.mixdrinks.data.Taste
 import org.mixdrinks.data.Tool
 import org.mixdrinks.dto.CocktailId
@@ -121,6 +122,7 @@ class TestCocktail(id: EntityID<Int>) : IntEntity(id) {
     var tools by Tool via CocktailsToToolsTable
     var taste by Taste via CocktailsToTastesTable
     var glassware by Glassware via CocktailsToGlasswareTable
+    var tags by Tag via CocktailToTagTable
 }
 
 private fun prepareData(tastes: List<String>) {
