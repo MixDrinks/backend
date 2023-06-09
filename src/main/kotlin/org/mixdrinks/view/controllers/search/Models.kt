@@ -19,5 +19,6 @@ data class FilterCount(
     @SerialName("id") val id: FilterId,
     @SerialName("count") val count: Int,
     @SerialName("query") val query: String,
+    @SerialName("isActive") val isActive: Boolean,
 )
 

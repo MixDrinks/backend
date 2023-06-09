@@ -76,7 +76,13 @@ class SearchResponseBuilder(
                         FilterCount(
                             id = filterId,
                             count = cocktailSelector.getCocktailIds(futureSearchParam).count(),
-                            query = buildNextQuery(futureSearchParam),
+                            query = buildNextQuery(
+                                filterGroupBackend.id,
+                                filterId,
+                                futureSearchParam,
+                                searchParams.filters
+                            ),
+                            isActive = searchParams.filters[filterGroupBackend.id].orEmpty().contains(filterId),
                         )
 
                     }
@@ -91,21 +97,33 @@ class SearchResponseBuilder(
         }
     }
 
-    private fun buildNextQuery(filters: Map<FilterGroupId, List<FilterId>>): String {
-        exposedLogger.debug("buildNextQuery: $filters")
-        return filters
-            .map { (groupId, filterIds) ->
+    private fun buildNextQuery(
+        currentFilterGroupId: FilterGroupId,
+        filterId: FilterId,
+        futureSearchOption: Map<FilterGroupId, List<FilterId>>,
+        currentSearch: Map<FilterGroupId, List<FilterId>>
+    ): String {
+        exposedLogger.debug("buildNextQuery: $futureSearchOption")
+        return futureSearchOption
+            .mapNotNull { (groupId, filterIds) ->
                 val group = FilterModels.FilterGroupBackend.values().first { it.id == groupId }
                 Pair(
                     group,
-                    filterCache.fullFilterGroupBackend[group].orEmpty().filter { it.id in filterIds }
-                        .map { it.slug })
+                    filterCache.fullFilterGroupBackend[group]
+                        .orEmpty()
+                        .filterNot {
+                            it.id == filterId
+                                    && groupId == currentFilterGroupId
+                                    && filterId in currentSearch[group.id].orEmpty()
+                        }
+                        .filter { it.id in filterIds }
+                        .map { it.slug }
+                        .takeIf { it.isNotEmpty() } ?: return@mapNotNull null)
             }
             .sortedBy { (group, _) -> group.sortOrder }
             .joinToString(separator = "/") { (group, filterSlugs) ->
                 "${group.queryName.value}=${filterSlugs.joinToString(",")}"
             }
-
     }
 
     private fun createCocktails(row: ResultRow): CompactCocktailVM {
