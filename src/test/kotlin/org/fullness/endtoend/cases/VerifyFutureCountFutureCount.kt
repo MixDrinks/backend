@@ -73,21 +73,21 @@ class VerifyFutureCountFutureCount : FunSpec({
                 cocktails = listOf(2, 3),
                 toolsCounts = listOf(
                     FilterCount(
-                        FilterId(1), 1, "glassware=test-glassware-2/tools=test-tool-1",
+                        FilterId(1), 1, "glassware=test-glassware-2/tools=test-tool-1", false,
                     ),
                     FilterCount(
-                        FilterId(2), 1, "glassware=test-glassware-2/tools=test-tool-2",
+                        FilterId(2), 1, "glassware=test-glassware-2/tools=test-tool-2", false,
                     ),
                     FilterCount(
-                        FilterId(3), 2, "glassware=test-glassware-2/tools=test-tool-3",
+                        FilterId(3), 2, "glassware=test-glassware-2/tools=test-tool-3", false,
                     )
                 ),
                 glasswareCounts = listOf(
                     FilterCount(
-                        FilterId(1), 1, "glassware=test-glassware-1",
+                        FilterId(1), 1, "glassware=test-glassware-1", false,
                     ),
                     FilterCount(
-                        FilterId(2), 2, "glassware=test-glassware-2",
+                        FilterId(2), 2, "", true
                     )
                 )
 
@@ -107,21 +107,21 @@ class VerifyFutureCountFutureCount : FunSpec({
                 cocktails = listOf(2, 3),
                 toolsCounts = listOf(
                     FilterCount(
-                        FilterId(1), 1, "tools=test-tool-1,test-tool-3",
+                        FilterId(1), 1, "tools=test-tool-1,test-tool-3", false,
                     ),
                     FilterCount(
-                        FilterId(2), 1, "tools=test-tool-2,test-tool-3",
+                        FilterId(2), 1, "tools=test-tool-2,test-tool-3", false,
                     ),
                     FilterCount(
-                        FilterId(3), 2, "tools=test-tool-3",
+                        FilterId(3), 2, "", true,
                     )
                 ),
                 glasswareCounts = listOf(
                     FilterCount(
-                        FilterId(1), 0, "glassware=test-glassware-1/tools=test-tool-3",
+                        FilterId(1), 0, "glassware=test-glassware-1/tools=test-tool-3", false,
                     ),
                     FilterCount(
-                        FilterId(2), 2, "glassware=test-glassware-2/tools=test-tool-3",
+                        FilterId(2), 2, "glassware=test-glassware-2/tools=test-tool-3", false,
                     )
                 )
             )
@@ -142,21 +142,21 @@ class VerifyFutureCountFutureCount : FunSpec({
                 cocktails = listOf(2, 3),
                 toolsCounts = listOf(
                     FilterCount(
-                        FilterId(1), 1, "glassware=test-glassware-2/tools=test-tool-1,test-tool-3",
+                        FilterId(1), 1, "glassware=test-glassware-2/tools=test-tool-1,test-tool-3", false,
                     ),
                     FilterCount(
-                        FilterId(2), 1, "glassware=test-glassware-2/tools=test-tool-2,test-tool-3",
+                        FilterId(2), 1, "glassware=test-glassware-2/tools=test-tool-2,test-tool-3", false,
                     ),
                     FilterCount(
-                        FilterId(3), 2, "glassware=test-glassware-2/tools=test-tool-3",
+                        FilterId(3), 2, "glassware=test-glassware-2", true,
                     )
                 ),
                 glasswareCounts = listOf(
                     FilterCount(
-                        FilterId(1), 0, "glassware=test-glassware-1/tools=test-tool-3",
+                        FilterId(1), 0, "glassware=test-glassware-1/tools=test-tool-3", false,
                     ),
                     FilterCount(
-                        FilterId(2), 2, "glassware=test-glassware-2/tools=test-tool-3",
+                        FilterId(2), 2, "tools=test-tool-3", true,
                     )
                 )
             )
@@ -177,21 +177,21 @@ class VerifyFutureCountFutureCount : FunSpec({
                 cocktails = listOf(3),
                 toolsCounts = listOf(
                     FilterCount(
-                        FilterId(1), 0, "glassware=test-glassware-2/tools=test-tool-1,test-tool-2",
+                        FilterId(1), 0, "glassware=test-glassware-2/tools=test-tool-1,test-tool-2", false,
                     ),
                     FilterCount(
-                        FilterId(2), 1, "glassware=test-glassware-2/tools=test-tool-2",
+                        FilterId(2), 1, "glassware=test-glassware-2", true,
                     ),
                     FilterCount(
-                        FilterId(3), 1, "glassware=test-glassware-2/tools=test-tool-2,test-tool-3",
+                        FilterId(3), 1, "glassware=test-glassware-2/tools=test-tool-2,test-tool-3", false,
                     )
                 ),
                 glasswareCounts = listOf(
                     FilterCount(
-                        FilterId(1), 1, "glassware=test-glassware-1/tools=test-tool-2",
+                        FilterId(1), 1, "glassware=test-glassware-1/tools=test-tool-2", false,
                     ),
                     FilterCount(
-                        FilterId(2), 1, "glassware=test-glassware-2/tools=test-tool-2",
+                        FilterId(2), 1, "tools=test-tool-2", true,
                     )
                 )
             )
