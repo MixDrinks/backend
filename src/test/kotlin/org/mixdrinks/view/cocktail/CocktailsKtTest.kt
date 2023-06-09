@@ -24,7 +24,7 @@ import org.mixdrinks.data.Tag
 import org.mixdrinks.data.Taste
 import org.mixdrinks.data.Tool
 
-internal class FullCocktailsEndToEndTests : FunSpec({
+internal class CocktailsKtTest : FunSpec({
 
     @Suppress("MemberVisibilityCanBePrivate") val database =
         Database.connect("jdbc:h2:mem:test_db_22;DB_CLOSE_DELAY=-1;IGNORECASE=true;")
