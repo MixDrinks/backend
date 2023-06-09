@@ -2,6 +2,7 @@ package org.fullness.integration
 
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.shouldBe
 import org.fullness.CocktailData
 import org.fullness.prepareData
 import org.jetbrains.exposed.sql.Database
@@ -9,10 +10,9 @@ import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.mixdrinks.domain.CocktailSelector
 import org.mixdrinks.dto.FilterId
 import org.mixdrinks.view.cocktail.domain.SortType
+import org.mixdrinks.view.controllers.filter.FilterCache
 import org.mixdrinks.view.controllers.filter.FilterModels
 import org.mixdrinks.view.controllers.search.DescriptionBuilder
-import org.mixdrinks.view.controllers.filter.FilterCache
-import org.mixdrinks.view.controllers.search.FilterCount
 import org.mixdrinks.view.controllers.search.SearchParams
 import org.mixdrinks.view.controllers.search.SearchResponse
 import org.mixdrinks.view.controllers.search.SearchResponseBuilder
@@ -233,9 +233,14 @@ private fun verifyFutureCountResponse(
     filter: FilterModels.FilterGroupBackend,
     expectedCount: Map<FilterId, Int>,
 ) {
-    result.futureCounts[filter.id] shouldContainExactlyInAnyOrder expectedCount.map { (filterId, count) ->
-        FilterCount(
-            filterId, count
+    result.futureCounts[filter.id]?.size shouldBe expectedCount.size
+
+    result.futureCounts[filter.id]?.map {
+        Pair(
+            it.id,
+            it.count
         )
+    } shouldContainExactlyInAnyOrder expectedCount.map { (filterId, count) ->
+        Pair(filterId, count)
     }
 }

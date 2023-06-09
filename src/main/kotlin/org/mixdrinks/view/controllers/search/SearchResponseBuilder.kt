@@ -76,6 +76,7 @@ class SearchResponseBuilder(
                         FilterCount(
                             id = filterId,
                             count = cocktailSelector.getCocktailIds(futureSearchParam).count(),
+                            query = buildNextQuery(futureSearchParam),
                         )
 
                     }
@@ -88,6 +89,23 @@ class SearchResponseBuilder(
                 description = descriptionBuilder.buildDescription(searchParams),
             )
         }
+    }
+
+    private fun buildNextQuery(filters: Map<FilterGroupId, List<FilterId>>): String {
+        exposedLogger.debug("buildNextQuery: $filters")
+        return filters
+            .map { (groupId, filterIds) ->
+                val group = FilterModels.FilterGroupBackend.values().first { it.id == groupId }
+                Pair(
+                    group,
+                    filterCache.fullFilterGroupBackend[group].orEmpty().filter { it.id in filterIds }
+                        .map { it.slug })
+            }
+            .sortedBy { (group, _) -> group.sortOrder }
+            .joinToString(separator = "/") { (group, filterSlugs) ->
+                "${group.queryName.value}=${filterSlugs.joinToString(",")}"
+            }
+
     }
 
     private fun createCocktails(row: ResultRow): CompactCocktailVM {
