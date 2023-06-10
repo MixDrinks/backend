@@ -19,6 +19,7 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailsTable
+import org.mixdrinks.dto.CocktailId
 import org.mixdrinks.view.controllers.score.CocktailScoreChangeResponse
 import org.mixdrinks.view.controllers.score.score
 import org.mixdrinks.view.controllers.settings.AppSettings
@@ -60,12 +61,12 @@ class CocktailEndToEndTests : FunSpec({
 })
 
 private suspend fun ApplicationTestBuilder.verifyVisitCount(count: Int) {
-    client.get("v2/cocktail/ratting?id=0").let { response ->
+    client.get("v2/cocktails/ratting").let { response ->
         response.status shouldBe HttpStatusCode.OK
 
-        val result = Json.decodeFromString<CocktailScoreChangeResponse>(response.bodyAsText())
+        val result = Json.decodeFromString<Map<Int, CocktailScoreChangeResponse>>(response.bodyAsText())
 
-        result.visitCount shouldBe count
+        result[0]?.visitCount shouldBe count
     }
 }
 
