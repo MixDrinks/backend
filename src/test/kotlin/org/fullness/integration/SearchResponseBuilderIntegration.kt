@@ -13,9 +13,9 @@ import org.mixdrinks.view.cocktail.domain.SortType
 import org.mixdrinks.view.controllers.filter.FilterCache
 import org.mixdrinks.view.controllers.filter.FilterModels
 import org.mixdrinks.view.controllers.search.DescriptionBuilder
-import org.mixdrinks.view.controllers.search.SearchParams
 import org.mixdrinks.view.controllers.search.SearchResponse
 import org.mixdrinks.view.controllers.search.SearchResponseBuilder
+import org.mixdrinks.view.controllers.search.slug.SearchParams
 
 class SearchResponseBuilderIntegration : FunSpec({
 

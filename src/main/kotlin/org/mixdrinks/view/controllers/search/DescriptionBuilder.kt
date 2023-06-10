@@ -10,6 +10,7 @@ import org.mixdrinks.data.Taste
 import org.mixdrinks.data.TastesTable
 import org.mixdrinks.dto.FilterId
 import org.mixdrinks.view.controllers.filter.FilterModels
+import org.mixdrinks.view.controllers.search.slug.SearchParams
 
 class DescriptionBuilder {
 

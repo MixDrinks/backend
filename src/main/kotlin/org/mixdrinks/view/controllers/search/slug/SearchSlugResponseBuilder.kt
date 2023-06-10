@@ -1,9 +1,10 @@
 package org.mixdrinks.view.controllers.search.slug
 
 import org.jetbrains.exposed.sql.exposedLogger
+import org.mixdrinks.dto.FilterGroupId
+import org.mixdrinks.dto.FilterId
 import org.mixdrinks.view.cocktail.domain.SortType
 import org.mixdrinks.view.controllers.filter.FilterCache
-import org.mixdrinks.view.controllers.search.SearchParams
 import org.mixdrinks.view.controllers.search.SearchResponse
 import org.mixdrinks.view.controllers.search.SearchResponseBuilder
 import org.mixdrinks.view.controllers.search.paggination.Page
@@ -33,3 +34,7 @@ class SearchSlugResponseBuilder(
         return searchResponseBuilder.getCocktailsBySearch(searchParams, page, sortType, true)
     }
 }
+
+data class SearchParams(
+    val filters: Map<FilterGroupId, List<FilterId>> = mapOf(),
+)

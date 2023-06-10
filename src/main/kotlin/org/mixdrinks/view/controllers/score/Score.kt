@@ -16,9 +16,9 @@ import org.jetbrains.exposed.sql.update
 import org.mixdrinks.data.Cocktail
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.dto.CocktailId
+import org.mixdrinks.view.controllers.settings.AppSettings
 import org.mixdrinks.view.error.QueryRequireException
 import org.mixdrinks.view.error.VoteError
-import org.mixdrinks.view.controllers.settings.AppSettings
 import org.mixdrinks.view.v2.getCocktailId
 import org.mixdrinks.view.v2.roundScore
 

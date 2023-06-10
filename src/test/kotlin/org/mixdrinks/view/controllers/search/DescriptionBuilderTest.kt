@@ -15,8 +15,7 @@ import org.mixdrinks.data.Tool
 import org.mixdrinks.dto.FilterGroupId
 import org.mixdrinks.dto.FilterId
 import org.mixdrinks.view.controllers.filter.FilterModels
-import org.mixdrinks.view.controllers.search.DescriptionBuilder
-import org.mixdrinks.view.controllers.search.SearchParams
+import org.mixdrinks.view.controllers.search.slug.SearchParams
 
 class DescriptionBuilderTest : FunSpec({
 
