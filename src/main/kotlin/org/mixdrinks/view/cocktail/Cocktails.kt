@@ -124,13 +124,6 @@ private fun getTagsV2(cocktail: FullCocktail): List<TagVM> {
     }
 }
 
-@Suppress("UnusedPrivateMember")
-private fun getTastes(cocktail: FullCocktail): List<TagVM> {
-    return cocktail.tastes.map {
-        return@map buildTagVM(it.id, it.name, it.slug, FilterModels.FilterGroupBackend.TASTE)
-    }
-}
-
 private fun getCocktailTags(cocktail: FullCocktail): List<TagVM> {
     return cocktail.tags.map {
         return@map buildTagVM(it.id, it.name, it.slug, FilterModels.FilterGroupBackend.TAGS)
