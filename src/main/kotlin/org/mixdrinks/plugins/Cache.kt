@@ -31,8 +31,6 @@ private fun isCachedCall(call: ApplicationCall) =
     call.request.httpMethod == HttpMethod.Get && (CACHE_RESPONSE_PATHS.any { call.request.path().contains(it) })
 
 private val CACHE_RESPONSE_PATHS = listOf(
-    "meta/all",
-    "tags/all",
     "v2/snapshot",
     "/cocktails/all",
 )

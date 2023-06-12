@@ -34,7 +34,9 @@ fun Application.score(appSettings: AppSettings) {
                     it[ratingCount] = ratingCount + 1
                 }
 
-                scoreCocktailsChangeResponse(id)
+                scoreCocktailsChangeResponse(
+                    Cocktail.findById(id.id) ?: throw QueryRequireException("Cocktail not found")
+                )
             })
         }
         post("v2/cocktails/visit") {
@@ -45,12 +47,17 @@ fun Application.score(appSettings: AppSettings) {
                     it[visitCount] = visitCount + 1
                 }
 
-                scoreCocktailsChangeResponse(id)
+                scoreCocktailsChangeResponse(
+                    Cocktail.findById(id.id) ?: throw QueryRequireException("Cocktail not found")
+                )
             })
         }
-        get("v2/cocktail/ratting") {
-            val id = call.getCocktailId()
-            call.respond(transaction { scoreCocktailsChangeResponse(id) })
+        get("v2/cocktails/ratting") {
+            call.respond(transaction {
+                Cocktail.all().associate { cocktail ->
+                    Pair(CocktailId(cocktail.id.value), scoreCocktailsChangeResponse(cocktail))
+                }
+            })
         }
     }
 }
@@ -62,11 +69,9 @@ data class CocktailScoreChangeResponse(
     @SerialName("visitCount") val visitCount: Int,
 )
 
-fun scoreCocktailsChangeResponse(id: CocktailId): CocktailScoreChangeResponse {
-    val cocktail = Cocktail.findById(id.id) ?: throw QueryRequireException("Cocktail not found")
-
+private fun scoreCocktailsChangeResponse(cocktail: Cocktail): CocktailScoreChangeResponse {
     return CocktailScoreChangeResponse(
-        cocktailId = id,
+        cocktailId = CocktailId(cocktail.id.value),
         rating = cocktail.getRatting()?.let { notNullScore -> roundScore(notNullScore) },
         visitCount = cocktail.visitCount,
     )
