@@ -13,6 +13,29 @@ import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
 
 fun Routing.tool() {
+    legacy()
+
+    get("v2/tool/{slug}") {
+        val slug = call.parameters["slug"] ?: throw BadRequestException("Tool id is required")
+        call.respond(
+            transaction {
+                Tool.find { ToolsTable.slug eq slug }.firstOrNull()?.let { tool ->
+                    val toolId = tool.id.value
+
+                    return@transaction ItemVm(
+                        id = toolId,
+                        name = tool.name,
+                        about = tool.about,
+                        images = buildImages(toolId, ImageType.ITEM),
+                        slug = tool.slug,
+                    )
+                } ?: throw NotFoundException("Tool with slug $slug not found")
+            }
+        )
+    }
+}
+
+private fun Routing.legacy() {
     /**
      * Return the tool info based on id
      */
@@ -31,25 +54,6 @@ fun Routing.tool() {
                         slug = tool.slug,
                     )
                 } ?: throw NotFoundException("Tool with id $id not found")
-            }
-        )
-    }
-
-    get("v2/tool/{slug}") {
-        val slug = call.parameters["slug"] ?: throw BadRequestException("Tool id is required")
-        call.respond(
-            transaction {
-                Tool.find { ToolsTable.slug eq slug }.firstOrNull()?.let { tool ->
-                    val toolId = tool.id.value
-
-                    return@transaction ItemVm(
-                        id = toolId,
-                        name = tool.name,
-                        about = tool.about,
-                        images = buildImages(toolId, ImageType.ITEM),
-                        slug = tool.slug,
-                    )
-                } ?: throw NotFoundException("Tool with slug $slug not found")
             }
         )
     }
