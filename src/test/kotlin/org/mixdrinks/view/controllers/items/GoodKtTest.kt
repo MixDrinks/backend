@@ -64,5 +64,4 @@ class GoodKtTest : AnnotationSpec() {
             }
         }
     }
-
 }

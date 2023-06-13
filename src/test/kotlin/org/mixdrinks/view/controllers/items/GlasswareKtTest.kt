@@ -65,5 +65,4 @@ class GlasswareKtTest : AnnotationSpec() {
             }
         }
     }
-
 }
