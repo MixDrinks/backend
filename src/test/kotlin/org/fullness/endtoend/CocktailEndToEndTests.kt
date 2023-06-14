@@ -11,7 +11,6 @@ import io.ktor.server.application.install
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.testing.ApplicationTestBuilder
 import io.ktor.server.testing.testApplication
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.createDataBase
 import org.jetbrains.exposed.sql.Database
@@ -19,7 +18,6 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailsTable
-import org.mixdrinks.dto.CocktailId
 import org.mixdrinks.view.controllers.score.CocktailScoreChangeResponse
 import org.mixdrinks.view.controllers.score.score
 import org.mixdrinks.view.controllers.settings.AppSettings
