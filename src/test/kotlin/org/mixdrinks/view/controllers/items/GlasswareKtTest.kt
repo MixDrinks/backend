@@ -42,7 +42,6 @@ class GlasswareKtTest : AnnotationSpec() {
             }
 
             client.get("v3/glassware/test-glassware").let { response ->
-                println(response)
                 response.status shouldBe HttpStatusCode.OK
                 val result = Json.decodeFromString<ItemVm>(response.bodyAsText())
 
