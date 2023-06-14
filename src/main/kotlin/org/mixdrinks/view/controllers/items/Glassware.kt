@@ -9,7 +9,6 @@ import io.ktor.server.routing.get
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.Glassware
 import org.mixdrinks.data.GlasswareTable
-import org.mixdrinks.data.GoodsTable
 import org.mixdrinks.view.controllers.filter.FilterModels
 import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages

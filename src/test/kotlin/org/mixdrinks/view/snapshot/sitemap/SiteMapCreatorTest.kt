@@ -2,12 +2,6 @@ package org.mixdrinks.view.snapshot.sitemap
 
 import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.collections.shouldContainAll
-import io.kotest.matchers.shouldBe
-import io.ktor.serialization.kotlinx.json.json
-import io.ktor.server.application.install
-import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.server.routing.routing
-import io.ktor.server.testing.testApplication
 import org.createDataBase
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -18,7 +12,6 @@ import org.mixdrinks.data.Tag
 import org.mixdrinks.data.Taste
 import org.mixdrinks.data.Tool
 import org.mixdrinks.view.controllers.filter.FilterModels
-import org.mixdrinks.view.controllers.items.good
 
 class SiteMapCreatorTest : AnnotationSpec() {
 
