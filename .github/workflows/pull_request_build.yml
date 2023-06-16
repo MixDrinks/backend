@@ -44,12 +44,9 @@ jobs:
         uses: yu-ichiro/spin-up-docker-compose-action@v1
         with:
           file: docker-compose-prod.yml
-      - uses: cygnetdigital/wait_for_response@v2.0.0
-        with:
-          url: 'http://localhost:8080/version'
-          responseCode: '200,500'
-          timeout: 120000
-          interval: 10000
+      - name: Sleep for 60 seconds
+        run: sleep 60s
+        shell: bash
       - name: Verify app is up
         run: curl -v --fail http://localhost:8080/version || exit 1
       - uses: matt-ball/newman-action@master
