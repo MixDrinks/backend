@@ -97,7 +97,7 @@ class TransliterationKtTest : FunSpec({
         "Мініточа (таблетки)" to "minitocha-tabletky",
         "Пробники" to "probnyky",
         "Підбірки" to "pidbirky",
-    ).forEach {(ukraine, slug) ->
+    ).forEach { (ukraine, slug) ->
         test("Slug of $ukraine is $slug") {
             slug(ukraine) shouldBe slug
         }

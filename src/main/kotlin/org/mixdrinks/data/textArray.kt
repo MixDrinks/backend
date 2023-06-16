@@ -18,7 +18,7 @@ import java.sql.Array as SQLArray
  *
  * @param size an optional size of the array
  */
-public fun Table.textArray(name: String, size: Int? = null): Column<Array<String>> =
+fun Table.textArray(name: String, size: Int? = null): Column<Array<String>> =
     array(name, currentDialect.dataTypeProvider.textType(), size)
 
 private fun <T : Serializable> Table.array(name: String, underlyingType: String, size: Int?) =
@@ -27,7 +27,7 @@ private fun <T : Serializable> Table.array(name: String, underlyingType: String,
 /**
  * Invokes the `ANY` function on [expression].
  */
-public fun <T : Serializable> any(
+fun <T : Serializable> any(
     expression: Expression<Array<T>>,
 ): ExpressionWithColumnType<String?> = CustomStringFunction("ANY", expression)
 
@@ -37,7 +37,7 @@ public fun <T : Serializable> any(
  * @property underlyingType the type of the array
  * @property size an optional size of the array
  */
-public class ArrayColumnType<T : Serializable>(
+class ArrayColumnType<T : Serializable>(
     private val underlyingType: String, private val size: Int?
 ) : ColumnType() {
     override fun sqlType(): String = "$underlyingType ARRAY${size?.let { "[$it]" } ?: ""}"
