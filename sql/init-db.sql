@@ -143,6 +143,12 @@ create table cocktails_to_glassware
             references glassware
 );
 
+create table redirects
+(
+    "from"    text,
+    "to"      text
+);
+
 insert into tags (id, name, type, slug)
 values (1, 'Tag1', 1, 'tag_1');
 
