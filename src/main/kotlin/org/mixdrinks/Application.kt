@@ -13,6 +13,7 @@ import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.cors.routing.CORS
 import org.jetbrains.exposed.sql.Database
 import org.mixdrinks.plugins.configureCache
+import org.mixdrinks.plugins.configureRedirectMiddleWare
 import org.mixdrinks.plugins.configureRouting
 import org.mixdrinks.plugins.static
 import org.mixdrinks.view.controllers.settings.AppSettings
@@ -50,6 +51,8 @@ fun main() {
                 user = user,
                 password = password,
             )
+
+            configureRedirectMiddleWare()
 
             val appSettings = AppSettings(
                 minVote = config.property("ktor.settings.minVote").getString().toInt(),
