@@ -47,7 +47,7 @@ class FilterViewV2Tests : FunSpec({
         val good2 = "good-2"
         setupAppAndVerify(
             "${FilterModels.FilterGroupBackend.TAGS.queryName.value}=$tag1,$tag2/" +
-                    "${FilterModels.FilterGroupBackend.GOODS.queryName.value}=$good1,$good2",
+                "${FilterModels.FilterGroupBackend.GOODS.queryName.value}=$good1,$good2",
             mapOf(
                 FilterModels.FilterGroupBackend.TAGS to listOf(tag1, tag2),
                 FilterModels.FilterGroupBackend.GOODS to listOf(good1, good2),
@@ -63,8 +63,8 @@ class FilterViewV2Tests : FunSpec({
         val alcohol1 = "alcohol-1"
         setupAppAndVerify(
             "${FilterModels.FilterGroupBackend.TAGS.queryName.value}=$tag1,$tag2/" +
-                    "${FilterModels.FilterGroupBackend.GOODS.queryName.value}=$good1,$good2/" +
-                    "${FilterModels.FilterGroupBackend.ALCOHOL_VOLUME.queryName.value}=$alcohol1",
+                "${FilterModels.FilterGroupBackend.GOODS.queryName.value}=$good1,$good2/" +
+                "${FilterModels.FilterGroupBackend.ALCOHOL_VOLUME.queryName.value}=$alcohol1",
             mapOf(
                 FilterModels.FilterGroupBackend.TAGS to listOf(tag1, tag2),
                 FilterModels.FilterGroupBackend.GOODS to listOf(good1, good2),

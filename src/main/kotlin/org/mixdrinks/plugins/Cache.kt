@@ -21,6 +21,7 @@ fun Application.configureCache() {
                         visibility = CacheControl.Visibility.Public
                     )
                 )
+
                 else -> null
             }
         }

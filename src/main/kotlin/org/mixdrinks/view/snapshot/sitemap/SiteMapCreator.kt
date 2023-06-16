@@ -18,14 +18,14 @@ class SiteMapCreator {
 
     val siteMapDto: List<String> = transaction {
         getCocktailIds().map { "cocktails/$it" } +
-                getGoodIds().map { "goods/$it" } +
-                getToolIds().map { "tools/$it" } +
-                getGlasswareIds().map { "glassware/$it" } +
-                getFirstLevelFirstersSlugs()
+            getGoodIds().map { "goods/$it" } +
+            getToolIds().map { "tools/$it" } +
+            getGlasswareIds().map { "glassware/$it" } +
+            getFirstLevelFirstersSlugs()
     }
 
-    private fun getFirstLevelFirstersSlugs() : List<String> {
-        return FilterModels.FilterGroupBackend.values().flatMap {filter ->
+    private fun getFirstLevelFirstersSlugs(): List<String> {
+        return FilterModels.FilterGroupBackend.values().flatMap { filter ->
             when (filter) {
                 FilterModels.FilterGroupBackend.TAGS -> Tag.all().map { it.slug }
                 FilterModels.FilterGroupBackend.GOODS -> Good.all().map { it.slug }

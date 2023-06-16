@@ -132,7 +132,7 @@ class VerifyFutureCountFutureCount : FunSpec({
             mockApp()
             val response = client.get(
                 "v2/filter/${FilterModels.FilterGroupBackend.TOOLS.queryName.value}=test-tool-3" +
-                        "/${FilterModels.FilterGroupBackend.GLASSWARE.queryName.value}=test-glassware-2"
+                    "/${FilterModels.FilterGroupBackend.GLASSWARE.queryName.value}=test-glassware-2"
             )
 
             response.status shouldBe HttpStatusCode.OK
@@ -167,7 +167,7 @@ class VerifyFutureCountFutureCount : FunSpec({
             mockApp()
             val response = client.get(
                 "v2/filter/${FilterModels.FilterGroupBackend.TOOLS.queryName.value}=test-tool-2/" +
-                        "${FilterModels.FilterGroupBackend.GLASSWARE.queryName.value}=test-glassware-2"
+                    "${FilterModels.FilterGroupBackend.GLASSWARE.queryName.value}=test-glassware-2"
             )
 
             response.status shouldBe HttpStatusCode.OK

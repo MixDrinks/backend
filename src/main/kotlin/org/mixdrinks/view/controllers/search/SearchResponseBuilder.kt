@@ -114,8 +114,8 @@ class SearchResponseBuilder(
                         .orEmpty()
                         .filterNot {
                             it.id == filterId
-                                    && groupId == currentFilterGroupId
-                                    && filterId in currentSearch[group.id].orEmpty()
+                                && groupId == currentFilterGroupId
+                                && filterId in currentSearch[group.id].orEmpty()
                         }
                         .filter { it.id in filterIds }
                         .map { it.slug }
