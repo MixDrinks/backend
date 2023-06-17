@@ -37,9 +37,3 @@ class FilterModels {
         @SerialName("slug") val slug: String,
     )
 }
-
-@Deprecated(
-    "Use FilterGroups instead, the typealias just for backward compatibilyt",
-    replaceWith = ReplaceWith("FilterGroups", "org.mixdrinks.domain.FilterGroups")
-)
-typealias FilterGroupBackend = FilterGroups
