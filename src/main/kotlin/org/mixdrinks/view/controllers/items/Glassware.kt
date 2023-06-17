@@ -9,13 +9,13 @@ import io.ktor.server.routing.get
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.Glassware
 import org.mixdrinks.data.GlasswareTable
-import org.mixdrinks.view.controllers.filter.FilterModels
+import org.mixdrinks.domain.FilterGroups
 import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
 
 fun Routing.glassware() {
     legacy()
-    get("v3/${FilterModels.FilterGroupBackend.GLASSWARE.queryName.value}/{slug}") {
+    get("v3/${FilterGroups.GLASSWARE.queryName.value}/{slug}") {
         val slug = call.parameters["slug"] ?: throw BadRequestException("Glassware slug is required")
 
         call.respond(

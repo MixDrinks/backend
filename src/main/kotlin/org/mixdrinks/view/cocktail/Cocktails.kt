@@ -18,9 +18,9 @@ import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsToGoodsTable
 import org.mixdrinks.data.FullCocktail
 import org.mixdrinks.data.GoodsTable
+import org.mixdrinks.domain.FilterGroups
 import org.mixdrinks.dto.CocktailId
 import org.mixdrinks.dto.TagId
-import org.mixdrinks.view.controllers.filter.FilterModels
 import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
 
@@ -111,14 +111,14 @@ private fun getTagsV2(cocktail: FullCocktail): List<TagVM> {
         return@map TagVM(
             id = TagId(it.id.value),
             name = it.name,
-            path = "${FilterModels.FilterGroupBackend.TASTE.queryName.value}=${it.slug}",
+            path = "${FilterGroups.TASTE.queryName.value}=${it.slug}",
             slug = it.slug,
         )
     } + cocktail.tags.map {
         return@map TagVM(
             id = TagId(it.id.value),
             name = it.name,
-            path = "${FilterModels.FilterGroupBackend.TAGS.queryName.value}=${it.slug}",
+            path = "${FilterGroups.TAGS.queryName.value}=${it.slug}",
             slug = it.slug,
         )
     }
@@ -126,11 +126,11 @@ private fun getTagsV2(cocktail: FullCocktail): List<TagVM> {
 
 private fun getCocktailTags(cocktail: FullCocktail): List<TagVM> {
     return cocktail.tags.map {
-        return@map buildTagVM(it.id, it.name, it.slug, FilterModels.FilterGroupBackend.TAGS)
+        return@map buildTagVM(it.id, it.name, it.slug, FilterGroups.TAGS)
     }
 }
 
-private fun buildTagVM(id: EntityID<Int>, name: String, slug: String, filter: FilterModels.FilterGroupBackend): TagVM {
+private fun buildTagVM(id: EntityID<Int>, name: String, slug: String, filter: FilterGroups): TagVM {
     return TagVM(
         id = TagId(id.value),
         name = name,
@@ -151,7 +151,7 @@ private fun getCocktailGoods(cocktail: FullCocktail): List<FullGood> {
                 images = buildImages(itemRow[GoodsTable.id].value, ImageType.ITEM),
                 amount = itemRow[CocktailsToGoodsTable.amount],
                 unit = itemRow[CocktailsToGoodsTable.unit],
-                path = "${FilterModels.FilterGroupBackend.GOODS.queryName.value}/${itemRow[GoodsTable.id].value}",
+                path = "${FilterGroups.GOODS.queryName.value}/${itemRow[GoodsTable.id].value}",
                 slug = itemRow[GoodsTable.slug],
             )
         }
@@ -168,7 +168,7 @@ private fun getCocktailGoodsV2(cocktail: FullCocktail): List<FullGoodV2VM> {
                 images = buildImages(itemRow[GoodsTable.id].value, ImageType.ITEM),
                 amount = itemRow[CocktailsToGoodsTable.amount],
                 unit = itemRow[CocktailsToGoodsTable.unit],
-                path = "${FilterModels.FilterGroupBackend.GOODS.queryName.value}/${itemRow[GoodsTable.slug]}",
+                path = "${FilterGroups.GOODS.queryName.value}/${itemRow[GoodsTable.slug]}",
                 slug = itemRow[GoodsTable.slug],
             )
         }
@@ -178,10 +178,10 @@ private fun getCocktailGoodsV2(cocktail: FullCocktail): List<FullGoodV2VM> {
 private fun getFullTools(cocktail: FullCocktail): List<ToolVM> {
     return buildList {
         cocktail.glassware.first().let {
-            add(buildToolVM(it.id, it.name, it.slug, FilterModels.FilterGroupBackend.GLASSWARE))
+            add(buildToolVM(it.id, it.name, it.slug, FilterGroups.GLASSWARE))
         }
         addAll(cocktail.tools
-            .map { buildToolVM(it.id, it.name, it.slug, FilterModels.FilterGroupBackend.TOOLS) }
+            .map { buildToolVM(it.id, it.name, it.slug, FilterGroups.TOOLS) }
         )
     }
 }
@@ -193,7 +193,7 @@ private fun getFullToolsV2(cocktail: FullCocktail): List<ToolV2VM> {
                 ToolV2VM(
                     id = it.id.value,
                     slug = it.slug,
-                    path = "${FilterModels.FilterGroupBackend.GLASSWARE.queryName.value}/${it.slug}",
+                    path = "${FilterGroups.GLASSWARE.queryName.value}/${it.slug}",
                     name = it.name,
                     images = buildImages(it.id.value, ImageType.ITEM),
                 )
@@ -204,7 +204,7 @@ private fun getFullToolsV2(cocktail: FullCocktail): List<ToolV2VM> {
                 ToolV2VM(
                     id = it.id.value,
                     slug = it.slug,
-                    path = "${FilterModels.FilterGroupBackend.TOOLS.queryName.value}/${it.slug}",
+                    path = "${FilterGroups.TOOLS.queryName.value}/${it.slug}",
                     name = it.name,
                     images = buildImages(it.id.value, ImageType.ITEM),
                 )
@@ -218,7 +218,7 @@ private fun buildToolVM(
     id: EntityID<Int>,
     name: String,
     slug: String,
-    filter: FilterModels.FilterGroupBackend,
+    filter: FilterGroups,
 ): ToolVM {
     return ToolVM(
         id = id.value,

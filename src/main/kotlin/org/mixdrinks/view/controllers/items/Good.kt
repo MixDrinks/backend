@@ -9,13 +9,13 @@ import io.ktor.server.routing.get
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.Good
 import org.mixdrinks.data.GoodsTable
-import org.mixdrinks.view.controllers.filter.FilterModels
+import org.mixdrinks.domain.FilterGroups
 import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
 
 fun Routing.good() {
     legacy()
-    get("v3/${FilterModels.FilterGroupBackend.GOODS.queryName.value}/{slug}") {
+    get("v3/${FilterGroups.GOODS.queryName.value}/{slug}") {
         val slug = call.parameters["slug"] ?: throw BadRequestException("Good slug is required")
         call.respond(
             transaction {

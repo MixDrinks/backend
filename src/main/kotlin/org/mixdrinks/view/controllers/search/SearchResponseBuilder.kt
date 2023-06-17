@@ -9,6 +9,7 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.domain.CocktailSelector
+import org.mixdrinks.domain.FilterGroups
 import org.mixdrinks.dto.CocktailId
 import org.mixdrinks.dto.FilterGroupId
 import org.mixdrinks.dto.FilterId
@@ -16,7 +17,6 @@ import org.mixdrinks.dto.SelectionType
 import org.mixdrinks.view.cocktail.CompactCocktailVM
 import org.mixdrinks.view.cocktail.domain.SortType
 import org.mixdrinks.view.controllers.filter.FilterCache
-import org.mixdrinks.view.controllers.filter.FilterModels
 import org.mixdrinks.view.controllers.search.paggination.Page
 import org.mixdrinks.view.controllers.search.slug.SearchParams
 import org.mixdrinks.view.images.ImageType
@@ -61,8 +61,8 @@ class SearchResponseBuilder(
                 query
             }.map(::createCocktails)
 
-            val futureCounts: Map<FilterModels.FilterGroupBackend, List<FilterCount>> =
-                FilterModels.FilterGroupBackend.values().associateWith { filterGroupBackend ->
+            val futureCounts: Map<FilterGroups, List<FilterCount>> =
+                FilterGroups.values().associateWith { filterGroupBackend ->
                     val filterIds: List<FilterId> = filterCache.filterIds[filterGroupBackend]!!
 
                     filterIds.map { filterId ->
@@ -107,7 +107,7 @@ class SearchResponseBuilder(
         exposedLogger.debug("buildNextQuery: $futureSearchOption")
         return futureSearchOption
             .mapNotNull { (groupId, filterIds) ->
-                val group = FilterModels.FilterGroupBackend.values().first { it.id == groupId }
+                val group = FilterGroups.values().first { it.id == groupId }
                 Pair(
                     group,
                     filterCache.fullFilterGroupBackend[group]

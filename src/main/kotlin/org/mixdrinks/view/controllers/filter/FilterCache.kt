@@ -10,6 +10,7 @@ import org.mixdrinks.data.Taste
 import org.mixdrinks.data.Tool
 import org.mixdrinks.domain.Filter
 import org.mixdrinks.domain.FilterGroup
+import org.mixdrinks.domain.FilterGroups
 import org.mixdrinks.dto.CocktailId
 import org.mixdrinks.dto.FilterId
 
@@ -22,24 +23,24 @@ class FilterCache {
         val slug: String,
     )
 
-    val fullFilterGroupBackend: Map<FilterModels.FilterGroupBackend, List<FullFilter>> = transaction {
+    val fullFilterGroupBackend: Map<FilterGroups, List<FullFilter>> = transaction {
         return@transaction mapOf(
-            FilterModels.FilterGroupBackend.ALCOHOL_VOLUME to AlcoholVolumes.all().with(AlcoholVolumes::cocktails)
+            FilterGroups.ALCOHOL_VOLUME to AlcoholVolumes.all().with(AlcoholVolumes::cocktails)
                 .map(::toFullFilter),
-            FilterModels.FilterGroupBackend.TASTE to Taste.all().with(Taste::cocktails)
+            FilterGroups.TASTE to Taste.all().with(Taste::cocktails)
                 .map(::toFullFilter),
-            FilterModels.FilterGroupBackend.GLASSWARE to Glassware.all().with(Glassware::cocktail)
+            FilterGroups.GLASSWARE to Glassware.all().with(Glassware::cocktail)
                 .map(::toFullFilter),
-            FilterModels.FilterGroupBackend.GOODS to Good.all().with(Good::cocktails)
+            FilterGroups.GOODS to Good.all().with(Good::cocktails)
                 .map(::toFullFilter),
-            FilterModels.FilterGroupBackend.TAGS to Tag.all().with(Tag::cocktails)
+            FilterGroups.TAGS to Tag.all().with(Tag::cocktails)
                 .map(::toFullFilter),
-            FilterModels.FilterGroupBackend.TOOLS to Tool.all().with(Tool::cocktails)
+            FilterGroups.TOOLS to Tool.all().with(Tool::cocktails)
                 .map(::toFullFilter),
         )
     }
 
-    val filterIds: Map<FilterModels.FilterGroupBackend, List<FilterId>> =
+    val filterIds: Map<FilterGroups, List<FilterId>> =
         fullFilterGroupBackend.mapValues { (_, filters) ->
             filters.map { it.id }
         }
