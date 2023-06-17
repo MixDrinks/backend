@@ -8,10 +8,10 @@ import org.fullness.prepareData
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.mixdrinks.domain.CocktailSelector
+import org.mixdrinks.domain.FilterGroups
 import org.mixdrinks.dto.FilterId
 import org.mixdrinks.view.cocktail.domain.SortType
 import org.mixdrinks.view.controllers.filter.FilterCache
-import org.mixdrinks.view.controllers.filter.FilterModels
 import org.mixdrinks.view.controllers.search.DescriptionBuilder
 import org.mixdrinks.view.controllers.search.SearchResponse
 import org.mixdrinks.view.controllers.search.SearchResponseBuilder
@@ -60,7 +60,7 @@ class SearchResponseBuilderIntegration : FunSpec({
         result.cocktails.map { it.id.id } shouldContainExactlyInAnyOrder listOf(0, 1, 2)
 
         verifyFutureCountResponse(
-            result, FilterModels.FilterGroupBackend.TAGS, mapOf(
+            result, FilterGroups.TAGS, mapOf(
                 FilterId(1) to 2,
                 FilterId(2) to 3,
                 FilterId(3) to 2,
@@ -68,7 +68,7 @@ class SearchResponseBuilderIntegration : FunSpec({
         )
 
         verifyFutureCountResponse(
-            result, FilterModels.FilterGroupBackend.GOODS, mapOf(
+            result, FilterGroups.GOODS, mapOf(
                 FilterId(10) to 2,
                 FilterId(20) to 3,
                 FilterId(30) to 2,
@@ -76,7 +76,7 @@ class SearchResponseBuilderIntegration : FunSpec({
         )
 
         verifyFutureCountResponse(
-            result, FilterModels.FilterGroupBackend.TOOLS, mapOf(
+            result, FilterGroups.TOOLS, mapOf(
                 FilterId(100) to 2,
                 FilterId(200) to 3,
                 FilterId(300) to 2,
@@ -120,7 +120,7 @@ class SearchResponseBuilderIntegration : FunSpec({
         result.cocktails.map { it.id.id } shouldContainExactlyInAnyOrder listOf(0, 1)
 
         verifyFutureCountResponse(
-            result, FilterModels.FilterGroupBackend.TAGS, mapOf(
+            result, FilterGroups.TAGS, mapOf(
                 FilterId(1) to 2,
                 FilterId(2) to 2,
                 FilterId(3) to 1,
@@ -128,7 +128,7 @@ class SearchResponseBuilderIntegration : FunSpec({
         )
 
         verifyFutureCountResponse(
-            result, FilterModels.FilterGroupBackend.GOODS, mapOf(
+            result, FilterGroups.GOODS, mapOf(
                 FilterId(10) to 2,
                 FilterId(20) to 2,
                 FilterId(30) to 1,
@@ -136,7 +136,7 @@ class SearchResponseBuilderIntegration : FunSpec({
         )
 
         verifyFutureCountResponse(
-            result, FilterModels.FilterGroupBackend.TOOLS, mapOf(
+            result, FilterGroups.TOOLS, mapOf(
                 FilterId(100) to 2,
                 FilterId(200) to 2,
                 FilterId(300) to 1,
@@ -183,7 +183,7 @@ class SearchResponseBuilderIntegration : FunSpec({
         result.cocktails.map { it.id.id } shouldContainExactlyInAnyOrder listOf(0)
 
         verifyFutureCountResponse(
-            result, FilterModels.FilterGroupBackend.TAGS, mapOf(
+            result, FilterGroups.TAGS, mapOf(
                 FilterId(1) to 1,
                 FilterId(2) to 1,
                 FilterId(3) to 1,
@@ -191,7 +191,7 @@ class SearchResponseBuilderIntegration : FunSpec({
         )
 
         verifyFutureCountResponse(
-            result, FilterModels.FilterGroupBackend.GOODS, mapOf(
+            result, FilterGroups.GOODS, mapOf(
                 FilterId(10) to 1,
                 FilterId(20) to 1,
                 FilterId(30) to 1,
@@ -199,7 +199,7 @@ class SearchResponseBuilderIntegration : FunSpec({
         )
 
         verifyFutureCountResponse(
-            result, FilterModels.FilterGroupBackend.TOOLS, mapOf(
+            result, FilterGroups.TOOLS, mapOf(
                 FilterId(100) to 1,
                 FilterId(200) to 1,
                 FilterId(300) to 0,
@@ -216,13 +216,13 @@ private fun createSearchParam(
     return SearchParams(
         buildMap {
             if (tagIds.isNotEmpty()) {
-                put(FilterModels.FilterGroupBackend.TAGS.id, tagIds.map { FilterId(it) })
+                put(FilterGroups.TAGS.id, tagIds.map { FilterId(it) })
             }
             if (goodIds.isNotEmpty()) {
-                put(FilterModels.FilterGroupBackend.GOODS.id, goodIds.map { FilterId(it) })
+                put(FilterGroups.GOODS.id, goodIds.map { FilterId(it) })
             }
             if (toolIds.isNotEmpty()) {
-                put(FilterModels.FilterGroupBackend.TOOLS.id, toolIds.map { FilterId(it) })
+                put(FilterGroups.TOOLS.id, toolIds.map { FilterId(it) })
             }
         }
     )
@@ -230,7 +230,7 @@ private fun createSearchParam(
 
 private fun verifyFutureCountResponse(
     result: SearchResponse,
-    filter: FilterModels.FilterGroupBackend,
+    filter: FilterGroups,
     expectedCount: Map<FilterId, Int>,
 ) {
     result.futureCounts[filter.id]?.size shouldBe expectedCount.size

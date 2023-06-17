@@ -11,7 +11,7 @@ import org.mixdrinks.data.Good
 import org.mixdrinks.data.Tag
 import org.mixdrinks.data.Taste
 import org.mixdrinks.data.Tool
-import org.mixdrinks.view.controllers.filter.FilterModels
+import org.mixdrinks.domain.FilterGroups
 
 class SiteMapCreatorTest : AnnotationSpec() {
 
@@ -29,13 +29,13 @@ class SiteMapCreatorTest : AnnotationSpec() {
         prepareData()
 
         SiteMapCreator().siteMapDto shouldContainAll listOf(
-            "${FilterModels.FilterGroupBackend.GOODS.queryName.value}=good1",
-            "${FilterModels.FilterGroupBackend.TOOLS.queryName.value}=tool1",
-            "${FilterModels.FilterGroupBackend.TOOLS.queryName.value}=tool2",
-            "${FilterModels.FilterGroupBackend.GLASSWARE.queryName.value}=glassware1",
-            "${FilterModels.FilterGroupBackend.TASTE.queryName.value}=taste1",
-            "${FilterModels.FilterGroupBackend.TAGS.queryName.value}=tag1",
-            "${FilterModels.FilterGroupBackend.ALCOHOL_VOLUME.queryName.value}=alcoholVolume1"
+            "${FilterGroups.GOODS.queryName.value}=good1",
+            "${FilterGroups.TOOLS.queryName.value}=tool1",
+            "${FilterGroups.TOOLS.queryName.value}=tool2",
+            "${FilterGroups.GLASSWARE.queryName.value}=glassware1",
+            "${FilterGroups.TASTE.queryName.value}=taste1",
+            "${FilterGroups.TAGS.queryName.value}=tag1",
+            "${FilterGroups.ALCOHOL_VOLUME.queryName.value}=alcoholVolume1"
         )
     }
 

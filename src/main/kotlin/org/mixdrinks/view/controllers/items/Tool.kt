@@ -9,14 +9,14 @@ import io.ktor.server.routing.get
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.data.Tool
 import org.mixdrinks.data.ToolsTable
-import org.mixdrinks.view.controllers.filter.FilterModels
+import org.mixdrinks.domain.FilterGroups
 import org.mixdrinks.view.images.ImageType
 import org.mixdrinks.view.images.buildImages
 
 fun Routing.tool() {
     legacy()
 
-    get("v3/${FilterModels.FilterGroupBackend.TOOLS.queryName.value}/{slug}") {
+    get("v3/${FilterGroups.TOOLS.queryName.value}/{slug}") {
         val slug = call.parameters["slug"] ?: throw BadRequestException("Tool slug is required")
         call.respond(
             transaction {

@@ -33,9 +33,9 @@ import org.mixdrinks.data.Good
 import org.mixdrinks.data.Taste
 import org.mixdrinks.data.Tool
 import org.mixdrinks.domain.CocktailSelector
+import org.mixdrinks.domain.FilterGroups
 import org.mixdrinks.dto.FilterId
 import org.mixdrinks.view.controllers.filter.FilterCache
-import org.mixdrinks.view.controllers.filter.FilterModels
 import org.mixdrinks.view.controllers.search.DescriptionBuilder
 import org.mixdrinks.view.controllers.search.FilterCount
 import org.mixdrinks.view.controllers.search.SearchResponse
@@ -61,7 +61,7 @@ class VerifyFutureCountFutureCount : FunSpec({
         testApplication {
             mockApp()
             val response = client.get(
-                "v2/filter/${FilterModels.FilterGroupBackend.GLASSWARE.queryName.value}=test-glassware-2"
+                "v2/filter/${FilterGroups.GLASSWARE.queryName.value}=test-glassware-2"
             )
 
             response.status shouldBe HttpStatusCode.OK
@@ -98,7 +98,7 @@ class VerifyFutureCountFutureCount : FunSpec({
         testApplication {
             mockApp()
             val response = client.get(
-                "v2/filter/${FilterModels.FilterGroupBackend.TOOLS.queryName.value}=test-tool-3"
+                "v2/filter/${FilterGroups.TOOLS.queryName.value}=test-tool-3"
             )
             response.status shouldBe HttpStatusCode.OK
 
@@ -131,8 +131,8 @@ class VerifyFutureCountFutureCount : FunSpec({
         testApplication {
             mockApp()
             val response = client.get(
-                "v2/filter/${FilterModels.FilterGroupBackend.TOOLS.queryName.value}=test-tool-3" +
-                    "/${FilterModels.FilterGroupBackend.GLASSWARE.queryName.value}=test-glassware-2"
+                "v2/filter/${FilterGroups.TOOLS.queryName.value}=test-tool-3" +
+                    "/${FilterGroups.GLASSWARE.queryName.value}=test-glassware-2"
             )
 
             response.status shouldBe HttpStatusCode.OK
@@ -166,8 +166,8 @@ class VerifyFutureCountFutureCount : FunSpec({
         testApplication {
             mockApp()
             val response = client.get(
-                "v2/filter/${FilterModels.FilterGroupBackend.TOOLS.queryName.value}=test-tool-2/" +
-                    "${FilterModels.FilterGroupBackend.GLASSWARE.queryName.value}=test-glassware-2"
+                "v2/filter/${FilterGroups.TOOLS.queryName.value}=test-tool-2/" +
+                    "${FilterGroups.GLASSWARE.queryName.value}=test-glassware-2"
             )
 
             response.status shouldBe HttpStatusCode.OK
@@ -224,22 +224,22 @@ private class SearchResponseMatch(
             )
         }
 
-        if (value.futureCounts[FilterModels.FilterGroupBackend.TOOLS.id].orEmpty() != toolsCounts) {
+        if (value.futureCounts[FilterGroups.TOOLS.id].orEmpty() != toolsCounts) {
             return ComparableMatcherResult(
                 false,
                 { "Tools counts is not equal to $toolsCounts" },
                 { "Tools counts is equal to $toolsCounts" },
-                value.futureCounts[FilterModels.FilterGroupBackend.TOOLS.id].orEmpty().toString(),
+                value.futureCounts[FilterGroups.TOOLS.id].orEmpty().toString(),
                 toolsCounts.toString(),
             )
         }
 
-        if (value.futureCounts[FilterModels.FilterGroupBackend.GLASSWARE.id].orEmpty() != glasswareCounts) {
+        if (value.futureCounts[FilterGroups.GLASSWARE.id].orEmpty() != glasswareCounts) {
             return ComparableMatcherResult(
                 false,
                 { "Glassware counts is not equal to $glasswareCounts" },
                 { "Glassware counts is equal to $glasswareCounts" },
-                value.futureCounts[FilterModels.FilterGroupBackend.GLASSWARE.id].orEmpty().toString(),
+                value.futureCounts[FilterGroups.GLASSWARE.id].orEmpty().toString(),
                 glasswareCounts.toString(),
             )
         }

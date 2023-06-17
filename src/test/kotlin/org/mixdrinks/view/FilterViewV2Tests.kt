@@ -10,6 +10,7 @@ import io.mockk.Matcher
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.mixdrinks.domain.FilterGroups
 import org.mixdrinks.view.cocktail.domain.SortType
 import org.mixdrinks.view.controllers.filter.FilterModels
 import org.mixdrinks.view.controllers.search.SearchResponse
@@ -22,9 +23,9 @@ class FilterViewV2Tests : FunSpec({
     test("verify one tag (one filer id in one filter group)") {
         val tag1 = "tag-1"
         setupAppAndVerify(
-            "${FilterModels.FilterGroupBackend.TAGS.queryName.value}=$tag1",
+            "${FilterGroups.TAGS.queryName.value}=$tag1",
             mapOf(
-                FilterModels.FilterGroupBackend.TAGS to listOf(tag1)
+                FilterGroups.TAGS to listOf(tag1)
             )
         )
     }
@@ -33,9 +34,9 @@ class FilterViewV2Tests : FunSpec({
         val tag1 = "tag-1"
         val tag2 = "tag-2"
         setupAppAndVerify(
-            "${FilterModels.FilterGroupBackend.TAGS.queryName.value}=$tag1,$tag2",
+            "${FilterGroups.TAGS.queryName.value}=$tag1,$tag2",
             mapOf(
-                FilterModels.FilterGroupBackend.TAGS to listOf(tag1, tag2)
+                FilterGroups.TAGS to listOf(tag1, tag2)
             )
         )
     }
@@ -46,11 +47,11 @@ class FilterViewV2Tests : FunSpec({
         val good1 = "good-1"
         val good2 = "good-2"
         setupAppAndVerify(
-            "${FilterModels.FilterGroupBackend.TAGS.queryName.value}=$tag1,$tag2/" +
-                "${FilterModels.FilterGroupBackend.GOODS.queryName.value}=$good1,$good2",
+            "${FilterGroups.TAGS.queryName.value}=$tag1,$tag2/" +
+                "${FilterGroups.GOODS.queryName.value}=$good1,$good2",
             mapOf(
-                FilterModels.FilterGroupBackend.TAGS to listOf(tag1, tag2),
-                FilterModels.FilterGroupBackend.GOODS to listOf(good1, good2),
+                FilterGroups.TAGS to listOf(tag1, tag2),
+                FilterGroups.GOODS to listOf(good1, good2),
             )
         )
     }
@@ -62,20 +63,20 @@ class FilterViewV2Tests : FunSpec({
         val good2 = "good-2"
         val alcohol1 = "alcohol-1"
         setupAppAndVerify(
-            "${FilterModels.FilterGroupBackend.TAGS.queryName.value}=$tag1,$tag2/" +
-                "${FilterModels.FilterGroupBackend.GOODS.queryName.value}=$good1,$good2/" +
-                "${FilterModels.FilterGroupBackend.ALCOHOL_VOLUME.queryName.value}=$alcohol1",
+            "${FilterGroups.TAGS.queryName.value}=$tag1,$tag2/" +
+                "${FilterGroups.GOODS.queryName.value}=$good1,$good2/" +
+                "${FilterGroups.ALCOHOL_VOLUME.queryName.value}=$alcohol1",
             mapOf(
-                FilterModels.FilterGroupBackend.TAGS to listOf(tag1, tag2),
-                FilterModels.FilterGroupBackend.GOODS to listOf(good1, good2),
-                FilterModels.FilterGroupBackend.ALCOHOL_VOLUME to listOf(alcohol1),
+                FilterGroups.TAGS to listOf(tag1, tag2),
+                FilterGroups.GOODS to listOf(good1, good2),
+                FilterGroups.ALCOHOL_VOLUME to listOf(alcohol1),
             )
         )
     }
 })
 
 data class SearchParamMatcher(
-    private val params: Map<FilterModels.FilterGroupBackend, List<String>>
+    private val params: Map<FilterGroups, List<String>>
 ) : Matcher<SearchParamsSlugs> {
     override fun match(arg: SearchParamsSlugs?): Boolean {
         val filters = arg?.filters ?: return false
@@ -87,7 +88,7 @@ data class SearchParamMatcher(
 
 private fun setupAppAndVerify(
     filterStr: String,
-    expectedMap: Map<FilterModels.FilterGroupBackend, List<String>>,
+    expectedMap: Map<FilterGroups, List<String>>,
 ) {
     val searchBuilder = mockk<SearchSlugResponseBuilder>(relaxed = true, relaxUnitFun = true) {
         every { getCocktailsSearchBySlugs(any(), any(), any()) } answers {

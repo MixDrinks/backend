@@ -49,18 +49,20 @@ class SnapshotCreator(
 
     private fun getFilterGroups(): List<FilterGroupDto> {
         return filterCache.fullFilterGroupBackend
-            .map { (filterModel, filters) ->
+            .map { (filterGroupBackend, filters) ->
                 FilterGroupDto(
-                    id = filterModel.id,
-                    name = filterModel.translation,
+                    id = filterGroupBackend.id,
+                    name = filterGroupBackend.translation,
                     filters = filters.map { filter ->
                         FilterWithCocktailIdsDto(
                             id = filter.id,
                             name = filter.name,
                             cocktailIds = filter.cocktailIds,
+                            slug = filter.slug,
                         )
                     },
-                    selectionType = filterModel.selectionType,
+                    selectionType = filterGroupBackend.selectionType,
+                    slug = filterGroupBackend.queryName.value,
                 )
             }
     }
@@ -71,6 +73,7 @@ class SnapshotCreator(
                 id = GlasswareId(glassware.id.value),
                 name = glassware.name,
                 about = glassware.about,
+                slug = glassware.slug,
             )
         }
     }
@@ -81,6 +84,7 @@ class SnapshotCreator(
                 id = ToolId(tool.id.value),
                 name = tool.name,
                 about = tool.about,
+                slug = tool.slug,
             )
         }
     }
@@ -90,6 +94,7 @@ class SnapshotCreator(
             TasteDto(
                 id = TasteId(taste.id.value),
                 name = taste.name,
+                slug = taste.slug,
             )
         }
     }
@@ -99,6 +104,7 @@ class SnapshotCreator(
             TagDto(
                 id = TagId(tag.id.value),
                 name = tag.name,
+                slug = tag.slug,
             )
         }
     }
@@ -109,6 +115,7 @@ class SnapshotCreator(
                 id = GoodId(good.id.value),
                 name = good.name,
                 about = good.about,
+                slug = good.slug,
             )
         }
     }
@@ -134,6 +141,7 @@ class SnapshotCreator(
                 tags = fullCocktail.tags.map { TagId(it.id.value) },
                 tastes = fullCocktail.tastes.map { TasteId(it.id.value) },
                 glassware = GlasswareId(fullCocktail.glassware.first().id.value),
+                slug = fullCocktail.slug,
             )
         }
     }

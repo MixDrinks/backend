@@ -12,7 +12,7 @@ import org.mixdrinks.data.Tag
 import org.mixdrinks.data.Taste
 import org.mixdrinks.data.Tool
 import org.mixdrinks.data.ToolsTable
-import org.mixdrinks.view.controllers.filter.FilterModels
+import org.mixdrinks.domain.FilterGroups
 
 class SiteMapCreator {
 
@@ -25,14 +25,14 @@ class SiteMapCreator {
     }
 
     private fun getFirstLevelFirstersSlugs(): List<String> {
-        return FilterModels.FilterGroupBackend.values().flatMap { filter ->
+        return FilterGroups.values().flatMap { filter ->
             when (filter) {
-                FilterModels.FilterGroupBackend.TAGS -> Tag.all().map { it.slug }
-                FilterModels.FilterGroupBackend.GOODS -> Good.all().map { it.slug }
-                FilterModels.FilterGroupBackend.TOOLS -> Tool.all().map { it.slug }
-                FilterModels.FilterGroupBackend.TASTE -> Taste.all().map { it.slug }
-                FilterModels.FilterGroupBackend.ALCOHOL_VOLUME -> AlcoholVolumes.all().map { it.slug }
-                FilterModels.FilterGroupBackend.GLASSWARE -> Glassware.all().map { it.slug }
+                FilterGroups.TAGS -> Tag.all().map { it.slug }
+                FilterGroups.GOODS -> Good.all().map { it.slug }
+                FilterGroups.TOOLS -> Tool.all().map { it.slug }
+                FilterGroups.TASTE -> Taste.all().map { it.slug }
+                FilterGroups.ALCOHOL_VOLUME -> AlcoholVolumes.all().map { it.slug }
+                FilterGroups.GLASSWARE -> Glassware.all().map { it.slug }
             }
                 .map { "${filter.queryName.value}=$it" }
         }

@@ -8,8 +8,8 @@ import org.mixdrinks.data.GoodsTable
 import org.mixdrinks.data.TagsTable
 import org.mixdrinks.data.Taste
 import org.mixdrinks.data.TastesTable
+import org.mixdrinks.domain.FilterGroups
 import org.mixdrinks.dto.FilterId
-import org.mixdrinks.view.controllers.filter.FilterModels
 import org.mixdrinks.view.controllers.search.slug.SearchParams
 
 class DescriptionBuilder {
@@ -19,14 +19,14 @@ class DescriptionBuilder {
 
         return transaction {
             buildString {
-                addAlcoholDescriptionIfExist(filters[FilterModels.FilterGroupBackend.ALCOHOL_VOLUME.id])
-                addTasteDescriptionIfExist(filters[FilterModels.FilterGroupBackend.TASTE.id])
+                addAlcoholDescriptionIfExist(filters[FilterGroups.ALCOHOL_VOLUME.id])
+                addTasteDescriptionIfExist(filters[FilterGroups.TASTE.id])
 
                 append(COCKTAIL_NAME)
 
-                addTagsDescriptionIfExist(filters[FilterModels.FilterGroupBackend.TAGS.id])
-                addGoodsDescriptionIfExist(filters[FilterModels.FilterGroupBackend.GOODS.id])
-                addGlasswareDescriptionIfExist(filters[FilterModels.FilterGroupBackend.GLASSWARE.id])
+                addTagsDescriptionIfExist(filters[FilterGroups.TAGS.id])
+                addGoodsDescriptionIfExist(filters[FilterGroups.GOODS.id])
+                addGlasswareDescriptionIfExist(filters[FilterGroups.GLASSWARE.id])
             }.takeIf { it.isNotEmpty() && it != COCKTAIL_NAME }
         }
     }
