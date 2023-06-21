@@ -52,13 +52,13 @@ fun Application.configureAdminAuth(supperAdminToken: String, slatPrefix: String)
 
     routing {
         authenticate(KEY_ADMIN_AUTH) {
-            get("/admin") {
+            get("admin") {
                 call.respondText("Hello, ${call.principal<UserIdPrincipal>()?.name}!")
             }
         }
 
         authenticate(KEY_SUPPER_ADMIN_AUTH) {
-            post("/supper-admin/add-admin") {
+            post("supper-admin/add-admin") {
                 val adminRequest = call.receive<AdminRequest>()
                 val result = transaction {
                     Admin.new {
