@@ -1,5 +1,7 @@
 package org.mixdrinks.plugins
 
+import io.ktor.http.URLBuilder
+import io.ktor.http.path
 import io.ktor.server.application.Application
 import io.ktor.server.application.createRouteScopedPlugin
 import io.ktor.server.application.install
@@ -16,9 +18,17 @@ fun Application.configureRedirectMiddleWare() {
     val redirect = createRouteScopedPlugin(name = "RedirectRequestPlugin") {
         onCall { call ->
             call.request.headers["x-user-path"]?.let { xUserPath ->
+                val origin = call.request.headers["Origin"]
                 val to = redirectMap[xUserPath]
                 if (to != null) {
-                    call.respondRedirect(permanent = true, url = to)
+                    val url = if (origin != null) {
+                        val urlBuilder = URLBuilder(origin)
+                        urlBuilder.path(to)
+                        urlBuilder.buildString()
+                    } else {
+                        to
+                    }
+                    call.respondRedirect(permanent = true, url = url)
                 }
             }
         }
