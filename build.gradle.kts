@@ -50,6 +50,7 @@ dependencies {
     implementation("io.ktor:ktor-server-openapi:$ktorVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("org.mixdrinks:core-jvm:1.8.7")
+    implementation("com.google.firebase:firebase-admin:7.1.0")
 
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktorVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")

@@ -4,6 +4,8 @@ import com.typesafe.config.ConfigFactory
 import io.ktor.http.HttpMethod.Companion.DefaultMethods
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.install
+import io.ktor.server.auth.Authentication
+import io.ktor.server.auth.basic
 import io.ktor.server.config.HoconApplicationConfig
 import io.ktor.server.engine.applicationEngineEnvironment
 import io.ktor.server.engine.connector
@@ -11,7 +13,10 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.cors.routing.CORS
+import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.Database
+import org.mixdrinks.admin.configSupperAdmin
+import org.mixdrinks.admin.configureAdminAuth
 import org.mixdrinks.plugins.configureCache
 import org.mixdrinks.plugins.configureRedirectMiddleWare
 import org.mixdrinks.plugins.configureRouting
@@ -65,6 +70,12 @@ fun main() {
             val appVersion = config.property("ktor.app.version").getString()
 
             service(appVersion)
+
+            val adminSlatPrefix = config.property("ktor.auth.adminSlatPrefix").getString()
+            configureAdminAuth(adminSlatPrefix)
+
+            val supperAdminToken = config.property("ktor.auth.supperAdminToken").getString()
+            configSupperAdmin(supperAdminToken, adminSlatPrefix)
         }
 
         val port = config.property("ktor.connector.port").getString().toInt()
