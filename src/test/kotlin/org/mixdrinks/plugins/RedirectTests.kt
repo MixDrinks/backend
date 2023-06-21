@@ -53,7 +53,8 @@ class RedirectTests : AnnotationSpec() {
             }
 
             response.status shouldBe HttpStatusCode.OK
-            Json.decodeFromString<SingleRedirectResponse>(response.bodyAsText()) shouldBe SingleRedirectResponse("/tools/some_slug")
+            Json.decodeFromString<SingleRedirectResponse>(response.bodyAsText()) shouldBe
+                SingleRedirectResponse("/tools/some_slug")
         }
     }
 
