@@ -28,12 +28,14 @@ fun Application.score(appSettings: AppSettings) {
             val id = call.getCocktailId()
             val vote = call.getRatting(appSettings)
 
-            call.respond(transaction {
+            transaction {
                 CocktailsTable.update({ CocktailsTable.id eq id.id }) {
                     it[ratingValue] = ratingValue + vote
                     it[ratingCount] = ratingCount + 1
                 }
+            }
 
+            call.respond(transaction {
                 scoreCocktailsChangeResponse(
                     Cocktail.findById(id.id) ?: throw QueryRequireException("Cocktail not found")
                 )
@@ -42,15 +44,19 @@ fun Application.score(appSettings: AppSettings) {
         post("v2/cocktails/visit") {
             val id = call.getCocktailId()
 
-            call.respond(transaction {
+            transaction {
                 CocktailsTable.update({ CocktailsTable.id eq id.id }) {
                     it[visitCount] = visitCount + 1
                 }
+            }
 
-                scoreCocktailsChangeResponse(
-                    Cocktail.findById(id.id) ?: throw QueryRequireException("Cocktail not found")
-                )
-            })
+            call.respond(
+                transaction {
+                    scoreCocktailsChangeResponse(
+                        Cocktail.findById(id.id) ?: throw QueryRequireException("Cocktail not found")
+                    )
+                }
+            )
         }
         get("v2/cocktails/ratting") {
             call.respond(transaction {
