@@ -2,10 +2,17 @@ package org.mixdrinks.plugins
 
 import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
+import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.header
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.append
+import io.ktor.serialization.kotlinx.json.json
+import io.ktor.server.application.install
+import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.testing.testApplication
+import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
@@ -31,53 +38,27 @@ class RedirectTests : AnnotationSpec() {
             SchemaUtils.create(RedirectsTable)
 
             RedirectsTable.insert {
-                it[from] = "/tools/1120"
+                it[from] = "/tools/11_new"
                 it[to] = "/tools/some_slug"
             }
         }
 
         testApplication {
             application {
+                install(ContentNegotiation) {
+                    json()
+                }
                 configureRedirectMiddleWare()
             }
 
-            val response = client.config {
-                this.followRedirects = false
-            }.get("/v2/filter/tools=1120") {
-                this.header("x-user-path", "/tools/1120")
+            val response = client.get("/v2/filter/tools=1120") {
+                this.headers.append("x-user-path", "/tools/11_new")
             }
 
-            response.status shouldBe HttpStatusCode.MovedPermanently
-            response.headers["Location"] shouldBe "/tools/some_slug"
-        }
-    }
+            println("response: $response")
 
-    @Test
-    fun verifyRedirectWorksWithOrigin() {
-        transaction {
-            SchemaUtils.drop(RedirectsTable)
-            SchemaUtils.create(RedirectsTable)
-
-            RedirectsTable.insert {
-                it[from] = "/tools/1120"
-                it[to] = "/tools/some_slug"
-            }
-        }
-
-        testApplication {
-            application {
-                configureRedirectMiddleWare()
-            }
-
-            val response = client.config {
-                this.followRedirects = false
-            }.get("/v2/filter/tools=1120") {
-                this.header("x-user-path", "/tools/1120")
-                this.header("OriGin", "https://www.example.com/")
-            }
-
-            response.status shouldBe HttpStatusCode.MovedPermanently
-            response.headers["Location"] shouldBe "https://www.example.com/tools/some_slug"
+            response.status shouldBe HttpStatusCode.OK
+            Json.decodeFromString<RedirectResponse>(response.bodyAsText()) shouldBe RedirectResponse("/tools/some_slug")
         }
     }
 
@@ -95,6 +76,9 @@ class RedirectTests : AnnotationSpec() {
 
         testApplication {
             application {
+                install(ContentNegotiation) {
+                    json()
+                }
                 configureRedirectMiddleWare()
             }
 
