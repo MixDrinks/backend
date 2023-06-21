@@ -17,6 +17,7 @@ import org.mixdrinks.plugins.configureCache
 import org.mixdrinks.plugins.configureRedirectMiddleWare
 import org.mixdrinks.plugins.configureRouting
 import org.mixdrinks.plugins.static
+import org.mixdrinks.redirects.redirectController
 import org.mixdrinks.view.controllers.settings.AppSettings
 import org.mixdrinks.view.service
 import org.mixdrinks.view.v2.api
@@ -73,6 +74,8 @@ fun main() {
                 supperAdminToken = supperAdminToken,
                 slatPrefix = adminSlatPrefix,
             )
+
+            redirectController()
         }
 
         val port = config.property("ktor.connector.port").getString().toInt()

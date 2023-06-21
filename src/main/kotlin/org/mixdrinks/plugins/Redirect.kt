@@ -21,7 +21,7 @@ fun Application.configureRedirectMiddleWare() {
             call.request.headers["x-user-path"]?.let { xUserPath ->
                 val to = redirectMap[xUserPath]
                 if (to != null) {
-                    call.respond<RedirectResponse>(HttpStatusCode.OK, RedirectResponse(to))
+                    call.respond<SingleRedirectResponse>(HttpStatusCode.OK, SingleRedirectResponse(to))
                 }
             }
         }
@@ -29,7 +29,7 @@ fun Application.configureRedirectMiddleWare() {
 }
 
 @Serializable
-data class RedirectResponse(
+data class SingleRedirectResponse(
     @SerialName("redirect")
     val redirect: String
 )
