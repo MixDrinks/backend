@@ -59,8 +59,6 @@ fun Application.configureAdminAuth(supperAdminToken: String, slatPrefix: String)
 
         authenticate(KEY_SUPPER_ADMIN_AUTH) {
             post("supper-admin/add-admin") {
-                println("post run ")
-                println(call.request.headers)
                 val adminRequest = call.receive<AdminRequest>()
                 val result = transaction {
                     Admin.new {
