@@ -53,6 +53,35 @@ class RedirectTests : AnnotationSpec() {
     }
 
     @Test
+    fun verifyRedirectWorksWithOrigin() {
+        transaction {
+            SchemaUtils.drop(RedirectsTable)
+            SchemaUtils.create(RedirectsTable)
+
+            RedirectsTable.insert {
+                it[from] = "/tools/1120"
+                it[to] = "/tools/some_slug"
+            }
+        }
+
+        testApplication {
+            application {
+                configureRedirectMiddleWare()
+            }
+
+            val response = client.config {
+                this.followRedirects = false
+            }.get("/v2/filter/tools=1120") {
+                this.header("x-user-path", "/tools/1120")
+                this.header("OriGin", "https://www.example.com/")
+            }
+
+            response.status shouldBe HttpStatusCode.MovedPermanently
+            response.headers["Location"] shouldBe "https://www.example.com/tools/some_slug"
+        }
+    }
+
+    @Test
     fun verifyRedirectIgnoresWitoutHeaders() {
         transaction {
             SchemaUtils.drop(RedirectsTable)
