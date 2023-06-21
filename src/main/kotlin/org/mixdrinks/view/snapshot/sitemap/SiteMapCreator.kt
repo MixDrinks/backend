@@ -17,10 +17,10 @@ import org.mixdrinks.domain.FilterGroups
 class SiteMapCreator {
 
     val siteMapDto: List<String> = transaction {
-        getCocktailIds().map { "cocktails/$it" } +
-            getGoodIds().map { "goods/$it" } +
-            getToolIds().map { "tools/$it" } +
-            getGlasswareIds().map { "glassware/$it" } +
+        getCocktailSlug().map { "cocktails/$it" } +
+            getGoodSlug().map { "goods/$it" } +
+            getToolSlug().map { "tools/$it" } +
+            getGlasswareSlug().map { "glassware/$it" } +
             getFirstLevelFirstersSlugs()
     }
 
@@ -38,19 +38,19 @@ class SiteMapCreator {
         }
     }
 
-    private fun getGlasswareIds(): List<Int> {
-        return GlasswareTable.slice(GlasswareTable.id).selectAll().map { it[GlasswareTable.id] }.map { it.value }
+    private fun getGlasswareSlug(): List<String> {
+        return GlasswareTable.slice(GlasswareTable.slug).selectAll().map { it[GlasswareTable.slug] }
     }
 
-    private fun getToolIds(): List<Int> {
-        return ToolsTable.slice(ToolsTable.id).selectAll().map { it[ToolsTable.id] }.map { it.value }
+    private fun getToolSlug(): List<String> {
+        return ToolsTable.slice(ToolsTable.slug).selectAll().map { it[ToolsTable.slug] }
     }
 
-    private fun getGoodIds(): List<Int> {
-        return GoodsTable.slice(GoodsTable.id).selectAll().map { it[GoodsTable.id] }.map { it.value }
+    private fun getGoodSlug(): List<String> {
+        return GoodsTable.slice(GoodsTable.slug).selectAll().map { it[GoodsTable.slug] }
     }
 
-    private fun getCocktailIds(): List<Int> {
-        return CocktailsTable.slice(CocktailsTable.id).selectAll().map { it[CocktailsTable.id] }.map { it.value }
+    private fun getCocktailSlug(): List<String> {
+        return CocktailsTable.slice(CocktailsTable.slug).selectAll().map { it[CocktailsTable.slug] }
     }
 }
