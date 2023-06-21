@@ -2,12 +2,9 @@ package org.mixdrinks.plugins
 
 import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
-import io.ktor.client.call.body
 import io.ktor.client.request.get
-import io.ktor.client.request.header
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.append
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.install
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
@@ -56,7 +53,7 @@ class RedirectTests : AnnotationSpec() {
             }
 
             response.status shouldBe HttpStatusCode.OK
-            Json.decodeFromString<RedirectResponse>(response.bodyAsText()) shouldBe RedirectResponse("/tools/some_slug")
+            Json.decodeFromString<SingleRedirectResponse>(response.bodyAsText()) shouldBe SingleRedirectResponse("/tools/some_slug")
         }
     }
 

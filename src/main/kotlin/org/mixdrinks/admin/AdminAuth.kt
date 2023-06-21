@@ -18,8 +18,8 @@ import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
 import org.jetbrains.exposed.sql.transactions.transaction
 
-private const val KEY_ADMIN_AUTH = "admin-auth"
-private const val KEY_SUPPER_ADMIN_AUTH = "supper-admin-auth"
+const val KEY_ADMIN_AUTH = "admin-auth"
+const val KEY_SUPPER_ADMIN_AUTH = "supper-admin-auth"
 
 fun Application.configureAdminAuth(supperAdminToken: String, slatPrefix: String) {
     val digestFunction = getHashFunction(slatPrefix)
