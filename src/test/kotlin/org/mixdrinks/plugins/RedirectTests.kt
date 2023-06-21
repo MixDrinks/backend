@@ -55,8 +55,6 @@ class RedirectTests : AnnotationSpec() {
                 this.headers.append("x-user-path", "/tools/11_new")
             }
 
-            println("response: $response")
-
             response.status shouldBe HttpStatusCode.OK
             Json.decodeFromString<RedirectResponse>(response.bodyAsText()) shouldBe RedirectResponse("/tools/some_slug")
         }
