@@ -12,7 +12,6 @@ import io.ktor.server.auth.bearer
 import io.ktor.server.auth.principal
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
-import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
@@ -32,7 +31,7 @@ fun Application.configureAdminAuth(supperAdminToken: String, slatPrefix: String)
                     Admin.find { AdminTable.name eq credentials.name }.firstOrNull()
                 }
 
-                return@validate if (user != null && user.password.contentEquals(digestFunction(credentials.password))) {
+                return@validate if (user?.password?.contentEquals(digestFunction(credentials.password)) == true) {
                     UserIdPrincipal(user.login)
                 } else {
                     null
@@ -52,8 +51,9 @@ fun Application.configureAdminAuth(supperAdminToken: String, slatPrefix: String)
 
     routing {
         authenticate(KEY_ADMIN_AUTH) {
-            get("admin") {
-                call.respondText("Hello, ${call.principal<UserIdPrincipal>()?.name}!")
+            get("admin-api/admin") {
+                val adminName = requireNotNull(call.principal<UserIdPrincipal>()).name
+                call.respond(HttpStatusCode.OK, AdminResponse(adminName))
             }
         }
 
@@ -67,7 +67,7 @@ fun Application.configureAdminAuth(supperAdminToken: String, slatPrefix: String)
                     }
                 }
 
-                call.respond(HttpStatusCode.Created, "Hello, ${result.login}!")
+                call.respond(HttpStatusCode.Created, "Admin added ${result.login}!")
             }
         }
     }
