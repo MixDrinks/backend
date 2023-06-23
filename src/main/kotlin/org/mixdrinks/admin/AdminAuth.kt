@@ -3,12 +3,8 @@ package org.mixdrinks.admin
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
-import io.ktor.server.application.install
-import io.ktor.server.auth.Authentication
 import io.ktor.server.auth.UserIdPrincipal
 import io.ktor.server.auth.authenticate
-import io.ktor.server.auth.basic
-import io.ktor.server.auth.bearer
 import io.ktor.server.auth.principal
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
@@ -20,34 +16,8 @@ import org.jetbrains.exposed.sql.transactions.transaction
 const val KEY_ADMIN_AUTH = "admin-auth"
 const val KEY_SUPPER_ADMIN_AUTH = "supper-admin-auth"
 
-fun Application.configureAdminAuth(supperAdminToken: String, slatPrefix: String) {
-    val digestFunction = getHashFunction(slatPrefix)
-
-    install(Authentication) {
-        basic(KEY_ADMIN_AUTH) {
-            realm = "Access to the '/admin/' path"
-            validate { credentials ->
-                val user = transaction {
-                    Admin.find { AdminTable.name eq credentials.name }.firstOrNull()
-                }
-
-                return@validate if (user?.password?.contentEquals(digestFunction(credentials.password)) == true) {
-                    UserIdPrincipal(user.login)
-                } else {
-                    null
-                }
-            }
-        }
-        bearer(KEY_SUPPER_ADMIN_AUTH) {
-            authenticate { tokenCredential ->
-                if (tokenCredential.token == supperAdminToken) {
-                    UserIdPrincipal("supper_admin")
-                } else {
-                    null
-                }
-            }
-        }
-    }
+fun Application.configureAdminController(adminPasswordsSlat: String) {
+    val digestFunction = getHashFunction(adminPasswordsSlat)
 
     routing {
         authenticate(KEY_ADMIN_AUTH) {

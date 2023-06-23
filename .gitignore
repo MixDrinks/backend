@@ -36,6 +36,3 @@ out/
 .vscode/
 
 .fleet
-
-### Firebase auth json
-src/main/resources/mixdrinks-firebase-admin-sdk.json
