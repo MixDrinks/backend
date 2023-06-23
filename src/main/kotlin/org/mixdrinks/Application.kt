@@ -12,12 +12,15 @@ import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.cors.routing.CORS
 import org.jetbrains.exposed.sql.Database
-import org.mixdrinks.admin.configureAdminAuth
+import org.mixdrinks.admin.configureAdminController
+import org.mixdrinks.auth.configureAuth
+import org.mixdrinks.auth.initFirebase
 import org.mixdrinks.plugins.configureCache
 import org.mixdrinks.plugins.configureRedirectMiddleWare
 import org.mixdrinks.plugins.configureRouting
 import org.mixdrinks.plugins.static
 import org.mixdrinks.redirects.redirectController
+import org.mixdrinks.users.userController
 import org.mixdrinks.view.controllers.settings.AppSettings
 import org.mixdrinks.view.service
 import org.mixdrinks.view.v2.api
@@ -68,14 +71,23 @@ fun main() {
 
             service(appVersion)
 
-            val adminSlatPrefix = config.property("ktor.auth.adminSlatPrefix").getString()
+            config.propertyOrNull("ktor.auth.firebaseAdminSdkJson")?.getString()?.let { firebaseAdminSdkJson ->
+                initFirebase(firebaseAdminSdkJson)
+            }
+
+            val adminPasswordsSlatPrefix = config.property("ktor.auth.adminSlatPrefix").getString()
             val supperAdminToken = config.property("ktor.auth.supperAdminToken").getString()
-            configureAdminAuth(
+            configureAuth(
                 supperAdminToken = supperAdminToken,
-                slatPrefix = adminSlatPrefix,
+                adminPasswordsSlat = adminPasswordsSlatPrefix,
+            )
+
+            configureAdminController(
+                adminPasswordsSlat = adminPasswordsSlatPrefix,
             )
 
             redirectController()
+            userController()
         }
 
         val port = config.property("ktor.connector.port").getString().toInt()
