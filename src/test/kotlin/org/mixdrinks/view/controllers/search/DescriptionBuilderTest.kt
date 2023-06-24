@@ -43,7 +43,7 @@ class DescriptionBuilderTest : FunSpec({
             mapOf(
                 FilterGroups.ALCOHOL_VOLUME.id to listOf(FilterId(1)),
             )
-        ) shouldBe "AlcoholVolumes1 коктейлі"
+        ) shouldBe "Alcohol_volumes_1 коктейлі"
     }
 
     test("Verify that the alcohol volume with taste") {
@@ -52,7 +52,7 @@ class DescriptionBuilderTest : FunSpec({
                 FilterGroups.ALCOHOL_VOLUME.id to listOf(FilterId(1)),
                 FilterGroups.TASTE.id to listOf(FilterId(8), FilterId(9)),
             )
-        ) shouldBe "AlcoholVolumes1 Taste8 Taste9 коктейлі"
+        ) shouldBe "Alcohol_volumes_1, Taste8, Taste9 коктейлі"
     }
 
     test("Verify that the alcohol volume and goods") {
@@ -61,7 +61,7 @@ class DescriptionBuilderTest : FunSpec({
                 FilterGroups.ALCOHOL_VOLUME.id to listOf(FilterId(1)),
                 FilterGroups.GOODS.id to listOf(FilterId(4), FilterId(5)),
             )
-        ) shouldBe "AlcoholVolumes1 коктейлі з Good4 Good5"
+        ) shouldBe "Alcohol_volumes_1 коктейлі з Good4, Good5"
     }
 
     test("Verify description with goods and tags") {
@@ -70,7 +70,7 @@ class DescriptionBuilderTest : FunSpec({
                 FilterGroups.GOODS.id to listOf(FilterId(4), FilterId(5)),
                 FilterGroups.TAGS.id to listOf(FilterId(7), FilterId(4)),
             )
-        ) shouldBe "коктейлі Tag4 Tag7 з Good4 Good5"
+        ) shouldBe "коктейлі Tag4, Tag7 з Good4, Good5"
     }
 
     test("Verify description with all but without glassware") {
@@ -81,7 +81,7 @@ class DescriptionBuilderTest : FunSpec({
                 FilterGroups.TAGS.id to listOf(FilterId(7), FilterId(4)),
                 FilterGroups.TOOLS.id to listOf(FilterId(7), FilterId(4)),
             )
-        ) shouldBe "AlcoholVolumes1 коктейлі Tag4 Tag7 з Good4 Good5"
+        ) shouldBe "Alcohol_volumes_1 коктейлі Tag4, Tag7 з Good4, Good5"
     }
 
     test("Verify description with all") {
@@ -93,7 +93,7 @@ class DescriptionBuilderTest : FunSpec({
                 FilterGroups.TOOLS.id to listOf(FilterId(7), FilterId(4)),
                 FilterGroups.GLASSWARE.id to listOf(FilterId(1)),
             )
-        ) shouldBe "AlcoholVolumes1 коктейлі Tag4 Tag7 з Good4 Good5 в Glassware1"
+        ) shouldBe "Alcohol_volumes_1 коктейлі Tag4, Tag7 з Good4, Good5 в Glassware1"
     }
 
     test("Verify description just tools") {
@@ -133,7 +133,7 @@ private fun prepareData(
 
         alcoholVolumes.forEach {
             AlcoholVolumes.new(id = it) {
-                name = "AlcoholVolumes$it"
+                name = "alcohol_volumes_$it"
                 slug = "slug_$it"
             }
         }

@@ -20,6 +20,11 @@ class DescriptionBuilder {
         return transaction {
             buildString {
                 addAlcoholDescriptionIfExist(filters[FilterGroups.ALCOHOL_VOLUME.id])
+                if (filters[FilterGroups.TASTE.id]?.isNotEmpty() == true) {
+                    append(", ")
+                } else {
+                    append(" ")
+                }
                 addTasteDescriptionIfExist(filters[FilterGroups.TASTE.id])
 
                 append(COCKTAIL_NAME)
@@ -27,7 +32,9 @@ class DescriptionBuilder {
                 addTagsDescriptionIfExist(filters[FilterGroups.TAGS.id])
                 addGoodsDescriptionIfExist(filters[FilterGroups.GOODS.id])
                 addGlasswareDescriptionIfExist(filters[FilterGroups.GLASSWARE.id])
-            }.takeIf { it.isNotEmpty() && it != COCKTAIL_NAME }
+            }
+                .removePrefix(" ")
+                .takeIf { it.isNotEmpty() && it != COCKTAIL_NAME }
         }
     }
 
@@ -39,7 +46,7 @@ class DescriptionBuilder {
             ?.let { glasswareId ->
                 Glassware.findById(glasswareId)?.let {
                     append(" в ")
-                    append(it.name)
+                    append(it.name.capitalize())
                 }
             }
     }
@@ -54,7 +61,7 @@ class DescriptionBuilder {
                     .select {
                         GoodsTable.id inList safeGoodIds
                     }
-                    .joinToString(separator = " ") { it[GoodsTable.name] }
+                    .joinToString(separator = ", ") { it[GoodsTable.name].capitalize() }
                     .let { append(it) }
             }
     }
@@ -69,7 +76,7 @@ class DescriptionBuilder {
                         TagsTable.id inList safeTagIds
                     }
                     .orderBy(TagsTable.id)
-                    .joinToString(separator = " ") { it[TagsTable.name] }
+                    .joinToString(separator = ", ") { it[TagsTable.name].capitalize() }
                     .let {
                         append(" ")
                         append(it)
@@ -82,7 +89,7 @@ class DescriptionBuilder {
             ?.map { it.value }
             ?.let { tasteIds ->
                 Taste.find { TastesTable.id inList tasteIds }
-                    .joinToString(separator = " ") { it.name }
+                    .joinToString(separator = ", ") { it.name.capitalize() }
                     .let {
                         append(it)
                         append(" ")
@@ -97,8 +104,7 @@ class DescriptionBuilder {
             ?.get(0)
             ?.let { safeAlcoholVolumeIds ->
                 AlcoholVolumes.findById(safeAlcoholVolumeIds)?.let {
-                    append(it.name)
-                    append(" ")
+                    append(it.name.capitalize())
                 }
             }
     }
