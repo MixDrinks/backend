@@ -96,6 +96,43 @@ class RattingEndToEndTests : FunSpec({
             }
         }
     }
+
+    test("Verify ratting change from null") {
+        prepareData(
+            listOf(
+                MockCocktailRatting(
+                    id = 0,
+                    visitCount = 10,
+                    ratingCount = 10,
+                    ratingValue = 25,
+                ), MockCocktailRatting(
+                    id = 1,
+                    visitCount = 1,
+                    ratingCount = 0,
+                    ratingValue = null,
+                )
+            )
+        )
+
+        testApplication {
+            application {
+                install(ContentNegotiation) {
+                    json()
+                }
+                val appSetting = AppSettings(1, 5, 10)
+                score(appSetting)
+            }
+
+            client.post("v2/cocktails/score?id=1") {
+                contentType(ContentType.Application.Json)
+                setBody("{\"value\":4}")
+            }.let { response ->
+                val result = Json.decodeFromString<CocktailScoreChangeResponse>(response.bodyAsText())
+                result.rating shouldBe 4F
+                result.visitCount shouldBe 1
+            }
+        }
+    }
 })
 
 private data class MockCocktailRatting(
