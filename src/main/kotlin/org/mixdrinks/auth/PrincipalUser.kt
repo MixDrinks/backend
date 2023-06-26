@@ -8,5 +8,4 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PrincipalUser(
     @SerialName("userId") val userId: String = "",
-    @SerialName("displayName") val displayName: String = ""
 ) : Principal

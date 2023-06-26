@@ -11,6 +11,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.admin.Admin
 import org.mixdrinks.admin.AdminTable
 import org.mixdrinks.admin.getHashFunction
+import org.mixdrinks.users.User
 
 const val FIREBASE_AUTH = "FIREBASE_AUTH"
 const val KEY_ADMIN_AUTH = "admin-auth"
@@ -45,7 +46,10 @@ fun Application.configureAuth(supperAdminToken: String, adminPasswordsSlat: Stri
         }
         firebase {
             validate {
-                PrincipalUser(it.uid, it.name.orEmpty())
+                val result = transaction {
+                    User.findById(it.uid) ?: User.new(id = it.uid) {}
+                }
+                PrincipalUser(result.userId.value)
             }
         }
     }

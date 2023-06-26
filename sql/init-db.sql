@@ -145,8 +145,15 @@ create table cocktails_to_glassware
 
 create table redirects
 (
-    "from"    text,
-    "to"      text
+    "from" text,
+    "to"   text
+);
+
+create table users
+(
+    user_id text not null
+        constraint users_pk
+            primary key
 );
 
 insert into tags (id, name, type, slug)
