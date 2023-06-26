@@ -29,8 +29,11 @@ fun Application.score(appSettings: AppSettings) {
             val vote = call.getRatting(appSettings)
 
             transaction {
+                val cocktail = Cocktail.findById(id.id) ?: throw QueryRequireException("Cocktail not found")
+                val newValue = (cocktail.ratingValue ?: 0) + vote
+
                 CocktailsTable.update({ CocktailsTable.id eq id.id }) {
-                    it[ratingValue] = ratingValue + vote
+                    it[ratingValue] = newValue
                     it[ratingCount] = ratingCount + 1
                 }
             }
