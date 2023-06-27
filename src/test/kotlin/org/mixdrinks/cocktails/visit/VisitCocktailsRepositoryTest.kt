@@ -5,6 +5,7 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.datetime.Instant
+import org.createDataBase
 import org.fullness.endtoend.TestCocktail
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -31,8 +32,7 @@ class VisitCocktailsRepositoryTest : AnnotationSpec() {
     @Test
     fun `verify return cocktails for user empty`() {
         transaction {
-            SchemaUtils.drop(CocktailsTable, VisitTable, UsersTable)
-            SchemaUtils.create(CocktailsTable, VisitTable, UsersTable)
+            createDataBase()
 
             TestCocktail.new(id = 1) {
                 name = "Test cocktail 1"
@@ -66,8 +66,7 @@ class VisitCocktailsRepositoryTest : AnnotationSpec() {
     @Test
     fun `verify return cocktails for user not empty`() {
         transaction {
-            SchemaUtils.drop(CocktailsTable, VisitTable, UsersTable)
-            SchemaUtils.create(CocktailsTable, VisitTable, UsersTable)
+            createDataBase()
 
             TestCocktail.new(id = 1) {
                 name = "Test cocktail 1"
@@ -89,7 +88,7 @@ class VisitCocktailsRepositoryTest : AnnotationSpec() {
             }
         }
 
-        val mockResult = mockk<CompactCocktailVM>()
+        val mockResult = mockk<CompactCocktailVM>(relaxed = true)
 
         val mapper = mockk<CocktailMapper> {
             every { createCocktails(any()) } answers { mockResult }
@@ -101,8 +100,7 @@ class VisitCocktailsRepositoryTest : AnnotationSpec() {
     @Test
     fun `verify return cocktails for user not empty with paggination`() {
         transaction {
-            SchemaUtils.drop(CocktailsTable, VisitTable, UsersTable)
-            SchemaUtils.create(CocktailsTable, VisitTable, UsersTable)
+            createDataBase()
 
             (0..50).forEach { id ->
                 TestCocktail.new(id = id) {
@@ -128,7 +126,7 @@ class VisitCocktailsRepositoryTest : AnnotationSpec() {
             }
         }
 
-        val mockResult = mockk<CompactCocktailVM>()
+        val mockResult = mockk<CompactCocktailVM>(relaxed = true)
 
         val mapper = mockk<CocktailMapper> {
             every { createCocktails(any()) } answers { mockResult }
