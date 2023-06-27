@@ -8,6 +8,7 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.install
+import io.ktor.server.auth.Authentication
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.testing.ApplicationTestBuilder
 import io.ktor.server.testing.testApplication
@@ -17,6 +18,8 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.mixdrinks.auth.FirebasePrincipalUser
+import org.mixdrinks.auth.firebase
 import org.mixdrinks.cocktails.score.CocktailScoreChangeResponse
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.view.controllers.score.score
@@ -43,6 +46,13 @@ class CocktailEndToEndTests : FunSpec({
 
         testApplication {
             application {
+                install(Authentication) {
+                    firebase {
+                        validate {
+                            FirebasePrincipalUser("")
+                        }
+                    }
+                }
                 install(ContentNegotiation) {
                     json()
                 }

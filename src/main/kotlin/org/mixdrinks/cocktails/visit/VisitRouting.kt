@@ -2,7 +2,6 @@ package org.mixdrinks.cocktails.visit
 
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.call
-import io.ktor.server.auth.AuthenticationStrategy
 import io.ktor.server.auth.authenticate
 import io.ktor.server.auth.principal
 import io.ktor.server.response.respond
