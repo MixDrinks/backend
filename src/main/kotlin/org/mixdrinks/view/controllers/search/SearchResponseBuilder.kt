@@ -1,16 +1,15 @@
 package org.mixdrinks.view.controllers.search
 
 import org.jetbrains.exposed.sql.Expression
-import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.exposedLogger
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.mixdrinks.cocktails.CocktailMapper
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.domain.CocktailSelector
 import org.mixdrinks.domain.FilterGroups
-import org.mixdrinks.dto.CocktailId
 import org.mixdrinks.dto.FilterGroupId
 import org.mixdrinks.dto.FilterId
 import org.mixdrinks.dto.SelectionType
@@ -19,13 +18,12 @@ import org.mixdrinks.view.cocktail.domain.SortType
 import org.mixdrinks.view.controllers.filter.FilterCache
 import org.mixdrinks.view.controllers.search.paggination.Page
 import org.mixdrinks.view.controllers.search.slug.SearchParams
-import org.mixdrinks.view.images.ImageType
-import org.mixdrinks.view.images.buildImages
 
 class SearchResponseBuilder(
     private val filterCache: FilterCache,
     private val cocktailSelector: CocktailSelector,
     private val descriptionBuilder: DescriptionBuilder,
+    private val cocktailMapper: CocktailMapper,
 ) {
 
     fun getCocktailsBySearch(
@@ -59,7 +57,7 @@ class SearchResponseBuilder(
                 query.copy().limit(page.limit, page.offset.toLong())
             } else {
                 query
-            }.map(::createCocktails)
+            }.map(cocktailMapper::createCocktails)
 
             val futureCounts: Map<FilterGroups, List<FilterCount>> =
                 FilterGroups.values().associateWith { filterGroupBackend ->
@@ -85,7 +83,6 @@ class SearchResponseBuilder(
                             ),
                             isActive = searchParams.filters[filterGroupBackend.id].orEmpty().contains(filterId),
                         )
-
                     }
                 }
 
@@ -125,23 +122,5 @@ class SearchResponseBuilder(
             .joinToString(separator = "/") { (group, filterSlugs) ->
                 "${group.queryName.value}=${filterSlugs.joinToString(",")}"
             }
-    }
-
-    private fun createCocktails(row: ResultRow): CompactCocktailVM {
-        val id = row[CocktailsTable.id].value
-        val ratingValue = row[CocktailsTable.ratingValue]
-
-        val rating = ratingValue?.let {
-            it.toFloat() / row[CocktailsTable.ratingCount].toFloat()
-        }
-
-        return CompactCocktailVM(
-            id = CocktailId(id),
-            name = row[CocktailsTable.name],
-            rating = rating,
-            visitCount = row[CocktailsTable.visitCount],
-            images = buildImages(id, ImageType.COCKTAIL),
-            slug = row[CocktailsTable.slug],
-        )
     }
 }

@@ -6,6 +6,7 @@ import io.ktor.server.auth.authenticate
 import io.ktor.server.auth.principal
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
+import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import kotlinx.datetime.Clock
 import org.jetbrains.exposed.sql.insert
@@ -19,13 +20,19 @@ import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.view.error.QueryRequireException
 import org.mixdrinks.view.v2.getCocktailId
 
-fun Routing.visitRouting() {
+fun Routing.visitRouting(
+    visitCocktailsRepository: VisitCocktailsRepository,
+) {
     post("v2/cocktails/visit") {
         this.call.incVisitMethod(false)
     }
     authenticate(FIREBASE_AUTH) {
         post("user-api/cocktail/visit") {
             this.call.incVisitMethod(true)
+        }
+        get("user-api/cocktail/visit/list") {
+            val userId = requireNotNull(call.principal<FirebasePrincipalUser>()).userId
+            call.respond(visitCocktailsRepository.getVisitedCocktails(userId))
         }
     }
 }

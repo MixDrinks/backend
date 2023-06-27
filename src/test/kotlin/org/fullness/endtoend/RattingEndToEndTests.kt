@@ -11,6 +11,7 @@ import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.install
 import io.ktor.server.auth.Authentication
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.routing.routing
 import io.ktor.server.testing.testApplication
 import kotlinx.serialization.json.Json
 import org.createDataBase
@@ -20,7 +21,10 @@ import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.auth.FirebasePrincipalUser
 import org.mixdrinks.auth.firebase
+import org.mixdrinks.cocktails.CocktailMapper
 import org.mixdrinks.cocktails.score.CocktailScoreChangeResponse
+import org.mixdrinks.cocktails.visit.VisitCocktailsRepository
+import org.mixdrinks.cocktails.visit.visitRouting
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.view.controllers.score.score
 import org.mixdrinks.view.controllers.settings.AppSettings
@@ -48,6 +52,9 @@ class RattingEndToEndTests : FunSpec({
 
         testApplication {
             application {
+                install(ContentNegotiation) {
+                    json()
+                }
                 install(Authentication) {
                     firebase {
                         validate {
@@ -55,11 +62,9 @@ class RattingEndToEndTests : FunSpec({
                         }
                     }
                 }
-                install(ContentNegotiation) {
-                    json()
+                this.routing {
+                    visitRouting(VisitCocktailsRepository(CocktailMapper()))
                 }
-                val appSetting = AppSettings(1, 5, 10)
-                score(appSetting)
             }
 
             client.post("v2/cocktails/visit?id=0").let { response ->
