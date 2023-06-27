@@ -42,7 +42,7 @@ fun Application.score(appSettings: AppSettings) {
 
             call.respond(transaction {
                 scoreCocktailsChangeResponse(
-                    Cocktail.findById(id.id) ?: throw QueryRequireException("Cocktail not found")
+                    Cocktail.findById(id.id)!!
                 )
             })
         }
