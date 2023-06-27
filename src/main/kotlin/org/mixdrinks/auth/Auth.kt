@@ -49,7 +49,7 @@ fun Application.configureAuth(supperAdminToken: String, adminPasswordsSlat: Stri
                 val result = transaction {
                     User.findById(it.uid) ?: User.new(id = it.uid) {}
                 }
-                PrincipalUser(result.userId.value)
+                FirebasePrincipalUser(result.userId.value)
             }
         }
     }

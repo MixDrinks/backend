@@ -2,6 +2,7 @@ package org.mixdrinks.view.v2
 
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
+import org.mixdrinks.cocktails.score.roundScore
 
 internal class UtilsKtTest : FunSpec({
     test("Verify round") {

@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class PrincipalUser(
+data class FirebasePrincipalUser(
     @SerialName("userId") val userId: String = "",
 ) : Principal
