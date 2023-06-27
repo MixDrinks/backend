@@ -14,6 +14,7 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.mixdrinks.cocktails.score.scoreCocktailsChangeResponse
+import org.mixdrinks.cocktails.visit.VisitCocktailsRepository
 import org.mixdrinks.cocktails.visit.visitRouting
 import org.mixdrinks.data.Cocktail
 import org.mixdrinks.data.CocktailsTable
@@ -25,7 +26,6 @@ import org.mixdrinks.view.v2.getCocktailId
 
 fun Application.score(appSettings: AppSettings) {
     routing {
-        visitRouting()
         post("v2/cocktails/score") {
             val id = call.getCocktailId()
             val vote = call.getRatting(appSettings)

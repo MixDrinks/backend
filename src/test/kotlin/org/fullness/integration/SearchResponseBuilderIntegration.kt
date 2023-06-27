@@ -7,6 +7,7 @@ import org.fullness.CocktailData
 import org.fullness.prepareData
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.TransactionManager
+import org.mixdrinks.cocktails.CocktailMapper
 import org.mixdrinks.domain.CocktailSelector
 import org.mixdrinks.domain.FilterGroups
 import org.mixdrinks.dto.FilterId
@@ -50,7 +51,7 @@ class SearchResponseBuilderIntegration : FunSpec({
 
         val filterCache = FilterCache()
         val searchResponseBuilder = SearchResponseBuilder(
-            filterCache, CocktailSelector(filterCache.filterGroups), DescriptionBuilder()
+            filterCache, CocktailSelector(filterCache.filterGroups), DescriptionBuilder(), CocktailMapper(),
         )
 
         val result = searchResponseBuilder.getCocktailsBySearch(
@@ -108,7 +109,7 @@ class SearchResponseBuilderIntegration : FunSpec({
 
         val filterCache = FilterCache()
         val searchResponseBuilder = SearchResponseBuilder(
-            filterCache, CocktailSelector(filterCache.filterGroups), DescriptionBuilder()
+            filterCache, CocktailSelector(filterCache.filterGroups), DescriptionBuilder(), CocktailMapper(),
         )
 
         val result = searchResponseBuilder.getCocktailsBySearch(
@@ -168,7 +169,7 @@ class SearchResponseBuilderIntegration : FunSpec({
 
         val filterCache = FilterCache()
         val searchResponseBuilder = SearchResponseBuilder(
-            filterCache, CocktailSelector(filterCache.filterGroups), DescriptionBuilder()
+            filterCache, CocktailSelector(filterCache.filterGroups), DescriptionBuilder(), CocktailMapper(),
         )
 
         val result = searchResponseBuilder.getCocktailsBySearch(

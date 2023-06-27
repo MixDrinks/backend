@@ -23,6 +23,7 @@ import org.jetbrains.exposed.sql.SizedCollection
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.mixdrinks.cocktails.CocktailMapper
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.data.CocktailsToGlasswareTable
 import org.mixdrinks.data.CocktailsToGoodsTable
@@ -260,7 +261,8 @@ private fun ApplicationTestBuilder.mockApp() {
         }
         val filterCache = FilterCache()
         val cocktailSelector = CocktailSelector(filterCache.filterGroups)
-        val searchResponseBuilder = SearchResponseBuilder(filterCache, cocktailSelector, DescriptionBuilder())
+        val searchResponseBuilder =
+            SearchResponseBuilder(filterCache, cocktailSelector, DescriptionBuilder(), CocktailMapper())
         val searchSlugResponseBuilder = SearchSlugResponseBuilder(filterCache, searchResponseBuilder)
         this.filterSlugs(searchSlugResponseBuilder, AppSettings(1, 1, 24))
     }
