@@ -9,13 +9,13 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
 import org.mixdrinks.auth.FIREBASE_AUTH
-import org.mixdrinks.auth.PrincipalUser
+import org.mixdrinks.auth.FirebasePrincipalUser
 
 fun Application.userController() {
     routing {
         authenticate(FIREBASE_AUTH) {
             get("user-api/check") {
-                val user: PrincipalUser =
+                val user: FirebasePrincipalUser =
                     call.principal() ?: return@get call.respond(HttpStatusCode.Unauthorized)
                 call.respond(HttpStatusCode.OK, user)
             }

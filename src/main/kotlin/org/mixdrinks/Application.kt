@@ -65,8 +65,6 @@ fun main() {
                 pageSize = config.property("ktor.settings.pageSize").getString().toInt()
             )
 
-            api(appSettings)
-
             val appVersion = config.property("ktor.app.version").getString()
 
             service(appVersion)
@@ -81,6 +79,8 @@ fun main() {
                 supperAdminToken = supperAdminToken,
                 adminPasswordsSlat = adminPasswordsSlatPrefix,
             )
+
+            api(appSettings)
 
             configureAdminController(
                 adminPasswordsSlat = adminPasswordsSlatPrefix,

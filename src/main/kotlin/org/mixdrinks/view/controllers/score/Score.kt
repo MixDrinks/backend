@@ -13,6 +13,8 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
+import org.mixdrinks.cocktails.score.scoreCocktailsChangeResponse
+import org.mixdrinks.cocktails.visit.visitRouting
 import org.mixdrinks.data.Cocktail
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.dto.CocktailId
@@ -20,10 +22,10 @@ import org.mixdrinks.view.controllers.settings.AppSettings
 import org.mixdrinks.view.error.QueryRequireException
 import org.mixdrinks.view.error.VoteError
 import org.mixdrinks.view.v2.getCocktailId
-import org.mixdrinks.view.v2.roundScore
 
 fun Application.score(appSettings: AppSettings) {
     routing {
+        visitRouting()
         post("v2/cocktails/score") {
             val id = call.getCocktailId()
             val vote = call.getRatting(appSettings)
@@ -44,23 +46,6 @@ fun Application.score(appSettings: AppSettings) {
                 )
             })
         }
-        post("v2/cocktails/visit") {
-            val id = call.getCocktailId()
-
-            transaction {
-                CocktailsTable.update({ CocktailsTable.id eq id.id }) {
-                    it[visitCount] = visitCount + 1
-                }
-            }
-
-            call.respond(
-                transaction {
-                    scoreCocktailsChangeResponse(
-                        Cocktail.findById(id.id) ?: throw QueryRequireException("Cocktail not found")
-                    )
-                }
-            )
-        }
         get("v2/cocktails/ratting") {
             call.respond(transaction {
                 Cocktail.all().associate { cocktail ->
@@ -69,21 +54,6 @@ fun Application.score(appSettings: AppSettings) {
             })
         }
     }
-}
-
-@Serializable
-data class CocktailScoreChangeResponse(
-    @SerialName("cocktailId") val cocktailId: CocktailId,
-    @SerialName("rating") val rating: Float?,
-    @SerialName("visitCount") val visitCount: Int,
-)
-
-private fun scoreCocktailsChangeResponse(cocktail: Cocktail): CocktailScoreChangeResponse {
-    return CocktailScoreChangeResponse(
-        cocktailId = CocktailId(cocktail.id.value),
-        rating = cocktail.getRatting()?.let { notNullScore -> roundScore(notNullScore) },
-        visitCount = cocktail.visitCount,
-    )
 }
 
 private suspend fun ApplicationCall.getRatting(appSettings: AppSettings): Int {
