@@ -56,7 +56,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
 
     implementation("org.jetbrains.exposed", "exposed-core", "0.42.1")
-    implementation("org.jetbrains.exposed", "exposed-dao", "0.42.1")
+    implementation("org.jetbrains.exposed", "exposed-dao", "0.43.0")
     implementation("org.jetbrains.exposed", "exposed-jdbc", "0.42.1")
     implementation("org.jetbrains.exposed", "exposed-kotlin-datetime", "0.42.1")
     implementation("com.h2database", "h2", "2.2.220")
