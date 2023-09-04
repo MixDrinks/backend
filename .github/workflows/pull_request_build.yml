@@ -6,7 +6,7 @@ jobs:
   end2end:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions-ecosystem/action-get-latest-tag@v1
         id: get-latest-tag
       - uses: actions-ecosystem/action-bump-semver@v1
