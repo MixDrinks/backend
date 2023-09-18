@@ -59,7 +59,7 @@ dependencies {
     implementation("org.jetbrains.exposed", "exposed-dao", "0.43.0")
     implementation("org.jetbrains.exposed", "exposed-jdbc", "0.43.0")
     implementation("org.jetbrains.exposed", "exposed-kotlin-datetime", "0.43.0")
-    implementation("com.h2database", "h2", "2.2.222")
+    implementation("com.h2database", "h2", "2.2.224")
 
     implementation("com.zaxxer:HikariCP:5.0.1")
     implementation("org.postgresql:postgresql:42.6.0")
