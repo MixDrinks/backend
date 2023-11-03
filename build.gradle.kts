@@ -65,5 +65,5 @@ dependencies {
     implementation("org.postgresql:postgresql:42.6.0")
 
     testImplementation("io.mockk:mockk:1.13.8")
-    testImplementation("io.kotest:kotest-runner-junit5:5.7.2")
+    testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
 }
