@@ -61,7 +61,7 @@ dependencies {
     implementation("org.jetbrains.exposed", "exposed-kotlin-datetime", "0.43.0")
     implementation("com.h2database", "h2", "2.2.224")
 
-    implementation("com.zaxxer:HikariCP:5.0.1")
+    implementation("com.zaxxer:HikariCP:5.1.0")
     implementation("org.postgresql:postgresql:42.6.0")
 
     testImplementation("io.mockk:mockk:1.13.8")
