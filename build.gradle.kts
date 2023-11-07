@@ -6,7 +6,7 @@ plugins {
     application
     kotlin("jvm") version "1.9.20"
     kotlin("plugin.serialization") version "1.9.20"
-    id("io.ktor.plugin") version "2.3.5"
+    id("io.ktor.plugin") version "2.3.6"
 }
 
 group = "org.mixdrinks"
