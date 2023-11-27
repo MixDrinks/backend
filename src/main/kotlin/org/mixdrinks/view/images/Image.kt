@@ -19,6 +19,7 @@ fun buildImages(id: Int, type: ImageType): List<Image> {
         val responseSize: String,
         val imageSize: String,
     )
+    val domain = "kanapaimage.ams3.cdn.digitaloceanspaces.com"
     return listOf("webp", "jpg").map { format ->
         listOf(
             SizeDep("570", "origin"),
@@ -27,7 +28,7 @@ fun buildImages(id: Int, type: ImageType): List<Image> {
             SizeDep("0", "320"),
         ).map { size ->
             Image(
-                src = "https://image.mixdrinks.org/${type.imagePrefix}/$id/${size.imageSize}/$id.$format",
+                src = "https://$domain/${type.imagePrefix}/$id/${size.imageSize}/$id.$format",
                 media = "screen and (min-width: ${size.responseSize}px)",
                 type = "image/$format"
             )
