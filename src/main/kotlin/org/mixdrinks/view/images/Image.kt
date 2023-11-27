@@ -27,7 +27,7 @@ fun buildImages(id: Int, type: ImageType): List<Image> {
             SizeDep("0", "320"),
         ).map { size ->
             Image(
-                src = "https://image.mixdrinks.org/${type.imagePrefix}/$id/${size.imageSize}/$id.$format",
+                src = "https://kanapaimage.ams3.cdn.digitaloceanspaces.com/${type.imagePrefix}/$id/${size.imageSize}/$id.$format",
                 media = "screen and (min-width: ${size.responseSize}px)",
                 type = "image/$format"
             )
