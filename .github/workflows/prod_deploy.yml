@@ -65,19 +65,3 @@ jobs:
         with:
           collection: postman/api.json
           environment: postman/env.json
-      - name: DigitalOcean App Platform deployment
-        uses: digitalocean/app_action@main
-        with:
-          app_name: backend
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-          images: "[
-                        {
-                         \"name\": \"vovochkastelmashchuk-mixdrinks\",
-                          \"image\":{
-                            \"registry_type\": \"DOCKER_HUB\",
-                            \"registry\": \"vovochkastelmashchuk\",
-                            \"repository\": \"mixdrinks\",
-                            \"tag\": \"${{env.mix_drinks_backend_version}}\"
-                          }
-                        }
-                      ]"
