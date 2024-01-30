@@ -16,14 +16,6 @@ The service provide api for
 
 [REST API](https://mixdrinks.github.io/docs/api)
 
-### Deploy your own instance of service by digital ocean app platform
-
---Un supported yet, will rewrite to deploy by docker image--
-[![Deploy to DO](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/MixDrinks/backend/tree/main)
-
-*Not fully tested at the moment*
-
-### Get the docker image
 [Link to docker hub](https://hub.docker.com/r/vovochkastelmashchuk/mixdrinks)
 ```bash
 docker pull vovochkastelmashchuk/mixdrinks:tagname
