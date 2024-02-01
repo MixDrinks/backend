@@ -19,8 +19,6 @@ class SearchSlugResponseBuilder(
         page: Page?,
         sortType: SortType,
     ): SearchResponse {
-        exposedLogger.info("searchParams: ${searchParamsSlug.filters}")
-
         val searchParams = SearchParams(
             filters = searchParamsSlug.filters.map { (group, slugs) ->
                 val groupId = filterCache.fullFilterGroupBackend.keys.first { it.queryName.value == group }.id

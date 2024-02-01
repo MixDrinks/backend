@@ -32,7 +32,6 @@ class SearchResponseBuilder(
         sortType: SortType,
         applyFilterType: Boolean = false
     ): SearchResponse {
-        exposedLogger.info("searchParams: ${searchParams.filters}")
         val cocktailsIds = if (searchParams.filters.isNotEmpty()) {
             cocktailSelector.getCocktailIds(searchParams.filters).map { it.id }
         } else {
