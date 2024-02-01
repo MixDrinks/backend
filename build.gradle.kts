@@ -4,9 +4,9 @@ val logbackVersion: String by project
 
 plugins {
     application
-    kotlin("jvm") version "1.9.10"
-    kotlin("plugin.serialization") version "1.9.10"
-    id("io.ktor.plugin") version "2.3.4"
+    kotlin("jvm") version "1.9.22"
+    kotlin("plugin.serialization") version "1.9.22"
+    id("io.ktor.plugin") version "2.3.8"
 }
 
 group = "org.mixdrinks"
@@ -59,11 +59,11 @@ dependencies {
     implementation("org.jetbrains.exposed", "exposed-dao", "0.43.0")
     implementation("org.jetbrains.exposed", "exposed-jdbc", "0.43.0")
     implementation("org.jetbrains.exposed", "exposed-kotlin-datetime", "0.43.0")
-    implementation("com.h2database", "h2", "2.2.222")
+    implementation("com.h2database", "h2", "2.2.224")
 
-    implementation("com.zaxxer:HikariCP:5.0.1")
-    implementation("org.postgresql:postgresql:42.6.0")
+    implementation("com.zaxxer:HikariCP:5.1.0")
+    implementation("org.postgresql:postgresql:42.7.1")
 
-    testImplementation("io.mockk:mockk:1.13.7")
-    testImplementation("io.kotest:kotest-runner-junit5:5.7.2")
+    testImplementation("io.mockk:mockk:1.13.9")
+    testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
 }
