@@ -64,6 +64,6 @@ dependencies {
     implementation("com.zaxxer:HikariCP:5.1.0")
     implementation("org.postgresql:postgresql:42.7.2")
 
-    testImplementation("io.mockk:mockk:1.13.9")
+    testImplementation("io.mockk:mockk:1.13.10")
     testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
 }
