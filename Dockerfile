@@ -6,7 +6,7 @@ WORKDIR /appbuild
 RUN gradle clean build
 RUN gradle buildFatJar
 
-FROM openjdk:11.0.16
+FROM openjdk:21
 
 ENV APPLICATION_USER 1033
 RUN useradd -ms /bin/bash $APPLICATION_USER
