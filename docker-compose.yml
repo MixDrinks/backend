@@ -12,8 +12,6 @@ services:
       - DB_USER=postgres
       - DB_PASSWORD=postgres
       - MIX_DRINKS_APP_VERSION=1.10.86-188
-      - SUPER_ADMIN_TOKEN=super_admin_token
-      - ADMIN_AUTH_SALT_PREFIX=admin_auth_salt_prefix
     depends_on:
       postgres:
         condition: service_healthy
