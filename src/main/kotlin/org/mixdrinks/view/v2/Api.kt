@@ -3,7 +3,6 @@ package org.mixdrinks.view.v2
 import io.ktor.server.application.Application
 import io.ktor.server.routing.routing
 import org.mixdrinks.cocktails.CocktailMapper
-import org.mixdrinks.cocktails.visit.VisitCocktailsRepository
 import org.mixdrinks.cocktails.visit.visitRouting
 import org.mixdrinks.domain.CocktailSelector
 import org.mixdrinks.view.cocktail.cocktails
@@ -32,9 +31,8 @@ fun Application.api(appSettings: AppSettings) {
         SearchResponseBuilder(filterCache, cocktailSelector, DescriptionBuilder(), CocktailMapper())
     this.score(appSettings)
 
-    val visitCocktailsRepository = VisitCocktailsRepository(CocktailMapper())
     this.routing {
-        visitRouting(visitCocktailsRepository)
+        visitRouting()
     }
 
     this.cocktails()

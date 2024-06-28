@@ -19,6 +19,7 @@ fun buildImages(id: Int, type: ImageType): List<Image> {
         val responseSize: String,
         val imageSize: String,
     )
+
     val domain = "images.mixdrinks.org"
     return listOf("webp", "jpg").map { format ->
         listOf(

@@ -14,8 +14,6 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.mixdrinks.cocktails.score.scoreCocktailsChangeResponse
-import org.mixdrinks.cocktails.visit.VisitCocktailsRepository
-import org.mixdrinks.cocktails.visit.visitRouting
 import org.mixdrinks.data.Cocktail
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.dto.CocktailId
