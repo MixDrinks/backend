@@ -67,8 +67,4 @@ dependencies {
 
     testImplementation("io.mockk:mockk:1.13.10")
     testImplementation("io.kotest:kotest-runner-junit5:5.8.1")
-    implementation(kotlin("stdlib-jdk8"))
-}
-kotlin {
-    jvmToolchain(15)
 }
