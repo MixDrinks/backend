@@ -21,6 +21,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.mixdrinks.cocktails.score.CocktailScoreChangeResponse
 import org.mixdrinks.cocktails.visit.visitRouting
 import org.mixdrinks.data.CocktailsTable
+import org.mixdrinks.mongo.Mongo
 import org.mixdrinks.view.controllers.score.score
 import org.mixdrinks.view.controllers.settings.AppSettings
 
@@ -50,7 +51,9 @@ class CocktailEndToEndTests : FunSpec({
                 }
                 this.score(AppSettings(1, 1, 1))
                 this.routing {
-                    visitRouting()
+                    val connectionString =
+                        "mongodb://mixdrinks:qqDE9zhmTT9LGkU6Jz2L@167.235.52.168:27017,5.161.117.185:27017/mixdrinks?authSource=mixdrinks&replicaSet=rs0"
+                    visitRouting(Mongo(connectionString))
                 }
             }
 
