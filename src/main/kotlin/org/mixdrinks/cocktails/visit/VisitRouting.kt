@@ -10,16 +10,17 @@ import org.jetbrains.exposed.sql.update
 import org.mixdrinks.cocktails.score.scoreCocktailsChangeResponse
 import org.mixdrinks.data.Cocktail
 import org.mixdrinks.data.CocktailsTable
+import org.mixdrinks.mongo.Mongo
 import org.mixdrinks.view.error.QueryRequireException
 import org.mixdrinks.view.v2.getCocktailId
 
-fun Routing.visitRouting() {
+fun Routing.visitRouting(mongo: Mongo) {
     post("v2/cocktails/visit") {
-        this.call.incVisitMethod()
+        this.call.incVisitMethod(mongo)
     }
 }
 
-private suspend fun ApplicationCall.incVisitMethod() {
+private suspend fun ApplicationCall.incVisitMethod(mongo: Mongo) {
     val id = this.getCocktailId()
 
     transaction {
@@ -28,6 +29,8 @@ private suspend fun ApplicationCall.incVisitMethod() {
             it[visitCount] = cocktail.visitCount + 1
         }
     }
+
+    mongo.incVisitCount(id.id)
 
     this.respond(
         transaction {
