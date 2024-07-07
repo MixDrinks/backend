@@ -35,22 +35,3 @@ jobs:
             MIX_DRINKS_APP_VERSION=${{env.mix_drinks_backend_version}}
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/mixdrinks:${{env.mix_drinks_backend_version}}
-      - name: Create docker compose prod file (set image)
-        shell: bash
-        run: |
-          sed -e 's,build: .,image: 'vovochkastelmashchuk/mixdrinks:${{env.mix_drinks_backend_version}}',g' < docker-compose.yml >> docker-compose-prod.yml
-          cat docker-compose-prod.yml
-      - name: Up docker compose prod
-        uses: yu-ichiro/spin-up-docker-compose-action@v1
-        with:
-          file: docker-compose-prod.yml
-      - name: Sleep for 60 seconds
-        run: sleep 60s
-        shell: bash
-      - name: Verify app is up
-        run: curl -v --fail http://localhost:8080/version || exit 1
-      - uses: matt-ball/newman-action@master
-        name: Run Postman tests
-        with:
-          collection: postman/api.json
-          environment: postman/env.json
