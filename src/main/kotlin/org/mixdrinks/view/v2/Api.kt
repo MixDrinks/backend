@@ -31,7 +31,7 @@ fun Application.api(
     }
     println("Visit routing initialized.")
 
-    this.score(appSettings)
+    this.score(appSettings, Mongo(mongoString))
 
     this.cocktails()
     this.items()
