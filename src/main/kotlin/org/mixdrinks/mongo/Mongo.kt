@@ -27,11 +27,28 @@ class Mongo(connectionString: String) {
     data class MongoCocktail(
         val id: Int,
         val visitCount: Int,
+        val ratingCount: Int,
+        val ratingValue: Int?,
     )
 
     suspend fun incVisitCount(id: Int) {
         val queryParam = Filters.eq("id", id)
         val updateParams = Updates.inc("visitCount", 1)
+        database.getCollection<MongoCocktail>(collectionName = "cocktails")
+            .updateOne(
+                filter = queryParam,
+                update = updateParams,
+            )
+    }
+
+    suspend fun updateRating(id: Int, vote: Int) {
+        val queryParam = Filters.eq("id", id)
+
+        val updateParams = Updates.combine(
+            Updates.inc("ratingCount", 1),
+            Updates.inc("ratingValue", vote),
+        )
+
         database.getCollection<MongoCocktail>(collectionName = "cocktails")
             .updateOne(
                 filter = queryParam,

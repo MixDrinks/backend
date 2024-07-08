@@ -17,12 +17,13 @@ import org.mixdrinks.cocktails.score.scoreCocktailsChangeResponse
 import org.mixdrinks.data.Cocktail
 import org.mixdrinks.data.CocktailsTable
 import org.mixdrinks.dto.CocktailId
+import org.mixdrinks.mongo.Mongo
 import org.mixdrinks.view.controllers.settings.AppSettings
 import org.mixdrinks.view.error.QueryRequireException
 import org.mixdrinks.view.error.VoteError
 import org.mixdrinks.view.v2.getCocktailId
 
-fun Application.score(appSettings: AppSettings) {
+fun Application.score(appSettings: AppSettings, mongo: Mongo) {
     routing {
         post("v2/cocktails/score") {
             val id = call.getCocktailId()
@@ -37,6 +38,8 @@ fun Application.score(appSettings: AppSettings) {
                     it[ratingCount] = ratingCount + 1
                 }
             }
+
+            mongo.updateRating(id.id, vote)
 
             call.respond(transaction {
                 scoreCocktailsChangeResponse(
