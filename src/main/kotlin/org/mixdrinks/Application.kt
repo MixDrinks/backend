@@ -12,13 +12,10 @@ import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.cors.routing.CORS
 import org.jetbrains.exposed.sql.Database
-import org.mixdrinks.mongo.Mongo
 import org.mixdrinks.plugins.configureCache
-import org.mixdrinks.plugins.configureRedirectMiddleWare
 import org.mixdrinks.plugins.configureRouting
 import org.mixdrinks.plugins.static
 import org.mixdrinks.view.controllers.settings.AppSettings
-import org.mixdrinks.view.service
 import org.mixdrinks.view.v2.api
 
 fun main() {
@@ -53,8 +50,6 @@ fun main() {
                 password = password,
             )
 
-            configureRedirectMiddleWare()
-
             val appSettings = AppSettings(
                 minVote = config.property("ktor.settings.minVote").getString().toInt(),
                 maxVote = config.property("ktor.settings.maxVote").getString().toInt(),
@@ -62,9 +57,6 @@ fun main() {
             )
 
             val mongoString = config.property("ktor.database.mongoString").getString()
-            val appVersion = config.property("ktor.app.version").getString()
-
-            service(appVersion)
 
             api(appSettings, mongoString)
         }
